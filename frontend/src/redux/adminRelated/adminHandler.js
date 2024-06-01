@@ -5,15 +5,15 @@ import {
   getFailed,
   getError,
   stuffDone,
-} from "./studentSlice";
+} from "./adminSlice";
 
 const REACT_APP_BASE_URL = "http://localhost:4000";
 
-export const getAllStudents = (id) => async (dispatch) => {
+export const getAllAdmins = (id) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(`${REACT_APP_BASE_URL}/Students/${id}`);
+    const result = await axios.get(`${REACT_APP_BASE_URL}/Admins/`);
     if (result.data.message) {
       dispatch(getFailed(result.data.message));
     } else {

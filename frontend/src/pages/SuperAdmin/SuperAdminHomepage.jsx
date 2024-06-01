@@ -9,6 +9,7 @@ import CountUp from "react-countup";
 import { getAllSclasses } from "../../redux/sclassRelated/sclassHandle";
 import { getAllStudents } from "../../redux/studentRelated/studentHandle";
 import { getAllTeachers } from "../../redux/teacherRelated/teacherHandle";
+import { getSubjectList } from "../../redux/sclassRelated/sclassHandle";
 import AccountMenu from "../../components/AccountMenu";
 import SideBar from "./SideBar";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
@@ -18,6 +19,7 @@ const SuperAdminHomePage = () => {
   const { studentsList } = useSelector((state) => state.student);
   const { sclassesList } = useSelector((state) => state.sclass);
   const { teachersList } = useSelector((state) => state.teacher);
+  const { subjectsList } = useSelector((state) => state.sclass);
 
   const { currentUser } = useSelector((state) => state.user);
 
@@ -27,11 +29,13 @@ const SuperAdminHomePage = () => {
     dispatch(getAllStudents(adminID));
     dispatch(getAllSclasses(adminID, "Sclass"));
     dispatch(getAllTeachers(adminID));
+    dispatch(getSubjectList(adminID, "AllSubjects"));
   }, [adminID, dispatch]);
 
   const numberOfStudents = studentsList && studentsList.length;
   const numberOfClasses = sclassesList && sclassesList.length;
   const numberOfTeachers = teachersList && teachersList.length;
+  const numberOfSubjects = subjectsList && subjectsList.length;
 
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
@@ -39,76 +43,82 @@ const SuperAdminHomePage = () => {
   };
 
   return (
-    <>
-      <div className="h-screen">
-        <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
-          <button
-            onClick={toggleDrawer}
-            className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
-          >
-            {open ? <IoMdArrowBack /> : <IoIosMenu />}
-          </button>
-          <span className="text-lg font-semibold">Super Admin Dashboard</span>
-
-          <AccountMenu />
+    <div className="h-screen font-poppins bg-gray-100">
+      <div className="flex items-center justify-between h-16 px-6 bg-white shadow-md">
+        <button
+          onClick={toggleDrawer}
+          className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
+        >
+          {open ? <IoMdArrowBack /> : <IoIosMenu />}
+        </button>
+        <span className="text-lg font-semibold">Super Admin Dashboard</span>
+        <AccountMenu />
+      </div>
+      <div className="flex h-full">
+        <div
+          className={`bg-white ${
+            open ? "block" : "hidden"
+          } lg:block border-r border-gray-200 w-64`}
+        >
+          <SideBar />
         </div>
-        <div className="flex h-screen">
-          <div className="bg-white border-b border-gray-200 w-64">
-            <SideBar />
-          </div>
-          <div className="flex-grow bg-gray-100">
-            <div className="py-6 px-4">
-              <div className="container mx-auto mt-4 mb-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="p-4 flex flex-col justify-between items-center bg-white rounded-lg shadow-md">
-                    <img src={Students} alt="Students" />
-                    <p className="text-xl font-semibold">Total Students</p>
-                    <CountUp
-                      start={0}
-                      end={numberOfStudents}
-                      duration={2.5}
-                      className="text-green-600 text-4xl"
-                    />
-                  </div>
-                  <div className="p-4 flex flex-col justify-between items-center bg-white rounded-lg shadow-md">
-                    <img src={Classes} alt="Classes" />
-                    <p className="text-xl font-semibold">Total Classes</p>
-                    <CountUp
-                      start={0}
-                      end={numberOfClasses}
-                      duration={5}
-                      className="text-green-600 text-4xl"
-                    />
-                  </div>
-                  <div className="p-4 flex flex-col justify-between items-center bg-white rounded-lg shadow-md">
-                    <img src={Teachers} alt="Teachers" />
-                    <p className="text-xl font-semibold">Total Teachers</p>
-                    <CountUp
-                      start={0}
-                      end={numberOfTeachers}
-                      duration={2.5}
-                      className="text-green-600 text-4xl"
-                    />
-                  </div>
-                  <div className="p-4 flex flex-col justify-between items-center bg-white rounded-lg shadow-md">
-                    <img src={Fees} alt="Fees" />
-                    <p className="text-xl font-semibold">Total Subject</p>
-                    <CountUp
-                      start={0}
-                      end={23000}
-                      duration={2.5}
-                      prefix="$"
-                      className="text-green-600 text-4xl"
-                    />
-                  </div>
-                </div>
-                <div className="mt-4">{/* <SeeNotice /> */}</div>
+        <div className="flex-grow p-6">
+          <div className="container mx-auto mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="p-6 flex flex-col justify-between items-center bg-gradient-to-r from-green-400 to-blue-500 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <img src={Students} alt="Students" className="w-16 h-16" />
+                <p className="text-xl font-semibold mt-4 text-white">
+                  Total Students
+                </p>
+                <CountUp
+                  start={0}
+                  end={numberOfStudents}
+                  duration={2.5}
+                  className="text-white text-4xl mt-2"
+                />
+              </div>
+              <div className="p-6 flex flex-col justify-between items-center bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <img src={Classes} alt="Classes" className="w-16 h-16" />
+                <p className="text-xl font-semibold mt-4 text-white">
+                  Total Classes
+                </p>
+                <CountUp
+                  start={0}
+                  end={numberOfClasses}
+                  duration={5}
+                  className="text-white text-4xl mt-2"
+                />
+              </div>
+              <div className="p-6 flex flex-col justify-between items-center bg-gradient-to-r from-yellow-400 to-red-500 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <img src={Teachers} alt="Teachers" className="w-16 h-16" />
+                <p className="text-xl font-semibold mt-4 text-white">
+                  Total Teachers
+                </p>
+                <CountUp
+                  start={0}
+                  end={numberOfTeachers}
+                  duration={2.5}
+                  className="text-white text-4xl mt-2"
+                />
+              </div>
+              <div className="p-6 flex flex-col justify-between items-center bg-gradient-to-r from-teal-400 to-cyan-500 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+                <img src={Fees} alt="Fees" className="w-16 h-16" />
+                <p className="text-xl font-semibold mt-4 text-white">
+                  Total Subjects
+                </p>
+                <CountUp
+                  start={0}
+                  end={numberOfSubjects}
+                  duration={2.5}
+                  className="text-white text-4xl mt-2"
+                />
               </div>
             </div>
+            <div className="mt-8">{/* <SeeNotice /> */}</div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

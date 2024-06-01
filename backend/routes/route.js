@@ -6,6 +6,7 @@ const {
   adminRegister,
   adminLogIn,
   getAdminDetail,
+  getAdmins,
 } = require("../controllers/admin-controller.js");
 
 const {
@@ -73,8 +74,9 @@ router.post("/SuperAdminLogin", superAdminLogIn);
 // Admin
 router.post("/AdminReg", adminRegister);
 router.post("/AdminLogin", adminLogIn);
-
 router.get("/Admin/:id", getAdminDetail);
+router.get("/Admins", getAdmins);
+
 // router.delete("/Admin/:id", deleteAdmin)
 
 // router.put("/Admin/:id", updateAdmin)

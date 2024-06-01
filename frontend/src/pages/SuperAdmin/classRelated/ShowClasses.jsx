@@ -3,11 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../../../redux/userRelated/userHandle";
 import { getAllSclasses } from "../../../redux/sclassRelated/sclassHandle";
+import DataTable from "react-data-table-component";
 
 import Popup from "../../../components/Popup";
 import { FaTrashAlt, FaPlusCircle, FaUserPlus, FaPlus } from "react-icons/fa";
-import SpeedDialTemplate from "../../../components/SpeedDialTemplate";
-import TableTemplate from "../../../components/TableTemplate";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
@@ -37,41 +36,55 @@ const ShowClasses = () => {
   const deleteHandler = (deleteID, address) => {
     console.log(deleteID);
     console.log(address);
-    setMessage("Sorry the delete function has been disabled for now.");
+    // setMessage("Sorry, the delete function has been disabled for now.");
+    // Uncomment the lines below if delete function is enabled
+    dispatch(deleteUser(deleteID, address)).then(() => {
+      dispatch(getAllSclasses(adminID, "Sclass"));
+    });
     setShowPopup(true);
-    // dispatch(deleteUser(deleteID, address))
-    //   .then(() => {
-    //     dispatch(getAllSclasses(adminID, "Sclass"));
-    //   })
   };
 
-  const sclassColumns = [{ id: "name", label: "Class Name", minWidth: 170 }];
+  const columns = [
+    {
+      name: "Class Name",
+      selector: (row) => row.name,
+      sortable: true,
+      minWidth: "200px",
+    },
+    {
+      name: "Actions",
+      cell: (row) => <SclassButtonHaver row={row} />,
+      ignoreRowClick: true,
+      allowOverflow: true,
+      button: true,
+      width: "200px",
+    },
+  ];
 
-  const sclassRows =
+  const data =
     sclassesList &&
     sclassesList.length > 0 &&
-    sclassesList.map((sclass) => {
-      return {
-        name: sclass.sclassName,
-        id: sclass._id,
-      };
-    });
+    sclassesList.map((sclass) => ({
+      name: sclass.sclassName,
+      id: sclass._id,
+    }));
 
   const SclassButtonHaver = ({ row }) => {
     const actions = [
       {
         icon: <FaPlus />,
         name: "Add Subjects",
-        action: () => navigate("/Admin/addsubject/" + row.id),
+        action: () => navigate("/SuperAdmin/addsubject/" + row.id),
       },
       {
         icon: <FaUserPlus />,
         name: "Add Student",
-        action: () => navigate("/Admin/class/addstudents/" + row.id),
+        action: () => navigate("/SuperAdmin/class/addstudents/" + row.id),
       },
     ];
+
     return (
-      <div className="flex items-center justify-center gap-4">
+      <div className="flex items-center gap-2 relative">
         <button
           onClick={() => deleteHandler(row.id, "Sclass")}
           className="text-red-500"
@@ -79,8 +92,8 @@ const ShowClasses = () => {
           <FaTrashAlt />
         </button>
         <button
-          onClick={() => navigate("/Admin/classes/class/" + row.id)}
-          className="bg-blue-500 text-white py-1 px-4 rounded"
+          onClick={() => navigate("/SuperAdmin/classes/class/" + row.id)}
+          className="bg-blue-500 text-white py-1 px-2 rounded"
         >
           View
         </button>
@@ -106,7 +119,7 @@ const ShowClasses = () => {
           <FaPlusCircle />
         </button>
         {open && (
-          <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded">
+          <div className="absolute right-0 -top-20 w-48 bg-white shadow-lg rounded z-50">
             {actions.map((action, index) => (
               <div
                 key={index}
@@ -127,7 +140,7 @@ const ShowClasses = () => {
     {
       icon: <FaPlusCircle className="text-blue-500" />,
       name: "Add New Class",
-      action: () => navigate("/Admin/addclass"),
+      action: () => navigate("/SuperAdmin/addclass"),
     },
     {
       icon: <FaTrashAlt className="text-red-500" />,
@@ -142,60 +155,79 @@ const ShowClasses = () => {
   };
 
   return (
-    <>
-      <div className="h-screen">
-        <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
-          <button
-            onClick={toggleDrawer}
-            className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
-          >
-            {open ? <IoMdArrowBack /> : <IoIosMenu />}
-          </button>
-          <span className="text-lg font-semibold">Super Admin Dashboard</span>
-
-          <AccountMenu />
+    <div className="h-screen font-poppins bg-gray-100">
+      <div className="flex items-center justify-between h-16 px-6 bg-white shadow-md">
+        <button
+          onClick={toggleDrawer}
+          className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
+        >
+          {open ? <IoMdArrowBack /> : <IoIosMenu />}
+        </button>
+        <span className="text-lg font-semibold">Super Admin Dashboard</span>
+        <AccountMenu />
+      </div>
+      <div className="flex h-full">
+        <div
+          className={`bg-white ${
+            open ? "block" : "hidden"
+          } lg:block border-r border-gray-200 w-64`}
+        >
+          <SideBar />
         </div>
-        <div className="flex h-screen">
-          <div className="bg-white border-b border-gray-200 w-64">
-            <SideBar />
-          </div>
-          <div>
-            {loading ? (
-              <div>Loading...</div>
-            ) : (
+        <div className="flex-grow p-6 relative">
+          {loading ? (
+            <div className="flex justify-center items-center h-full">
+              <div
+                className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"
+                role="status"
+              >
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          ) : (
+            <div className="grid ">
+              <div className="flex justify-end mt-4">
+                <button
+                  onClick={() => navigate("/SuperAdmin/addclass")}
+                  className="bg-green-500 text-white py-1 px-4 rounded"
+                >
+                  Add Class
+                </button>
+              </div>
               <>
-                {getresponse ? (
-                  <div className="flex justify-end mt-4">
-                    <button
-                      onClick={() => navigate("/SuperAdmin/addclass")}
-                      className="bg-green-500 text-white py-1 px-4 rounded"
-                    >
-                      Add Class
-                    </button>
-                  </div>
-                ) : (
-                  <>
-                    {Array.isArray(sclassesList) && sclassesList.length > 0 && (
-                      <TableTemplate
-                        buttonHaver={SclassButtonHaver}
-                        columns={sclassColumns}
-                        rows={sclassRows}
-                      />
-                    )}
-                    <SpeedDialTemplate actions={actions} />
-                  </>
+                {Array.isArray(sclassesList) && sclassesList.length > 0 && (
+                  <DataTable
+                    columns={columns}
+                    data={data}
+                    pagination
+                    highlightOnHover
+                    responsive
+                    customStyles={{
+                      headCells: {
+                        style: {
+                          fontWeight: "bold",
+                          backgroundColor: "#f8f9fa",
+                        },
+                      },
+                      rows: {
+                        style: {
+                          minHeight: "72px", // override the row height
+                        },
+                      },
+                    }}
+                  />
                 )}
               </>
-            )}
-            <Popup
-              message={message}
-              setShowPopup={setShowPopup}
-              showPopup={showPopup}
-            />
-          </div>
+            </div>
+          )}
+          <Popup
+            message={message}
+            setShowPopup={setShowPopup}
+            showPopup={showPopup}
+          />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
