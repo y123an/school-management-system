@@ -49,7 +49,7 @@ const TeacherHomePage = () => {
         <span className="text-lg font-semibold">Teachers Dashboard</span>
         <AccountMenu />
       </div>
-      <div className="flex h-full">
+      <div className="flex">
         <div
           className={`bg-white ${
             open ? "block" : "hidden"
@@ -57,43 +57,41 @@ const TeacherHomePage = () => {
         >
           <TeacherSideBar />
         </div>
-        <>
-          <div className="container mx-auto mt-4 mb-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-white p-4 flex flex-col justify-between items-center">
-                <img src={Students} alt="Students" />
-                <p className="text-lg font-semibold">Class Students</p>
-                <p className="text-4xl font-bold">
-                  <span>{numberOfStudents}</span>
-                </p>
-              </div>
-              <div className="bg-white p-4 flex flex-col justify-between items-center">
-                <img src={Lessons} alt="Lessons" />
-                <p className="text-lg font-semibold">Total Lessons</p>
-                <p className="text-4xl font-bold">
-                  <span>{numberOfSessions}</span>
-                </p>
-              </div>
-              <div className="bg-white p-4 flex flex-col justify-between items-center">
-                <img src={Tests} alt="Tests" />
-                <p className="text-lg font-semibold">Tests Taken</p>
-                <p className="text-4xl font-bold">
-                  <span>24</span>
-                </p>
-              </div>
-              <div className="bg-white p-4 flex flex-col justify-between items-center">
-                <img src={Time} alt="Time" />
-                <p className="text-lg font-semibold">Total Hours</p>
-                <p className="text-4xl font-bold">
-                  <span>30</span> hrs
-                </p>
-              </div>
+        <div className="container mx-auto mt-4 mb-4 p-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-lg shadow-md flex flex-col justify-between items-center">
+              <img src={Students} alt="Students" className="w-16 h-16" />
+              <p className="text-lg font-semibold">Class Students</p>
+              <p className="text-4xl font-bold">
+                <span>{numberOfStudents}</span>
+              </p>
             </div>
-            <div className="mt-4">
-              <SeeNotice />
+            <div className="bg-gradient-to-r from-green-500 to-green-700 text-white p-6 rounded-lg shadow-md flex flex-col justify-between items-center">
+              <img src={Lessons} alt="Lessons" className="w-16 h-16" />
+              <p className="text-lg font-semibold">Total Lessons</p>
+              <p className="text-4xl font-bold">
+                <span>{numberOfSessions}</span>
+              </p>
+            </div>
+            <div className="bg-gradient-to-r from-red-500 to-red-700 text-white p-6 rounded-lg shadow-md flex flex-col justify-between items-center">
+              <img src={Tests} alt="Tests" className="w-16 h-16" />
+              <p className="text-lg font-semibold">Tests Taken</p>
+              <p className="text-4xl font-bold">
+                <span>24</span>
+              </p>
+            </div>
+            <div className="bg-gradient-to-r from-yellow-500 to-yellow-700 text-white p-6 rounded-lg shadow-md flex flex-col justify-between items-center">
+              <img src={Time} alt="Time" className="w-16 h-16" />
+              <p className="text-lg font-semibold">Total Hours</p>
+              <p className="text-4xl font-bold">
+                <span>30</span> hrs
+              </p>
             </div>
           </div>
-        </>
+          <div className="mt-4">
+            <SeeNotice />
+          </div>
+        </div>
       </div>
     </div>
   );

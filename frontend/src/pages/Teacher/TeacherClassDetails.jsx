@@ -37,7 +37,6 @@ const TeacherClassDetails = () => {
     const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleClick = () => {
-      console.info(`You clicked ${options[selectedIndex]}`);
       if (selectedIndex === 0) {
         handleAttendance();
       } else if (selectedIndex === 1) {
@@ -55,6 +54,7 @@ const TeacherClassDetails = () => {
     const handleMenuItemClick = (index) => {
       setSelectedIndex(index);
       setOpen(false);
+      handleClick();
     };
 
     const handleToggle = () => {
@@ -69,30 +69,28 @@ const TeacherClassDetails = () => {
     };
 
     return (
-      <>
+      <div className="flex items-center space-x-2">
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
           onClick={() => navigate("/Teacher/class/student/" + row._id)}
         >
           View
         </button>
         <div className="relative inline-block text-left">
-          <div>
-            <button
-              className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
-              onClick={handleToggle}
-              ref={anchorRef}
-            >
-              {open ? <IoIosArrowUp /> : <IoIosArrowDown />}
-            </button>
-          </div>
+          <button
+            className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
+            onClick={handleToggle}
+            ref={anchorRef}
+          >
+            {open ? <IoIosArrowUp /> : <IoIosArrowDown />}
+          </button>
           {open && (
-            <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+            <div className="origin-top-right absolute -top-20 z-50 right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
               <div className="py-1">
                 {options.map((option, index) => (
                   <button
                     key={option}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors duration-300"
                     onClick={() => handleMenuItemClick(index)}
                   >
                     {option}
@@ -102,7 +100,7 @@ const TeacherClassDetails = () => {
             </div>
           )}
         </div>
-      </>
+      </div>
     );
   };
 
@@ -131,20 +129,28 @@ const TeacherClassDetails = () => {
         >
           <TeacherSideBar />
         </div>
-        <>
+        <div className="flex-1 p-6">
           {loading ? (
-            <div>Loading...</div>
+            <div className="flex justify-center items-center h-full">
+              <div className="text-xl font-semibold">Loading...</div>
+            </div>
           ) : (
             <>
-              <h4 className="text-center text-xl mt-4">Class Details</h4>
+              <h4 className="text-center text-2xl font-bold text-gray-800 mt-4">
+                Class Details
+              </h4>
               {getresponse ? (
-                <div className="flex justify-end mt-4">No Students Found</div>
+                <div className="flex justify-center mt-4 text-xl font-semibold text-gray-600">
+                  No Students Found
+                </div>
               ) : (
-                <div className="mt-4">
-                  <h5 className="text-lg">Students List:</h5>
+                <div className="mt-8">
+                  <h5 className="text-lg font-semibold text-gray-700 mb-4">
+                    Students List:
+                  </h5>
                   <div className="overflow-x-auto">
                     <div className="min-w-full">
-                      <div className="bg-white shadow-md rounded my-6">
+                      <div className="bg-white shadow-lg rounded-lg overflow-hidden">
                         <table className="min-w-max w-full table-auto">
                           <thead>
                             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -181,7 +187,7 @@ const TeacherClassDetails = () => {
               )}
             </>
           )}
-        </>
+        </div>
       </div>
     </div>
   );

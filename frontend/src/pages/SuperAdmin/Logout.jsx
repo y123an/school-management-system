@@ -42,9 +42,7 @@ const Logout = () => {
           className={`transition-transform duration-300 ${
             open ? "w-64" : "w-0"
           } bg-white shadow-lg`}
-        >
-          <SideBar />
-        </div>
+        ></div>
         <div className="flex-1 flex flex-col justify-center items-center p-4">
           <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-6 text-center">Logout</h2>

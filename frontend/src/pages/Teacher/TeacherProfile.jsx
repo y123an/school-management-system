@@ -31,7 +31,7 @@ const TeacherProfile = () => {
         >
           {open ? <IoMdArrowBack /> : <IoIosMenu />}
         </button>
-        <span className="text-lg font-semibold">Teachers Dashboard</span>
+        <span className="text-lg font-semibold">Teacher's Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex h-full">
@@ -42,27 +42,33 @@ const TeacherProfile = () => {
         >
           <TeacherSideBar />
         </div>
-        <div className="mt-20 mx-auto w-80 border rounded-lg shadow-lg p-4">
-          <h2 className="text-xl font-semibold mb-4">Teacher Profile</h2>
-          <div className="flex flex-col">
-            <p className="mb-2">
-              <span className="font-semibold">Name:</span> {currentUser.name}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">Email:</span> {currentUser.email}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">Class:</span>{" "}
-              {teachSclass.sclassName}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">Subject:</span>{" "}
-              {teachSubject.subName}
-            </p>
-            <p className="mb-2">
-              <span className="font-semibold">School:</span>{" "}
-              {teachSchool.schoolName}
-            </p>
+        <div className="flex flex-col items-center justify-center flex-grow">
+          <div className="w-full max-w-md bg-white shadow-lg rounded-lg p-8">
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              Teacher Profile
+            </h2>
+            <div className="flex flex-col space-y-4">
+              <div className="flex flex-col">
+                <span className="text-gray-600 font-semibold">Name:</span>
+                <p className="text-gray-900">{currentUser.name}</p>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-gray-600 font-semibold">Email:</span>
+                <p className="text-gray-900">{currentUser.email}</p>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-gray-600 font-semibold">Class:</span>
+                <p className="text-gray-900">{teachSclass.sclassName}</p>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-gray-600 font-semibold">Subject:</span>
+                <p className="text-gray-900">{teachSubject.subName}</p>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-gray-600 font-semibold">School:</span>
+                <p className="text-gray-900">{teachSchool.schoolName}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

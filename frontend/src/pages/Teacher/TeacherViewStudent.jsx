@@ -86,7 +86,7 @@ const TeacherViewStudent = () => {
         >
           {open ? <IoMdArrowBack /> : <IoIosMenu />}
         </button>
-        <span className="text-lg font-semibold">Teachers Dashboard</span>
+        <span className="text-lg font-semibold">Teacher's Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex h-full">
@@ -97,171 +97,183 @@ const TeacherViewStudent = () => {
         >
           <TeacherSideBar />
         </div>
-        <>
+        <div className="flex-1 p-6 overflow-auto">
           {loading ? (
-            <div>Loading...</div>
+            <div className="flex justify-center items-center h-full">
+              <div className="text-xl font-semibold">Loading...</div>
+            </div>
           ) : (
             <>
-              {loading ? (
-                <div>Loading...</div>
-              ) : (
-                <div>
-                  <div>
-                    Name: {userDetails.name}
-                    <br />
-                    Roll Number: {userDetails.rollNum}
-                    <br />
-                    Class: {sclassName.sclassName}
-                    <br />
-                    School: {studentSchool.schoolName}
-                    <br />
-                    <br />
-                    <h3>Attendance:</h3>
-                    {subjectAttendance &&
-                      Array.isArray(subjectAttendance) &&
-                      subjectAttendance.length > 0 && (
-                        <>
-                          {Object.entries(
-                            groupAttendanceBySubject(subjectAttendance)
-                          ).map(
-                            (
-                              [subName, { present, allData, subId, sessions }],
-                              index
-                            ) => {
-                              if (subName === teachSubject) {
-                                const subjectAttendancePercentage =
-                                  calculateSubjectAttendancePercentage(
-                                    present,
-                                    sessions
-                                  );
-
-                                return (
-                                  <div key={index}>
-                                    <div>
-                                      <div>Subject: {subName}</div>
-                                      <div>Present: {present}</div>
-                                      <div>Total Sessions: {sessions}</div>
-                                      <div>
-                                        Attendance Percentage:{" "}
-                                        {subjectAttendancePercentage}%
-                                      </div>
-                                      <div>
-                                        <button
-                                          onClick={() => handleOpen(subId)}
-                                        >
-                                          {openStates[subId] ? (
-                                            <IoIosArrowUp />
-                                          ) : (
-                                            <IoIosArrowDown />
-                                          )}
-                                          Details
-                                        </button>
-                                      </div>
-                                      <div>
-                                        {openStates[subId] && (
-                                          <div>
-                                            <h6>Attendance Details</h6>
-                                            <table>
-                                              <thead>
-                                                <tr>
-                                                  <th>Date</th>
-                                                  <th>Status</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                {allData.map((data, index) => {
-                                                  const date = new Date(
-                                                    data.date
-                                                  );
-                                                  const dateString =
-                                                    date.toString() !==
-                                                    "Invalid Date"
-                                                      ? date
-                                                          .toISOString()
-                                                          .substring(0, 10)
-                                                      : "Invalid Date";
-                                                  return (
-                                                    <tr key={index}>
-                                                      <td>{dateString}</td>
-                                                      <td>{data.status}</td>
-                                                    </tr>
-                                                  );
-                                                })}
-                                              </tbody>
-                                            </table>
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                );
-                              } else {
-                                return null;
-                              }
-                            }
-                          )}
-                          <div>
-                            Overall Attendance Percentage:{" "}
-                            {overallAttendancePercentage.toFixed(2)}%
-                          </div>
-
-                          <CustomPieChart data={chartData} />
-                        </>
-                      )}
-                    <br />
-                    <br />
-                    <button
-                      onClick={() =>
-                        navigate(
-                          `/Teacher/class/student/attendance/${studentID}/${teachSubjectID}`
-                        )
-                      }
-                    >
-                      Add Attendance
-                    </button>
-                    <br />
-                    <br />
-                    <br />
-                  </div>
-                  <h3>Subject Marks:</h3>
-
-                  {subjectMarks &&
-                    Array.isArray(subjectMarks) &&
-                    subjectMarks.length > 0 && (
-                      <>
-                        {subjectMarks.map((result, index) => {
-                          if (result.subName.subName === teachSubject) {
-                            return (
-                              <div key={index}>
-                                <div>Subject: {result.subName.subName}</div>
-                                <div>Marks: {result.marksObtained}</div>
-                              </div>
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-2xl font-bold mb-4">{userDetails.name}</h2>
+                <p className="text-gray-700">
+                  <span className="font-semibold">Roll Number:</span>{" "}
+                  {userDetails.rollNum}
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-semibold">Class:</span>{" "}
+                  {sclassName.sclassName}
+                </p>
+                <p className="text-gray-700">
+                  <span className="font-semibold">School:</span>{" "}
+                  {studentSchool.schoolName}
+                </p>
+                <h3 className="text-xl font-semibold mt-6">Attendance</h3>
+                {subjectAttendance &&
+                Array.isArray(subjectAttendance) &&
+                subjectAttendance.length > 0 ? (
+                  <>
+                    {Object.entries(
+                      groupAttendanceBySubject(subjectAttendance)
+                    ).map(
+                      (
+                        [subName, { present, allData, subId, sessions }],
+                        index
+                      ) => {
+                        if (subName === teachSubject) {
+                          const subjectAttendancePercentage =
+                            calculateSubjectAttendancePercentage(
+                              present,
+                              sessions
                             );
-                          } else if (!result.subName || !result.marksObtained) {
-                            return null;
-                          }
+
+                          return (
+                            <div key={index} className="mt-4">
+                              <div className="flex items-center justify-between">
+                                <div className="text-gray-700">
+                                  <p className="font-semibold">
+                                    Subject: {subName}
+                                  </p>
+                                  <p>Present: {present}</p>
+                                  <p>Total Sessions: {sessions}</p>
+                                  <p>
+                                    Attendance Percentage:{" "}
+                                    {subjectAttendancePercentage}%
+                                  </p>
+                                </div>
+                                <button
+                                  onClick={() => handleOpen(subId)}
+                                  className="flex items-center text-blue-500 hover:text-blue-700"
+                                >
+                                  {openStates[subId] ? (
+                                    <IoIosArrowUp />
+                                  ) : (
+                                    <IoIosArrowDown />
+                                  )}{" "}
+                                  Details
+                                </button>
+                              </div>
+                              {openStates[subId] && (
+                                <div className="mt-2">
+                                  <h4 className="font-semibold">
+                                    Attendance Details
+                                  </h4>
+                                  <table className="min-w-full bg-white">
+                                    <thead>
+                                      <tr>
+                                        <th className="py-2 px-4 bg-gray-200">
+                                          Date
+                                        </th>
+                                        <th className="py-2 px-4 bg-gray-200">
+                                          Status
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {allData.map((data, index) => {
+                                        const date = new Date(data.date);
+                                        const dateString =
+                                          date.toString() !== "Invalid Date"
+                                            ? date
+                                                .toISOString()
+                                                .substring(0, 10)
+                                            : "Invalid Date";
+                                        return (
+                                          <tr key={index}>
+                                            <td className="border px-4 py-2">
+                                              {dateString}
+                                            </td>
+                                            <td className="border px-4 py-2">
+                                              {data.status}
+                                            </td>
+                                          </tr>
+                                        );
+                                      })}
+                                    </tbody>
+                                  </table>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        } else {
                           return null;
-                        })}
-                      </>
+                        }
+                      }
                     )}
-                  <br />
-                  <PurpleButton
-                    onClick={() =>
-                      navigate(
-                        `/Teacher/class/student/marks/${studentID}/${teachSubjectID}`
-                      )
+                    <div className="mt-6">
+                      <p className="text-gray-700 font-semibold">
+                        Overall Attendance Percentage:{" "}
+                        {overallAttendancePercentage.toFixed(2)}%
+                      </p>
+                      <CustomPieChart data={chartData} />
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-gray-700 mt-4">
+                    No attendance records available.
+                  </p>
+                )}
+                <PurpleButton
+                  onClick={() =>
+                    navigate(
+                      `/Teacher/class/student/attendance/${studentID}/${teachSubjectID}`
+                    )
+                  }
+                  className="bg-gradient-to-r from-green-500 to-green-700 text-white p-2 rounded-sm"
+                >
+                  Add Attendance
+                </PurpleButton>
+                <h3 className="text-xl font-semibold mt-6">Subject Marks</h3>
+                {subjectMarks &&
+                Array.isArray(subjectMarks) &&
+                subjectMarks.length > 0 ? (
+                  subjectMarks.map((result, index) => {
+                    if (result.subName.subName === teachSubject) {
+                      return (
+                        <div key={index} className="mt-4">
+                          <p className="text-gray-700">
+                            <span className="font-semibold">Subject:</span>{" "}
+                            {result.subName.subName}
+                          </p>
+                          <p className="text-gray-700">
+                            <span className="font-semibold">Marks:</span>{" "}
+                            {result.marksObtained}
+                          </p>
+                        </div>
+                      );
+                    } else {
+                      return null;
                     }
-                  >
-                    Add Marks
-                  </PurpleButton>
-                  <br />
-                  <br />
-                  <br />
-                </div>
-              )}
+                  })
+                ) : (
+                  <p className="text-gray-700 mt-4">
+                    No marks records available.
+                  </p>
+                )}
+                <button
+                  onClick={() =>
+                    navigate(
+                      `/Teacher/class/student/marks/${studentID}/${teachSubjectID}`
+                    )
+                  }
+                  className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-2 rounded-sm"
+                >
+                  Add Marks
+                </button>
+              </div>
             </>
           )}
-        </>
+        </div>
       </div>
     </div>
   );

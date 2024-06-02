@@ -15,15 +15,15 @@ const TeacherSideBar = () => {
   const location = useLocation();
 
   return (
-    <>
-      <div className="mt-4">
+    <div className="h-screen w-64 font-poppins bg-white shadow-lg rounded-lg p-4">
+      <div>
         <Link
           to="/Teacher/dashboard"
-          className={`flex items-center ${
+          className={`py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
             location.pathname === "/" ||
             location.pathname === "/Teacher/dashboard"
-              ? "text-blue-600"
-              : "text-gray-600"
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
         >
           <FaHome className="w-6 h-6 mr-2" />
@@ -31,10 +31,10 @@ const TeacherSideBar = () => {
         </Link>
         <Link
           to="/Teacher/class"
-          className={`flex items-center mt-4 ${
+          className={`py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
             location.pathname.startsWith("/Teacher/class")
-              ? "text-blue-600"
-              : "text-gray-600"
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
         >
           <FaChalkboardTeacher className="w-6 h-6 mr-2" />
@@ -42,10 +42,10 @@ const TeacherSideBar = () => {
         </Link>
         <Link
           to="/Teacher/complain"
-          className={`flex items-center mt-4 ${
+          className={`py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
             location.pathname.startsWith("/Teacher/complain")
-              ? "text-blue-600"
-              : "text-gray-600"
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
         >
           <FaExclamationCircle className="w-6 h-6 mr-2" />
@@ -57,10 +57,10 @@ const TeacherSideBar = () => {
         <p className="text-gray-500 text-sm">User</p>
         <Link
           to="/Teacher/profile"
-          className={`flex items-center mt-2 ${
+          className={`py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
             location.pathname.startsWith("/Teacher/profile")
-              ? "text-blue-600"
-              : "text-gray-600"
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
         >
           <FaUserCircle className="w-6 h-6 mr-2" />
@@ -68,17 +68,17 @@ const TeacherSideBar = () => {
         </Link>
         <Link
           to="/logout"
-          className={`flex items-center mt-2 ${
+          className={`py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
             location.pathname.startsWith("/logout")
-              ? "text-blue-600"
-              : "text-gray-600"
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
         >
           <FaSignOutAlt className="w-6 h-6 mr-2" />
           <span>Logout</span>
         </Link>
       </div>
-    </>
+    </div>
   );
 };
 

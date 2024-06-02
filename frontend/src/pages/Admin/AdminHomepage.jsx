@@ -13,6 +13,7 @@ import { getSubjectList } from "../../redux/sclassRelated/sclassHandle";
 import AccountMenu from "../../components/AccountMenu";
 import SideBar from "./SideBar";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
+import SeeNotice from "../../components/SeeNotice";
 
 const AdminHomePage = () => {
   const dispatch = useDispatch();
@@ -116,7 +117,9 @@ const AdminHomePage = () => {
                 />
               </div>
             </div>
-            <div className="mt-8">{/* <SeeNotice /> */}</div>
+            <div className="mt-8">
+              <SeeNotice />
+            </div>
           </div>
         </div>
       </div>
