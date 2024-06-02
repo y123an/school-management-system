@@ -70,7 +70,7 @@ const ShowNotices = () => {
     {
       icon: <FiPlus className="text-blue-500" />,
       name: "Add New Notice",
-      action: () => navigate("/SuperAdmin/addnotice"),
+      action: () => navigate("/Admin/addnotice"),
     },
     {
       icon: <FiTrash2 className="text-red-500" />,
@@ -113,7 +113,7 @@ const ShowNotices = () => {
                   <div className="flex justify-end mt-4">
                     <button
                       className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-                      onClick={() => navigate("/SuperAdmin/addnotice")}
+                      onClick={() => navigate("/Admin/addnotice")}
                     >
                       Add Notice
                     </button>

@@ -57,7 +57,7 @@ const ShowSubjects = () => {
       </button>
       <button
         onClick={() =>
-          navigate(`/SuperAdmin/subjects/subject/${row.sclassID}/${row.id}`)
+          navigate(`/Admin/subjects/subject/${row.sclassID}/${row.id}`)
         }
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
       >
@@ -70,7 +70,7 @@ const ShowSubjects = () => {
     {
       icon: <FaPlus className="text-blue-500" />,
       name: "Add New Subject",
-      action: () => navigate("/SuperAdmin/subjects/chooseclass"),
+      action: () => navigate("/Admin/subjects/chooseclass"),
     },
     {
       icon: <FaTrash className="text-red-500" />,

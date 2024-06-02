@@ -12,7 +12,7 @@ import AccountMenu from "../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import { useState } from "react";
 
-const SuperAdminProfile = () => {
+const AdminProfile = () => {
   // const [showTab, setShowTab] = useState(false);
   // const buttonText = showTab ? 'Cancel' : 'Edit profile';
 
@@ -122,7 +122,7 @@ const SuperAdminProfile = () => {
   );
 };
 
-export default SuperAdminProfile;
+export default AdminProfile;
 
 // const styles = {
 //     attendanceButton: {

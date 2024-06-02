@@ -74,10 +74,10 @@ const ShowStudents = () => {
     };
 
     const handleAttendance = () => {
-      navigate("/SuperAdmin/students/student/attendance/" + row.id);
+      navigate("/Admin/students/student/attendance/" + row.id);
     };
     const handleMarks = () => {
-      navigate("/SuperAdmin/students/student/marks/" + row.id);
+      navigate("/Admin/students/student/marks/" + row.id);
     };
 
     const handleMenuItemClick = (event, index) => {
@@ -107,7 +107,7 @@ const ShowStudents = () => {
         </button>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
-          onClick={() => navigate("/SuperAdmin/students/student/" + row.id)}
+          onClick={() => navigate("/Admin/students/student/" + row.id)}
         >
           View
         </button>
@@ -155,7 +155,7 @@ const ShowStudents = () => {
     {
       icon: <AiOutlineUserAdd className="w-6 h-6 text-blue-600" />,
       name: "Add New Student",
-      action: () => navigate("/SuperAdmin/addstudents"),
+      action: () => navigate("/Admin/addstudents"),
     },
     {
       icon: <AiOutlineDelete className="w-6 h-6 text-red-600" />,
@@ -201,7 +201,7 @@ const ShowStudents = () => {
               <div className="flex justify-end mb-4">
                 <button
                   className="bg-green-500 text-white px-4 py-2 rounded shadow-md hover:bg-green-600 transition duration-300"
-                  onClick={() => navigate("/SuperAdmin/addstudents")}
+                  onClick={() => navigate("/Admin/addstudents")}
                 >
                   Add Students
                 </button>

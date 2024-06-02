@@ -14,7 +14,7 @@ import AccountMenu from "../../components/AccountMenu";
 import SideBar from "./SideBar";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 
-const SuperAdminHomePage = () => {
+const AdminHomePage = () => {
   const dispatch = useDispatch();
   const { studentsList } = useSelector((state) => state.student);
   const { sclassesList } = useSelector((state) => state.sclass);
@@ -124,4 +124,4 @@ const SuperAdminHomePage = () => {
   );
 };
 
-export default SuperAdminHomePage;
+export default AdminHomePage;

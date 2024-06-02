@@ -92,7 +92,7 @@ const ClassDetails = () => {
         </button>
         <button
           onClick={() => {
-            navigate(`/SuperAdmin/class/subject/${classID}/${row.id}`);
+            navigate(`/Admin/class/subject/${classID}/${row.id}`);
           }}
           className="bg-blue-500 text-white px-2 py-1 rounded"
         >
@@ -106,7 +106,7 @@ const ClassDetails = () => {
     {
       icon: <FaPlus className="text-blue-500" />,
       name: "Add New Subject",
-      action: () => navigate("/SuperAdmin/addsubject/" + classID),
+      action: () => navigate("/Admin/addsubject/" + classID),
     },
     {
       icon: <FaTrash className="text-red-500" />,
@@ -122,7 +122,7 @@ const ClassDetails = () => {
           <div className="flex justify-end mt-4">
             <button
               className="bg-green-500 text-white px-4 py-2 rounded"
-              onClick={() => navigate("/SuperAdmin/addsubject/" + classID)}
+              onClick={() => navigate("/Admin/addsubject/" + classID)}
             >
               Add Subjects
             </button>
@@ -166,14 +166,14 @@ const ClassDetails = () => {
         </button>
         <button
           className="bg-blue-500 text-white px-2 py-1 rounded"
-          onClick={() => navigate("/SuperAdmin/students/student/" + row.id)}
+          onClick={() => navigate("/Admin/students/student/" + row.id)}
         >
           View
         </button>
         <button
           className="bg-purple-500 text-white px-2 py-1 rounded"
           onClick={() =>
-            navigate("/SuperAdmin/students/student/attendance/" + row.id)
+            navigate("/Admin/students/student/attendance/" + row.id)
           }
         >
           Attendance
@@ -186,7 +186,7 @@ const ClassDetails = () => {
     {
       icon: <FaUserPlus className="text-blue-500" />,
       name: "Add New Student",
-      action: () => navigate("/SuperAdmin/class/addstudents/" + classID),
+      action: () => navigate("/Admin/class/addstudents/" + classID),
     },
     {
       icon: <FaUserMinus className="text-red-500" />,
@@ -202,9 +202,7 @@ const ClassDetails = () => {
           <div className="flex justify-end mt-4">
             <button
               className="bg-green-500 text-white px-4 py-2 rounded"
-              onClick={() =>
-                navigate("/SuperAdmin/class/addstudents/" + classID)
-              }
+              onClick={() => navigate("/Admin/class/addstudents/" + classID)}
             >
               Add Students
             </button>
@@ -262,9 +260,7 @@ const ClassDetails = () => {
           {getresponse && (
             <button
               className="bg-green-500 text-white px-4 py-2 rounded"
-              onClick={() =>
-                navigate("/SuperAdmin/class/addstudents/" + classID)
-              }
+              onClick={() => navigate("/Admin/class/addstudents/" + classID)}
             >
               Add Students
             </button>
@@ -274,7 +270,7 @@ const ClassDetails = () => {
           {response && (
             <button
               className="bg-green-500 text-white px-4 py-2 rounded"
-              onClick={() => navigate("/SuperAdmin/addsubject/" + classID)}
+              onClick={() => navigate("/Admin/addsubject/" + classID)}
             >
               Add Subjects
             </button>

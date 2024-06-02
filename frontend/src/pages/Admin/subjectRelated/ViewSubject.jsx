@@ -48,16 +48,14 @@ const ViewSubject = () => {
     <>
       <button
         className="text-blue-500 hover:text-blue-700"
-        onClick={() => navigate("/SuperAdmin/students/student/" + row.id)}
+        onClick={() => navigate("/Admin/students/student/" + row.id)}
       >
         View
       </button>
       <button
         className="text-green-500 hover:text-green-700"
         onClick={() =>
-          navigate(
-            `/SuperAdmin/subject/student/attendance/${row.id}/${subjectID}`
-          )
+          navigate(`/Admin/subject/student/attendance/${row.id}/${subjectID}`)
         }
       >
         Take Attendance
@@ -69,14 +67,14 @@ const ViewSubject = () => {
     <>
       <button
         className="text-blue-500 hover:text-blue-700"
-        onClick={() => navigate("/SuperAdmin/students/student/" + row.id)}
+        onClick={() => navigate("/Admin/students/student/" + row.id)}
       >
         View
       </button>
       <button
         className="text-green-500 hover:text-green-700"
         onClick={() =>
-          navigate(`/SuperAdmin/subject/student/marks/${row.id}/${subjectID}`)
+          navigate(`/Admin/subject/student/marks/${row.id}/${subjectID}`)
         }
       >
         Provide Marks
@@ -90,7 +88,7 @@ const ViewSubject = () => {
         <div className="flex justify-end mt-4">
           <button
             className="bg-blue-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-blue-600 transition duration-300 ease-in-out"
-            onClick={() => navigate("/SuperAdmin/class/addstudents/" + classID)}
+            onClick={() => navigate("/Admin/class/addstudents/" + classID)}
           >
             Add Students
           </button>
@@ -206,9 +204,7 @@ const ViewSubject = () => {
             <button
               className="bg-green-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-600"
               onClick={() =>
-                navigate(
-                  "/SuperAdmin/teachers/addteacher/" + subjectDetails._id
-                )
+                navigate("/Admin/teachers/addteacher/" + subjectDetails._id)
               }
             >
               Add Subject Teacher

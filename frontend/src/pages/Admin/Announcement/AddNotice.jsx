@@ -34,7 +34,7 @@ const AddNotice = () => {
 
   useEffect(() => {
     if (status === "added") {
-      navigate("/SuperAdmin/notices");
+      navigate("/Admin/notices");
       dispatch(underControl());
     } else if (status === "error") {
       setMessage("Network Error");

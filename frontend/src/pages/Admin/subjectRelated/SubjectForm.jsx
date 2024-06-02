@@ -74,7 +74,7 @@ const SubjectForm = () => {
 
   useEffect(() => {
     if (status === "added") {
-      navigate("/SuperAdmin/subjects");
+      navigate("/Admin/subjects");
       dispatch(underControl());
       setLoader(false);
     } else if (status === "failed") {

@@ -21,9 +21,9 @@ const SideBar = () => {
     <div className="h-screen w-64 font-poppins bg-white shadow-lg rounded-lg p-4">
       <React.Fragment>
         <Link
-          to="/SuperAdmin/dashboard"
+          to="/Admin/dashboard"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
-            isActive("/SuperAdmin/dashboard")
+            isActive("/Admin/dashboard")
               ? "bg-blue-500 text-white"
               : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
@@ -32,9 +32,9 @@ const SideBar = () => {
           <span className="text-md font-medium">Home</span>
         </Link>
         <Link
-          to="/SuperAdmin/classes"
+          to="/Admin/classes"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
-            isActive("/SuperAdmin/classes")
+            isActive("/Admin/classes")
               ? "bg-blue-500 text-white"
               : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
@@ -43,9 +43,9 @@ const SideBar = () => {
           <span className="text-md font-medium">Classes</span>
         </Link>
         <Link
-          to="/SuperAdmin/subjects"
+          to="/Admin/subjects"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
-            isActive("/SuperAdmin/subjects")
+            isActive("/Admin/subjects")
               ? "bg-blue-500 text-white"
               : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
@@ -54,9 +54,9 @@ const SideBar = () => {
           <span className="text-md font-medium">Subjects</span>
         </Link>
         <Link
-          to="/SuperAdmin/teachers"
+          to="/Admin/teachers"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
-            isActive("/SuperAdmin/teachers")
+            isActive("/Admin/teachers")
               ? "bg-blue-500 text-white"
               : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
@@ -65,9 +65,9 @@ const SideBar = () => {
           <span className="text-md font-medium">Teachers</span>
         </Link>
         <Link
-          to="/SuperAdmin/students"
+          to="/Admin/students"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
-            isActive("/SuperAdmin/students")
+            isActive("/Admin/students")
               ? "bg-blue-500 text-white"
               : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
@@ -75,21 +75,11 @@ const SideBar = () => {
           <RiUserLine className="mr-3 text-xl" />
           <span className="text-md font-medium">Students</span>
         </Link>
+
         <Link
-          to="/SuperAdmin/admins"
+          to="/Admin/notices"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
-            isActive("/SuperAdmin/admins")
-              ? "bg-blue-500 text-white"
-              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
-          }`}
-        >
-          <RiUserLine className="mr-3 text-xl" />
-          <span className="text-md font-medium">Admins</span>
-        </Link>
-        <Link
-          to="/SuperAdmin/notices"
-          className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
-            isActive("/SuperAdmin/notices")
+            isActive("/Admin/notices")
               ? "bg-blue-500 text-white"
               : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
@@ -98,9 +88,9 @@ const SideBar = () => {
           <span className="text-md font-medium">Announcement</span>
         </Link>
         <Link
-          to="/SuperAdmin/complains"
+          to="/Admin/complains"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
-            isActive("/SuperAdmin/complains")
+            isActive("/Admin/complains")
               ? "bg-blue-500 text-white"
               : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
@@ -115,9 +105,9 @@ const SideBar = () => {
           User
         </span>
         <Link
-          to="/SuperAdmin/profile"
+          to="/Admin/profile"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
-            isActive("/SuperAdmin/profile")
+            isActive("/Admin/profile")
               ? "bg-blue-500 text-white"
               : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}

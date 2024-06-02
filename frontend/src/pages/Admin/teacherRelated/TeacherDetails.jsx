@@ -28,7 +28,7 @@ const TeacherDetails = () => {
 
   const handleAddSubject = () => {
     navigate(
-      `/SuperAdmin/teachers/choosesubject/${teacherDetails?.teachSclass?._id}/${teacherDetails?._id}`
+      `/Admin/teachers/choosesubject/${teacherDetails?.teachSclass?._id}/${teacherDetails?._id}`
     );
   };
 

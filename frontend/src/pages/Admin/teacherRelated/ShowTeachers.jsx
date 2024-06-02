@@ -55,7 +55,7 @@ const ShowTeachers = () => {
     return (
       <div className="flex justify-end mt-4">
         <button
-          onClick={() => navigate("/SuperAdmin/teachers/chooseclass")}
+          onClick={() => navigate("/Admin/teachers/chooseclass")}
           className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
         >
           Add Teacher
@@ -120,7 +120,7 @@ const ShowTeachers = () => {
                         <button
                           onClick={() =>
                             navigate(
-                              `/SuperAdmin/teachers/choosesubject/${row.teachSclassID}/${row.id}`
+                              `/Admin/teachers/choosesubject/${row.teachSclassID}/${row.id}`
                             )
                           }
                           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -148,9 +148,7 @@ const ShowTeachers = () => {
                   <MdPersonRemove size={24} />
                 </button>
                 <button
-                  onClick={() =>
-                    navigate(`/SuperAdmin/teachers/teacher/${row.id}`)
-                  }
+                  onClick={() => navigate(`/Admin/teachers/teacher/${row.id}`)}
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
                 >
                   View
@@ -166,7 +164,7 @@ const ShowTeachers = () => {
     {
       icon: <MdPersonAdd className="text-blue-500" size={24} />,
       name: "Add New Teacher",
-      action: () => navigate("/SuperAdmin/teachers/chooseclass"),
+      action: () => navigate("/Admin/teachers/chooseclass"),
     },
     {
       icon: <MdPersonRemove className="text-red-500" size={24} />,

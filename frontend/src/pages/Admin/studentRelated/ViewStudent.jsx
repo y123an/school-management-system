@@ -220,7 +220,7 @@ const ViewStudent = () => {
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded ml-2 transition duration-300"
                           onClick={() =>
                             navigate(
-                              `/SuperAdmin/subject/student/attendance/${studentID}/${subId}`
+                              `/Admin/subject/student/attendance/${studentID}/${subId}`
                             )
                           }
                         >
@@ -246,7 +246,7 @@ const ViewStudent = () => {
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 ml-2 transition duration-300"
             onClick={() =>
-              navigate("/SuperAdmin/students/student/attendance/" + studentID)
+              navigate("/Admin/students/student/attendance/" + studentID)
             }
           >
             Add Attendance
@@ -303,7 +303,7 @@ const ViewStudent = () => {
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
             onClick={() =>
-              navigate("/SuperAdmin/students/student/attendance/" + studentID)
+              navigate("/Admin/students/student/attendance/" + studentID)
             }
           >
             Add Attendance
@@ -346,7 +346,7 @@ const ViewStudent = () => {
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300"
             onClick={() =>
-              navigate("/SuperAdmin/students/student/marks/" + studentID)
+              navigate("/Admin/students/student/marks/" + studentID)
             }
           >
             Add Marks
@@ -400,7 +400,7 @@ const ViewStudent = () => {
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
             onClick={() =>
-              navigate("/SuperAdmin/students/student/marks/" + studentID)
+              navigate("/Admin/students/student/marks/" + studentID)
             }
           >
             Add Marks
@@ -455,7 +455,7 @@ const ViewStudent = () => {
         >
           {open ? <IoMdArrowBack /> : <IoIosMenu />}
         </button>
-        <span className="text-lg font-semibold">Super Admin Dashboard</span>
+        <span className="text-lg font-semibold">Admin Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex h-full">

@@ -80,12 +80,12 @@ const ShowClasses = () => {
       {
         icon: <FaPlus />,
         name: "Add Subjects",
-        action: () => navigate("/SuperAdmin/addsubject/" + row.id),
+        action: () => navigate("/Admin/addsubject/" + row.id),
       },
       {
         icon: <FaUserPlus />,
         name: "Add Student",
-        action: () => navigate("/SuperAdmin/class/addstudents/" + row.id),
+        action: () => navigate("/Admin/class/addstudents/" + row.id),
       },
     ];
 
@@ -98,7 +98,7 @@ const ShowClasses = () => {
           <FaTrashAlt />
         </button>
         <button
-          onClick={() => navigate("/SuperAdmin/classes/class/" + row.id)}
+          onClick={() => navigate("/Admin/classes/class/" + row.id)}
           className="bg-blue-500 text-white py-1 px-2 rounded"
         >
           View
@@ -146,7 +146,7 @@ const ShowClasses = () => {
     {
       icon: <FaPlusCircle className="text-blue-500" />,
       name: "Add New Class",
-      action: () => navigate("/SuperAdmin/addclass"),
+      action: () => navigate("/Admin/addclass"),
     },
     {
       icon: <FaTrashAlt className="text-red-500" />,
@@ -189,7 +189,7 @@ const ShowClasses = () => {
             <div className="grid ">
               <div className="flex justify-end mt-4">
                 <button
-                  onClick={() => navigate("/SuperAdmin/addclass")}
+                  onClick={() => navigate("/Admin/addclass")}
                   className="bg-green-500 text-white py-1 px-4 rounded"
                 >
                   Add Class

@@ -41,7 +41,7 @@ const ChooseSubject = ({ situation }) => {
   const updateSubjectHandler = (teacherId, teachSubject) => {
     setLoader(true);
     dispatch(updateTeachSubject(teacherId, teachSubject));
-    navigate("/SuperAdmin/teachers");
+    navigate("/Admin/teachers");
   };
 
   return (
@@ -74,7 +74,7 @@ const ChooseSubject = ({ situation }) => {
                   Sorry, all subjects have teachers assigned already
                 </h1>
                 <button
-                  onClick={() => navigate("/SuperAdmin/addsubject/" + classID)}
+                  onClick={() => navigate("/Admin/addsubject/" + classID)}
                   className="bg-purple-500 text-white px-6 py-3 rounded hover:bg-purple-700"
                 >
                   Add Subjects
