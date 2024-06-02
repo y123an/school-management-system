@@ -9,7 +9,6 @@ import SpeedDialTemplate from "../../../components/SpeedDialTemplate";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
-import { FaSpinner } from "react-icons/fa";
 
 const ShowNotices = () => {
   const navigate = useNavigate();
@@ -105,9 +104,9 @@ const ShowNotices = () => {
           </div>
           <>
             {loading ? (
-               <div className="flex justify-center items-center h-full">
-               <FaSpinner className="animate-spin text-blue-500" size={32} />
-             </div>
+              <div className="flex justify-center items-center h-screen">
+                Loading...
+              </div>
             ) : (
               <>
                 {response ? (

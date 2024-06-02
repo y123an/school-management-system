@@ -4,15 +4,13 @@ import { useParams } from "react-router-dom";
 import { getUserDetails } from "../../../redux/userRelated/userHandle";
 import { getSubjectList } from "../../../redux/sclassRelated/sclassHandle";
 import { updateStudentFields } from "../../../redux/studentRelated/studentHandle";
-
+import { PurpleButton } from "../../../components/ButtonStyles";
 import Popup from "../../../components/Popup";
-import { BlueButton } from "../../../components/ButtonStyles";
-import { MdOutlineSubject, MdOutlinePerson } from "react-icons/md";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 
-const StudentExamMarks = ({ situation }) => {
+const StudentAttendance = ({ situation }) => {
   const dispatch = useDispatch();
   const { currentUser, userDetails, loading } = useSelector(
     (state) => state.user
@@ -26,7 +24,8 @@ const StudentExamMarks = ({ situation }) => {
   const [studentID, setStudentID] = useState("");
   const [subjectName, setSubjectName] = useState("");
   const [chosenSubName, setChosenSubName] = useState("");
-  const [marksObtained, setMarksObtained] = useState("");
+  const [status, setStatus] = useState("");
+  const [date, setDate] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
@@ -59,12 +58,12 @@ const StudentExamMarks = ({ situation }) => {
     setChosenSubName(selectedSubject._id);
   };
 
-  const fields = { subName: chosenSubName, marksObtained };
+  const fields = { subName: chosenSubName, status, date };
 
   const submitHandler = (event) => {
     event.preventDefault();
     setLoader(true);
-    dispatch(updateStudentFields(studentID, fields, "UpdateExamResult"));
+    dispatch(updateStudentFields(studentID, fields, "StudentAttendance"));
   };
 
   useEffect(() => {
@@ -83,14 +82,14 @@ const StudentExamMarks = ({ situation }) => {
     }
   }, [response, statestatus, error]);
 
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   return (
     <>
-      <div className="h-screen">
+      <div className="h-screen font-poppins">
         <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
           <button
             onClick={toggleDrawer}
@@ -104,31 +103,21 @@ const StudentExamMarks = ({ situation }) => {
         </div>
         <div className="flex h-screen">
           <div className="bg-white border-b border-gray-200 w-64">
-            <div
-              className={`bg-white shadow-md transition-transform ${
-                open ? "w-64" : "w-0"
-              } overflow-hidden`}
-            >
-              <SideBar />
-            </div>
+            <SideBar />
           </div>
           <>
             {loading ? (
-              <div className="flex items-center justify-center h-screen">
-                loading...
-              </div>
+              <div>Loading...</div>
             ) : (
               <div className="flex items-center justify-center flex-1">
                 <div className="max-w-lg px-4 py-24 w-full">
                   <div className="mb-6">
-                    <h4 className="text-2xl font-bold mb-2 flex items-center">
-                      <MdOutlinePerson className="mr-2" /> Student Name:{" "}
-                      {userDetails.name}
+                    <h4 className="text-2xl font-bold mb-2">
+                      Student Name: {userDetails.name}
                     </h4>
                     {currentUser.teachSubject && (
-                      <h4 className="text-2xl font-bold mb-2 flex items-center">
-                        <MdOutlineSubject className="mr-2" /> Subject Name:{" "}
-                        {currentUser.teachSubject?.subName}
+                      <h4 className="text-2xl font-bold mb-2">
+                        Subject Name: {currentUser.teachSubject?.subName}
                       </h4>
                     )}
                   </div>
@@ -156,38 +145,51 @@ const StudentExamMarks = ({ situation }) => {
                                 </option>
                               ))
                             ) : (
-                              <option value="">Add Subjects For Marks</option>
+                              <option value="">
+                                Add Subjects For Attendance
+                              </option>
                             )}
                           </select>
                         </div>
                       )}
                       <div className="w-full">
                         <label
-                          htmlFor="marks-input"
+                          htmlFor="status-select"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Enter Marks
+                          Attendance Status
+                        </label>
+                        <select
+                          id="status-select"
+                          value={status}
+                          onChange={(event) => setStatus(event.target.value)}
+                          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                          required
+                        >
+                          <option value="Present">Present</option>
+                          <option value="Absent">Absent</option>
+                        </select>
+                      </div>
+                      <div className="w-full">
+                        <label
+                          htmlFor="date-select"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Select Date
                         </label>
                         <input
-                          id="marks-input"
-                          type="number"
-                          value={marksObtained}
-                          onChange={(e) => setMarksObtained(e.target.value)}
+                          id="date-select"
+                          type="date"
+                          value={date}
+                          onChange={(event) => setDate(event.target.value)}
                           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           required
                         />
                       </div>
                     </div>
-                    <BlueButton
-                      fullWidth
-                      size="large"
-                      className="mt-6"
-                      variant="contained"
-                      type="submit"
-                      disabled={loader}
-                    >
+                    <button className="bg-blue-500 p-3 text-white rounded-md mt-4">
                       {loader ? "loading..." : "Submit"}
-                    </BlueButton>
+                    </button>
                   </form>
                 </div>
                 <Popup
@@ -204,4 +206,4 @@ const StudentExamMarks = ({ situation }) => {
   );
 };
 
-export default StudentExamMarks;
+export default StudentAttendance;
