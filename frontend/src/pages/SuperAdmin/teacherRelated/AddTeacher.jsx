@@ -27,8 +27,6 @@ const AddTeacher = () => {
     (state) => state.sclass
   );
 
-  console.log(subjectsList);
-
   useEffect(() => {
     dispatch(getSubjectDetails(subjectID, "Subject"));
   }, [dispatch, subjectID]);
@@ -100,7 +98,6 @@ const AddTeacher = () => {
       const selectedClass = sclassesList.find(
         (classItem) => classItem._id === event.target.value
       );
-      console.log(selectedClass);
       setClassName(selectedClass._id);
       setSclassName(selectedClass._id);
     }
@@ -122,30 +119,35 @@ const AddTeacher = () => {
 
   return (
     <>
-      <div className="h-screen">
-        <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
+      <div className="h-screen font-poppins">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 bg-white shadow-md">
           <button
             onClick={toggleDrawer}
             className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
           >
-            {open ? <IoMdArrowBack /> : <IoIosMenu />}
+            {open ? <IoMdArrowBack size={24} /> : <IoIosMenu size={24} />}
           </button>
           <span className="text-lg font-semibold">Super Admin Dashboard</span>
-
           <AccountMenu />
         </div>
-        <div className="flex h-screen">
-          <div className="bg-white border-b border-gray-200 w-64">
+        <div className="flex flex-grow">
+          <div
+            className={`bg-white border-r border-gray-200 ${
+              open ? "block" : "hidden"
+            } md:block w-64`}
+          >
             <SideBar />
           </div>
-          <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-            <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-              <form className="space-y-4" onSubmit={submitHandler}>
-                <h2 className="text-2xl font-bold text-center">Add Teacher</h2>
+          <div className="flex flex-col items-center justify-center flex-grow bg-gray-100">
+            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+              <form className="space-y-6" onSubmit={submitHandler}>
+                <h2 className="text-2xl font-bold text-center text-gray-800">
+                  Add Teacher
+                </h2>
                 <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Class</label>
+                  <label className="block text-gray-700 mb-2">Subject</label>
                   <select
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={subjectName}
                     onChange={changeSubjectHandler}
                     required
@@ -161,7 +163,7 @@ const AddTeacher = () => {
                 <div className="mb-4">
                   <label className="block text-gray-700 mb-2">Class</label>
                   <select
-                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     value={className}
                     onChange={changeHandler}
                     required
@@ -177,7 +179,7 @@ const AddTeacher = () => {
                 <div>
                   <label className="block text-gray-700">Name</label>
                   <input
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="text"
                     placeholder="Enter teacher's name..."
                     value={name}
@@ -189,7 +191,7 @@ const AddTeacher = () => {
                 <div>
                   <label className="block text-gray-700">Email</label>
                   <input
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="email"
                     placeholder="Enter teacher's email..."
                     value={email}
@@ -201,7 +203,7 @@ const AddTeacher = () => {
                 <div>
                   <label className="block text-gray-700">Password</label>
                   <input
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="password"
                     placeholder="Enter teacher's password..."
                     value={password}
@@ -211,14 +213,12 @@ const AddTeacher = () => {
                   />
                 </div>
                 <button
-                  className="w-full bg-blue-500 text-white py-2 rounded mt-4 hover:bg-blue-600"
+                  className="w-full bg-blue-500 text-white py-3 rounded-lg mt-4 hover:bg-blue-600 transition duration-300"
                   type="submit"
                   disabled={loader}
                 >
                   {loader ? (
-                    <div className="flex justify-center">
-                      <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-6 w-6"></div>
-                    </div>
+                    <div className="flex justify-center">loading</div>
                   ) : (
                     "Register"
                   )}

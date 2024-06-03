@@ -197,22 +197,11 @@ const ViewSubject = () => {
           </p>
         </div>
         <div className="mb-4">
-          {subjectDetails && subjectDetails.teacher ? (
+          {subjectDetails && subjectDetails.teacher && (
             <>
               <h6 className="text-lg mb-2 font-semibold">Teacher Name:</h6>
               <p className="text-lg mb-2">{subjectDetails.teacher.name}</p>
             </>
-          ) : (
-            <button
-              className="bg-green-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-600"
-              onClick={() =>
-                navigate(
-                  "/SuperAdmin/teachers/addteacher/" + subjectDetails._id
-                )
-              }
-            >
-              Add Subject Teacher
-            </button>
           )}
         </div>
       </div>

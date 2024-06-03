@@ -76,11 +76,11 @@ const TeacherDetails = () => {
                 </p>
                 <p className="text-xl mb-4">
                   <strong>Attendance:</strong>{" "}
-                  {teacherDetails?.attendance.length}
+                  {teacherDetails?.attendance?.length}
                 </p>
                 <p className="text-xl mb-4">
                   <strong>Classes:</strong>{" "}
-                  {teacherDetails?.classes.map((cls, index) => (
+                  {teacherDetails?.classes?.map((cls, index) => (
                     <span key={index}>
                       {cls.teachSubject?.subName} -{" "}
                       {cls.teachSclass?.sclassName}
