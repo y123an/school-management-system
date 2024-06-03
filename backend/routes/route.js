@@ -7,6 +7,8 @@ const {
   adminLogIn,
   getAdminDetail,
   getAdmins,
+  deleteAdmin,
+  updateAdmin,
 } = require("../controllers/admin-controller.js");
 
 const {
@@ -66,6 +68,7 @@ const {
   deleteTeacher,
   updateTeacherSubject,
   teacherAttendance,
+  addClassToTeacher,
 } = require("../controllers/teacher-controller.js");
 
 // superadmin
@@ -76,15 +79,12 @@ router.post("/AdminReg", adminRegister);
 router.post("/AdminLogin", adminLogIn);
 router.get("/Admin/:id", getAdminDetail);
 router.get("/Admins", getAdmins);
-
-// router.delete("/Admin/:id", deleteAdmin)
-
-// router.put("/Admin/:id", updateAdmin)
+router.delete("/Admin/:id", deleteAdmin);
+router.put("/Admin/:id", updateAdmin);
 
 // Student
 
 router.post("/StudentReg", studentRegister);
-router.post("/StudentLogin", studentLogIn);
 
 router.get("/Students/:id", getStudents);
 router.get("/Student/:id", getStudentDetail);
@@ -112,6 +112,7 @@ router.put("/RemoveStudentAtten/:id", removeStudentAttendance);
 
 router.post("/TeacherReg", teacherRegister);
 router.post("/TeacherLogin", teacherLogIn);
+router.post("/Teacher/addSubject/:id", addClassToTeacher);
 
 router.get("/Teachers/:id", getTeachers);
 router.get("/Teacher/:id", getTeacherDetail);

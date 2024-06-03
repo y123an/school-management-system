@@ -71,7 +71,7 @@ const ShowClasses = () => {
     sclassesList &&
     sclassesList.length > 0 &&
     sclassesList.map((sclass) => ({
-      name: sclass.sclassName,
+      name: sclass.gradelevel + sclass.section,
       id: sclass._id,
     }));
 
@@ -159,7 +159,7 @@ const ShowClasses = () => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
+  console.log(sclassesList);
   return (
     <div className="h-screen font-poppins bg-gray-100">
       <div className="flex items-center justify-between h-16 px-6 bg-white shadow-md">

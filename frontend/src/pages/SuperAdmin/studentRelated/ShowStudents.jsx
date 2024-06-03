@@ -168,6 +168,7 @@ const ShowStudents = () => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  console.log(studentsList);
 
   return (
     <div className="h-screen font-poppins bg-gray-100">

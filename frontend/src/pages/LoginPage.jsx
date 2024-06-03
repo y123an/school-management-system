@@ -88,7 +88,7 @@ const LoginPage = () => {
   }, [status, currentRole, navigate, error, response, currentUser]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen font-poppins flex items-center justify-center bg-gray-100">
       <div className="flex items-center w-full  bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="w-full p-8">
           <div className="text-center">

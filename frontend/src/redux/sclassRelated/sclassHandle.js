@@ -10,6 +10,7 @@ import {
   getSubjectsSuccess,
   getSubDetailsSuccess,
   getSubDetailsRequest,
+  stuffDone,
 } from "./sclassSlice";
 const REACT_APP_BASE_URL = "http://localhost:4000";
 
@@ -24,6 +25,27 @@ export const getAllSclasses = (id, address) => async (dispatch) => {
       dispatch(getFailedTwo(result.data.message));
     } else {
       dispatch(getSuccess(result.data));
+    }
+  } catch (error) {
+    dispatch(getError(error));
+  }
+};
+
+export const addSubject = (fields, id) => async (dispatch) => {
+  dispatch(getRequest());
+
+  try {
+    const result = await axios.post(
+      `${REACT_APP_BASE_URL}/Teacher/addSubject/${id}`,
+      fields,
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    if (result.data.message) {
+      dispatch(getFailed(result.data.message));
+    } else {
+      dispatch(stuffDone());
     }
   } catch (error) {
     dispatch(getError(error));

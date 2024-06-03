@@ -51,19 +51,6 @@ const ShowTeachers = () => {
     );
   }
 
-  if (response) {
-    return (
-      <div className="flex justify-end mt-4">
-        <button
-          onClick={() => navigate("/Admin/teachers/chooseclass")}
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-        >
-          Add Teacher
-        </button>
-      </div>
-    );
-  }
-
   if (error) {
     console.log(error);
   }
@@ -175,7 +162,7 @@ const ShowTeachers = () => {
 
   return (
     <>
-      <div className="h-screen font-poppins">
+      <div className="h-screen font-poppins ">
         <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <button
             onClick={toggleDrawer}
@@ -191,7 +178,15 @@ const ShowTeachers = () => {
           <div className="bg-white border-b border-gray-200 w-64">
             <SideBar />
           </div>
-          <div className="w-full overflow-hidden">
+          <div className="w-full overflow-hidden p-4">
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => navigate("/Admin/teachers/chooseclass")}
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+              >
+                Add Teacher
+              </button>
+            </div>
             <div className="overflow-x-auto">
               {/* Render Table */}
               <ActionsTable />

@@ -24,11 +24,9 @@ const TeacherDetails = () => {
     console.log(error);
   }
 
-  const isSubjectNamePresent = teacherDetails?.teachSubject?.subName;
-
   const handleAddSubject = () => {
     navigate(
-      `/SuperAdmin/teachers/choosesubject/${teacherDetails?.teachSclass?._id}/${teacherDetails?._id}`
+      `/SuperAdmin/teachers/choosesubject/${teacherDetails?.classes[0]?.teachSclass?._id}/${teacherDetails?._id}`
     );
   };
 
@@ -36,6 +34,8 @@ const TeacherDetails = () => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  console.log(teacherDetails);
 
   return (
     <>
@@ -69,28 +69,31 @@ const TeacherDetails = () => {
                   <strong>Teacher Name:</strong> {teacherDetails?.name}
                 </p>
                 <p className="text-xl mb-4">
-                  <strong>Class Name:</strong>{" "}
-                  {teacherDetails?.teachSclass?.sclassName}
+                  <strong>Email:</strong> {teacherDetails?.email}
                 </p>
-                {isSubjectNamePresent ? (
-                  <>
-                    <p className="text-xl mb-4">
-                      <strong>Subject Name:</strong>{" "}
-                      {teacherDetails?.teachSubject?.subName}
-                    </p>
-                    <p className="text-xl mb-4">
-                      <strong>Subject Sessions:</strong>{" "}
-                      {teacherDetails?.teachSubject?.sessions}
-                    </p>
-                  </>
-                ) : (
-                  <button
-                    onClick={handleAddSubject}
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
-                  >
-                    Add Subject
-                  </button>
-                )}
+                <p className="text-xl mb-4">
+                  <strong>Role:</strong> {teacherDetails?.role}
+                </p>
+                <p className="text-xl mb-4">
+                  <strong>Attendance:</strong>{" "}
+                  {teacherDetails?.attendance.length}
+                </p>
+                <p className="text-xl mb-4">
+                  <strong>Classes:</strong>{" "}
+                  {teacherDetails?.classes.map((cls, index) => (
+                    <span key={index}>
+                      {cls.teachSubject?.subName} -{" "}
+                      {cls.teachSclass?.sclassName}
+                      {index !== teacherDetails?.classes.length - 1 && ", "}
+                    </span>
+                  ))}
+                </p>
+                <button
+                  onClick={handleAddSubject}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                  Add Subject
+                </button>
               </div>
             )}
           </>

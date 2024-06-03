@@ -1,15 +1,23 @@
 const mongoose = require("mongoose");
 
-const sclassSchema = new mongoose.Schema({
-    sclassName: {
-        type: String,
-        required: true,
+const sclassSchema = new mongoose.Schema(
+  {
+    gradelevel: {
+      type: Number,
+    },
+    section: {
+      type: String,
+    },
+    homeroomteacher: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "teacher",
     },
     school: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'admin'
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "admin",
     },
-}, { timestamps: true });
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("sclass", sclassSchema);
-

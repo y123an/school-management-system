@@ -10,7 +10,10 @@ import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 
 const AddClass = () => {
-  const [sclassName, setSclassName] = useState("");
+  const [gradelevel, setGradelevel] = useState("");
+  const [section, setSection] = useState("");
+  const [homeroomteacher, setHomeroomteacher] = useState("");
+  const [school, setSchool] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -26,7 +29,9 @@ const AddClass = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   const fields = {
-    sclassName,
+    gradelevel: gradelevel,
+    section: section,
+    // homeroomteacher,
     adminID,
   };
 
@@ -52,15 +57,15 @@ const AddClass = () => {
     }
   }, [status, navigate, error, response, dispatch, tempDetails]);
 
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   return (
     <>
-      <div className="h-screen font-poppins flex flex-col">
-        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
+      <div className="h-screen font-poppins ">
+        <div className="flex items-center justify-between h-16 px-6 bg-white shadow-md">
           <button
             onClick={toggleDrawer}
             className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
@@ -68,32 +73,75 @@ const AddClass = () => {
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
           <span className="text-lg font-semibold">Super Admin Dashboard</span>
-
           <AccountMenu />
         </div>
         <div className="flex flex-grow">
-          <SideBar />
-          <div className="flex justify-center items-center w-full">
+          <div>
+            <div
+              className={`bg-white shadow-md transition-transform ${
+                open ? "w-64" : "w-0"
+              } overflow-hidden`}
+            >
+              <SideBar />
+            </div>
+          </div>
+          <div className="flex justify-center items-center w-full bg-gray-100">
             <div className="max-w-md w-full p-8 rounded-lg shadow-md bg-white">
               <div className="flex justify-center mb-6">
                 <img src={ClassRoom} alt="classroom" className="w-3/4" />
               </div>
               <form onSubmit={submitHandler}>
                 <div className="space-y-4">
-                  <label
-                    htmlFor="className"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Create a class
-                  </label>
-                  <input
-                    id="className"
-                    type="text"
-                    className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-400 focus:outline-none"
-                    value={sclassName}
-                    onChange={(event) => setSclassName(event.target.value)}
-                    required
-                  />
+                  <div>
+                    <label
+                      htmlFor="gradelevel"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Grade Level
+                    </label>
+                    <input
+                      id="gradelevel"
+                      type="number"
+                      className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-400 focus:outline-none"
+                      value={gradelevel}
+                      onChange={(event) => setGradelevel(event.target.value)}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="section"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Section
+                    </label>
+                    <input
+                      id="section"
+                      type="text"
+                      className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-400 focus:outline-none"
+                      value={section}
+                      onChange={(event) => setSection(event.target.value)}
+                      required
+                    />
+                  </div>
+                  {/* <div>
+                    <label
+                      htmlFor="homeroomteacher"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Homeroom Teacher
+                    </label>
+                    <input
+                      id="homeroomteacher"
+                      type="text"
+                      className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-400 focus:outline-none"
+                      value={homeroomteacher}
+                      onChange={(event) =>
+                        setHomeroomteacher(event.target.value)
+                      }
+                      required
+                    />
+                  </div> */}
                   <button
                     type="submit"
                     className="w-full bg-blue-600 text-white py-2 rounded-md shadow hover:bg-blue-700 disabled:opacity-50"

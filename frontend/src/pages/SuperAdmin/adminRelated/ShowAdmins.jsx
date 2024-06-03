@@ -111,13 +111,19 @@ const ShowAdmins = () => {
       <>
         <button
           className="text-red-600 hover:text-red-800"
-          onClick={() => deleteHandler(row.id, "Student")}
+          onClick={() => deleteHandler(row.id, "Admin")}
         >
           <MdDelete size={24} />
         </button>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
-          onClick={() => navigate("/SuperAdmin/students/student/" + row.id)}
+          onClick={() =>
+            navigate("/SuperAdmin/admins/update/" + row.id, {
+              state: {
+                admin: row,
+              },
+            })
+          }
         >
           Update
         </button>
@@ -143,7 +149,7 @@ const ShowAdmins = () => {
           ></path>
         </svg>
       ),
-      name: "Add New Student",
+      name: "Add New admin",
       action: () => navigate("/SuperAdmin/addstudents"),
     },
     {
@@ -163,7 +169,7 @@ const ShowAdmins = () => {
           ></path>
         </svg>
       ),
-      name: "Delete All Students",
+      name: "Delete All admins",
       action: () => deleteHandler(currentUser._id, "Students"),
     },
   ];

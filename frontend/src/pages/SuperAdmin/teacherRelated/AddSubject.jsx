@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  addSubject,
+  getAllSclasses,
   getSubjectDetails,
   getSubjectList,
 } from "../../../redux/sclassRelated/sclassHandle";
@@ -13,12 +15,12 @@ import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import ChooseClass from "./ChooseClass";
 
-const AddTeacher = () => {
+const AddSubject = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const subjectID = params.id;
+  const teacherID = params.id;
 
   const { status, response, error, currentUser } = useSelector(
     (state) => state.user
@@ -28,10 +30,6 @@ const AddTeacher = () => {
   );
 
   console.log(subjectsList);
-
-  useEffect(() => {
-    dispatch(getSubjectDetails(subjectID, "Subject"));
-  }, [dispatch, subjectID]);
 
   useEffect(() => {
     dispatch(getSubjectList(currentUser._id, "AllSubjects"));
@@ -49,27 +47,14 @@ const AddTeacher = () => {
   const [subjectName, setSubjectName] = useState("");
   const [chosenSub, setChosenSub] = useState("");
 
-  const role = "Teacher";
-  const school = subjectDetails && subjectDetails.school;
-  const teachSubject = subjectDetails && subjectDetails._id;
-  const teachSclass =
-    subjectDetails &&
-    subjectDetails.sclassName &&
-    subjectDetails.sclassName._id;
-
   const fields = {
-    name,
-    email,
-    password,
-    role,
-    school: currentUser._id,
     classes: [{ teachSubject: chosenSub, teachSclass: sclassName }],
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
     setLoader(true);
-    dispatch(registerUser(fields, role));
+    dispatch(addSubject(fields, teacherID));
   };
 
   useEffect(() => {
@@ -91,6 +76,11 @@ const AddTeacher = () => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const adminID = currentUser._id;
+  useEffect(() => {
+    dispatch(getAllSclasses(adminID, "Sclass"));
+  }, [adminID, dispatch]);
 
   const changeHandler = (event) => {
     if (event.target.value === "Select Class") {
@@ -174,42 +164,6 @@ const AddTeacher = () => {
                     ))}
                   </select>
                 </div>
-                <div>
-                  <label className="block text-gray-700">Name</label>
-                  <input
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    type="text"
-                    placeholder="Enter teacher's name..."
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    autoComplete="name"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Email</label>
-                  <input
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    type="email"
-                    placeholder="Enter teacher's email..."
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    autoComplete="email"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-gray-700">Password</label>
-                  <input
-                    className="w-full px-3 py-2 border border-gray-300 rounded"
-                    type="password"
-                    placeholder="Enter teacher's password..."
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    autoComplete="new-password"
-                    required
-                  />
-                </div>
                 <button
                   className="w-full bg-blue-500 text-white py-2 rounded mt-4 hover:bg-blue-600"
                   type="submit"
@@ -237,4 +191,4 @@ const AddTeacher = () => {
   );
 };
 
-export default AddTeacher;
+export default AddSubject;

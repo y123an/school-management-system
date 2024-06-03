@@ -54,6 +54,8 @@ import TeacherViewStudent from "./pages/Teacher/TeacherViewStudent";
 import TeacherStudentAttendance from "./pages/Teacher/StudentAttendance";
 import TeacherStudentExamMarks from "./pages/Teacher/StudentExamMarks";
 import TeacherComplain from "./pages/Teacher/TeacherComplain";
+import UpdateAdmin from "./pages/SuperAdmin/adminRelated/UpdateAdmin";
+import AddSubject from "./pages/SuperAdmin/teacherRelated/AddSubject";
 
 const App = () => {
   return (
@@ -138,7 +140,7 @@ const App = () => {
         {/* teacher */}
 
         <Route
-          path="/SuperAdmin/teachers/addteacher/:id"
+          path="/SuperAdmin/teachers/addteacher"
           element={<SuperAdminAddTeacher />}
         />
         <Route
@@ -161,10 +163,15 @@ const App = () => {
           path="/SuperAdmin/teachers/choosesubject/:id"
           element={<SuperAdminChooseSubject situation="Norm" />}
         />
+        <Route
+          path="/SuperAdmin/teachers/addsubject/:id"
+          element={<AddSubject situation="Norm" />}
+        />
 
         {/* admins */}
         <Route path="/SuperAdmin/admins" element={<SuperAdminShowAdmins />} />
         <Route path="/SuperAdmin/addAdmins" element={<SuperAdminAddAdmin />} />
+        <Route path="/SuperAdmin/admins/update/:id" element={<UpdateAdmin />} />
 
         {/* anouncement  */}
         <Route path="/SuperAdmin/notices" element={<SuperAdminShowNotices />} />

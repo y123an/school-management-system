@@ -40,7 +40,7 @@ const ChooseClass = ({ situation }) => {
     sclassesList.length > 0 &&
     sclassesList.map((sclass) => {
       return {
-        name: sclass.sclassName,
+        name: sclass.gradelevel + sclass.section,
         id: sclass._id,
       };
     });

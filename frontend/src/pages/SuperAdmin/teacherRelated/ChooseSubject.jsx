@@ -18,7 +18,7 @@ const ChooseSubject = ({ situation }) => {
   const dispatch = useDispatch();
 
   const [classID, setClassID] = useState("");
-  const [teacherID, setTeacherID] = useState("");
+  const [teacherID, setTeacherID] = useState(null);
   const [loader, setLoader] = useState(false);
 
   const { subjectsList, loading, error, response } = useSelector(
