@@ -10,13 +10,13 @@ const studentRegister = async (req, res) => {
       grandfathersName,
       studentID,
       sclassName,
-      adminID,
+
+      gender,
       className,
     } = req.body;
 
     const existingStudent = await Student.findOne({
       studentID,
-      school: adminID,
       sclassName,
     });
 
@@ -30,8 +30,8 @@ const studentRegister = async (req, res) => {
       grandfathersName,
       studentID,
       sclassName,
+      gender,
       className,
-      school: adminID,
       role: "Student", // Assuming you always want to set the role as "Student"
     });
 
@@ -44,10 +44,7 @@ const studentRegister = async (req, res) => {
 
 const getStudents = async (req, res) => {
   try {
-    let students = await Student.find({ school: req.params.id }).populate(
-      "sclassName",
-      "sclassName"
-    );
+    let students = await Student.find().populate("sclassName", "sclassName");
     if (students.length > 0) {
       let modifiedStudents = students.map((student) => {
         return { ...student._doc };
@@ -64,7 +61,6 @@ const getStudents = async (req, res) => {
 const getStudentDetail = async (req, res) => {
   try {
     let student = await Student.findById(req.params.id)
-      .populate("school", "schoolName")
       .populate("sclassName", "sclassName")
       .populate("examResult.subName", "subName")
       .populate("attendance.subName", "subName sessions");
@@ -161,6 +157,7 @@ const updateExamResult = async (req, res) => {
 };
 
 const studentAttendance = async (req, res) => {
+  console.log(req.params.id);
   const { subName, status, date } = req.body;
 
   try {

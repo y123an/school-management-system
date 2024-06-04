@@ -36,13 +36,27 @@ const sclassSlice = createSlice({
       state.getresponse = null;
     },
     getStudentsSuccess: (state, action) => {
-      state.sclassStudents = action.payload;
+      const newStudents = action.payload;
+      const existingStudentIDs = new Set(
+        state.sclassStudents.map((student) => student._id)
+      );
+      const uniqueNewStudents = newStudents.filter(
+        (student) => !existingStudentIDs.has(student._id)
+      );
+      state.sclassStudents = [...state.sclassStudents, ...uniqueNewStudents];
       state.loading = false;
       state.error = null;
       state.getresponse = null;
     },
     getSubjectsSuccess: (state, action) => {
-      state.subjectsList = action.payload;
+      const newSubjects = action.payload;
+      const existingSubjectIDs = new Set(
+        state.subjectsList.map((subject) => subject._id)
+      );
+      const uniqueNewSubjects = newSubjects.filter(
+        (subject) => !existingSubjectIDs.has(subject._id)
+      );
+      state.subjectsList = [...state.subjectsList, ...uniqueNewSubjects];
       state.loading = false;
       state.error = null;
       state.response = null;
@@ -70,7 +84,14 @@ const sclassSlice = createSlice({
       state.error = null;
     },
     getSubDetailsSuccess: (state, action) => {
-      state.subjectDetails = action.payload;
+      const newDetails = [action.payload];
+      const existingDetailIDs = new Set(
+        state.subjectDetails.map((detail) => detail._id)
+      );
+      const uniqueNewDetails = newDetails.filter(
+        (detail) => !existingDetailIDs.has(detail._id)
+      );
+      state.subjectDetails = [...state.subjectDetails, ...uniqueNewDetails];
       state.subloading = false;
       state.error = null;
     },

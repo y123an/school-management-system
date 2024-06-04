@@ -87,6 +87,17 @@ const SideBar = () => {
           <span className="text-md font-medium">Admins</span>
         </Link>
         <Link
+          to="/SuperAdmin/parents"
+          className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
+            isActive("/SuperAdmin/parents")
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
+          }`}
+        >
+          <RiUserLine className="mr-3 text-xl" />
+          <span className="text-md font-medium">Parents</span>
+        </Link>
+        <Link
           to="/SuperAdmin/notices"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
             isActive("/SuperAdmin/notices")

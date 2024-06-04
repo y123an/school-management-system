@@ -21,16 +21,32 @@ const TeacherHomePage = () => {
     (state) => state.sclass
   );
 
-  const classID = currentUser.teachSclass?._id;
-  const subjectID = currentUser.teachSubject?._id;
+  const classIDs = currentUser.classes.map((cls) => cls.teachSclass?._id);
+  const subjectIDs = currentUser.classes.map((cls) => cls.teachSubject?._id);
 
+  const fetchData = () => {
+    classIDs.forEach((id) => {
+      if (id) {
+        dispatch(getClassStudents(id));
+      }
+    });
+    subjectIDs.forEach((id) => {
+      if (id) {
+        dispatch(getSubjectDetails(id, "Subject"));
+      }
+    });
+  };
   useEffect(() => {
-    dispatch(getSubjectDetails(subjectID, "Subject"));
-    dispatch(getClassStudents(classID));
-  }, [dispatch, subjectID, classID]);
+    fetchData();
+  }, []);
 
   const numberOfStudents = sclassStudents && sclassStudents.length;
-  const numberOfSessions = subjectDetails && subjectDetails.sessions;
+  const numberOfSessions = subjectDetails
+    ? subjectDetails.reduce(
+        (sum, subject) => sum + parseInt(subject.sessions, 10),
+        0
+      )
+    : 0;
 
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => {

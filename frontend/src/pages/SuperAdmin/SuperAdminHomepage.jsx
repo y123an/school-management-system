@@ -14,6 +14,7 @@ import AccountMenu from "../../components/AccountMenu";
 import SideBar from "./SideBar";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import SeeNotice from "../../components/SeeNotice";
+import { getAllParents } from "../../redux/parentRelated/parentHandler";
 
 const SuperAdminHomePage = () => {
   const dispatch = useDispatch();
@@ -21,7 +22,7 @@ const SuperAdminHomePage = () => {
   const { sclassesList } = useSelector((state) => state.sclass);
   const { teachersList } = useSelector((state) => state.teacher);
   const { subjectsList } = useSelector((state) => state.sclass);
-
+  const { parentsList } = useSelector((state) => state.parent);
   const { currentUser } = useSelector((state) => state.user);
 
   const adminID = currentUser._id;
@@ -31,12 +32,14 @@ const SuperAdminHomePage = () => {
     dispatch(getAllSclasses(adminID, "Sclass"));
     dispatch(getAllTeachers(adminID));
     dispatch(getSubjectList(adminID, "AllSubjects"));
+    dispatch(getAllParents(adminID));
   }, [adminID, dispatch]);
 
   const numberOfStudents = studentsList && studentsList.length;
   const numberOfClasses = sclassesList && sclassesList.length;
   const numberOfTeachers = teachersList && teachersList.length;
   const numberOfSubjects = subjectsList && subjectsList.length;
+  const numberOfParents = parentsList && parentsList.length;
 
   const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
@@ -107,11 +110,11 @@ const SuperAdminHomePage = () => {
               <div className="p-6 flex flex-col justify-between items-center bg-gradient-to-r from-teal-400 to-cyan-500 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                 <img src={Fees} alt="Fees" className="w-16 h-16" />
                 <p className="text-xl font-semibold mt-4 text-white">
-                  Total Subjects
+                  Total Parents
                 </p>
                 <CountUp
                   start={0}
-                  end={numberOfSubjects}
+                  end={numberOfParents}
                   duration={2.5}
                   className="text-white text-4xl mt-2"
                 />

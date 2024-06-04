@@ -68,6 +68,23 @@ export const getClassStudents = (id) => async (dispatch) => {
     dispatch(getError(error));
   }
 };
+export const updateHomeRoom = (fields, classID) => async (dispatch) => {
+  dispatch(getRequest());
+
+  try {
+    const result = await axios.post(
+      `${REACT_APP_BASE_URL}/Sclass/homeroom/${classID}`,
+      fields
+    );
+    if (result.data.message) {
+      dispatch(getFailedTwo(result.data.message));
+    } else {
+      dispatch(getStudentsSuccess(result.data));
+    }
+  } catch (error) {
+    dispatch(getError(error));
+  }
+};
 
 export const getClassDetails = (id, address) => async (dispatch) => {
   dispatch(getRequest());

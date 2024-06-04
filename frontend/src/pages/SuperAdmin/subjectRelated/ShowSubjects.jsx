@@ -42,7 +42,7 @@ const ShowSubjects = () => {
   const subjectRows = subjectsList.map((subject) => ({
     subName: subject.subName,
     sessions: subject.sessions,
-    sclassName: subject.sclassName.sclassName,
+    sclassName: subject.sclassName.gradelevel + subject.sclassName.section,
     sclassID: subject.sclassName._id,
     id: subject._id,
   }));

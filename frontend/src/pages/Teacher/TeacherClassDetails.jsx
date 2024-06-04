@@ -45,10 +45,10 @@ const TeacherClassDetails = () => {
     };
 
     const handleAttendance = () => {
-      navigate(`/Teacher/class/student/attendance/${row.id}/${subjectID}`);
+      navigate(`/Teacher/class/student/attendance/${row.id}`);
     };
     const handleMarks = () => {
-      navigate(`/Teacher/class/student/marks/${row.id}/${subjectID}`);
+      navigate(`/Teacher/class/student/marks/${row.id}`);
     };
 
     const handleMenuItemClick = (index) => {
@@ -67,6 +67,8 @@ const TeacherClassDetails = () => {
       }
       setOpen(false);
     };
+
+    console.log(sclassStudents);
 
     return (
       <div className="flex items-center space-x-2">
@@ -154,9 +156,19 @@ const TeacherClassDetails = () => {
                         <table className="min-w-max w-full table-auto">
                           <thead>
                             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                              <th className="py-3 px-6 text-left">Name</th>
                               <th className="py-3 px-6 text-left">
-                                Roll Number
+                                First Name
+                              </th>
+                              <th className="py-3 px-6 text-left">Last Name</th>
+                              <th className="py-3 px-6 text-left">
+                                Grand Father Name
+                              </th>
+                              <th className="py-3 px-6 text-left">
+                                Grand Father Name
+                              </th>
+                              <th className="py-3 px-6 text-left">StudentID</th>
+                              <th className="py-3 px-6 text-left">
+                                Class Name
                               </th>
                               <th className="py-3 px-6 text-center">Actions</th>
                             </tr>
@@ -168,10 +180,19 @@ const TeacherClassDetails = () => {
                                 className="border-b border-gray-200 hover:bg-gray-100"
                               >
                                 <td className="py-3 px-6 text-left whitespace-nowrap">
-                                  {student.name}
+                                  {student.firstName}
                                 </td>
                                 <td className="py-3 px-6 text-left whitespace-nowrap">
-                                  {student.rollNum}
+                                  {student.lastName}
+                                </td>
+                                <td className="py-3 px-6 text-left whitespace-nowrap">
+                                  {student.grandfathersName}
+                                </td>
+                                <td className="py-3 px-6 text-left whitespace-nowrap">
+                                  {student.studentID}
+                                </td>
+                                <td className="py-3 px-6 text-left whitespace-nowrap">
+                                  {student.className}
                                 </td>
                                 <td className="py-3 px-6 text-center">
                                   <StudentsButtonHaver row={student} />

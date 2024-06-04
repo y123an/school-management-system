@@ -14,10 +14,6 @@ const noticeSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    school: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "admin",
-    },
     recipient: {
       type: String,
       enum: ["Parent", "Teacher", "Both"],

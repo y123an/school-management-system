@@ -22,7 +22,7 @@ const AddStudent = ({ situation }) => {
   const [lastName, setLastName] = useState("");
   const [grandfathersName, setGrandfathersName] = useState("");
   const [studentID, setStudentID] = useState("");
-  const [password, setPassword] = useState("");
+  const [gender, setGender] = useState("");
   const [className, setClassName] = useState("");
   const [sclassName, setSclassName] = useState("");
 
@@ -61,6 +61,7 @@ const AddStudent = ({ situation }) => {
     grandfathersName,
     studentID,
     sclassName,
+    gender,
     className:
       sclassesList.find((classItem) => classItem._id === className)
         ?.gradelevel +
@@ -174,6 +175,19 @@ const AddStudent = ({ situation }) => {
                     onChange={(event) => setStudentID(event.target.value)}
                     required
                   />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Gender</label>
+                  <select
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    required
+                  >
+                    <option value="Select Class">Select Class</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700 mb-2">Class</label>

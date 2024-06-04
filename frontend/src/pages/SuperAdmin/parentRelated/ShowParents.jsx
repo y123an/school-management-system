@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAllAdmins } from "../../../redux/adminRelated/adminHandler";
 import { deleteUser } from "../../../redux/userRelated/userHandle";
 import TableTemplate from "../../../components/TableTemplate";
 import Popup from "../../../components/Popup";
@@ -10,19 +9,20 @@ import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { FaSpinner } from "react-icons/fa";
+import { getAllParents } from "../../../redux/parentRelated/parentHandler";
 
-const ShowAdmins = () => {
+const ShowParents = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getAllAdmins(currentUser._id));
+    dispatch(getAllParents(currentUser._id));
   }, [currentUser._id, dispatch]);
 
-  const { adminsList, loading, error, response } = useSelector(
-    (state) => state.admin
+  const { parentsList, loading, error, response } = useSelector(
+    (state) => state.parent
   );
 
   if (error) {
@@ -39,7 +39,7 @@ const ShowAdmins = () => {
     // setShowPopup(true);
 
     dispatch(deleteUser(deleteID, address)).then(() => {
-      dispatch(getAllAdmins(currentUser._id));
+      dispatch(getAllParents(currentUser._id));
     });
   };
 
@@ -49,11 +49,10 @@ const ShowAdmins = () => {
     { id: "schoolName", label: "School Name", minWidth: 170 },
   ];
 
-  console.log(adminsList);
   const studentRows =
-    adminsList &&
-    adminsList.length > 0 &&
-    adminsList.map((admin) => {
+    parentsList &&
+    parentsList.length > 0 &&
+    parentsList.map((admin) => {
       return {
         name: admin.name,
         email: admin.email,
@@ -105,14 +104,14 @@ const ShowAdmins = () => {
       <>
         <button
           className="text-red-600 hover:text-red-800"
-          onClick={() => deleteHandler(row.id, "Admin")}
+          onClick={() => deleteHandler(row.id, "Parent")}
         >
           <MdDelete size={24} />
         </button>
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
           onClick={() =>
-            navigate("/SuperAdmin/admins/update/" + row.id, {
+            navigate("/SuperAdmin/parents/update/" + row.id, {
               state: {
                 admin: row,
               },
@@ -144,7 +143,7 @@ const ShowAdmins = () => {
         </svg>
       ),
       name: "Add New admin",
-      action: () => navigate("/SuperAdmin/addstudents"),
+      action: () => navigate("/SuperAdmin/addParents"),
     },
     {
       icon: (
@@ -164,7 +163,7 @@ const ShowAdmins = () => {
         </svg>
       ),
       name: "Delete All admins",
-      action: () => deleteHandler(currentUser._id, "Students"),
+      action: () => deleteHandler(currentUser._id, "Parents"),
     },
   ];
 
@@ -207,14 +206,14 @@ const ShowAdmins = () => {
                 <div className="flex justify-end mt-4">
                   <button
                     className="bg-green-500 text-white px-4 py-2 rounded"
-                    onClick={() => navigate("/SuperAdmin/addAdmins")}
+                    onClick={() => navigate("/SuperAdmin/addParents")}
                   >
-                    Add Admin
+                    Add Parent
                   </button>
                 </div>
 
                 <div className="w-full overflow-hidden">
-                  {Array.isArray(adminsList) && adminsList.length > 0 && (
+                  {Array.isArray(parentsList) && parentsList.length > 0 && (
                     <TableTemplate
                       buttonHaver={StudentButtonHaver}
                       columns={studentColumns}
@@ -236,4 +235,4 @@ const ShowAdmins = () => {
   );
 };
 
-export default ShowAdmins;
+export default ShowParents;

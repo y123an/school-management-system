@@ -5,18 +5,17 @@ const Teacher = require("../models/teacherSchema.js");
 
 const sclassCreate = async (req, res) => {
   try {
-    const { gradelevel, section, homeroomteacher, adminID } = req.body;
+    const { gradelevel, section } = req.body;
 
     const sclass = new Sclass({
       gradelevel,
       section,
-      school: adminID,
     });
 
     const existingSclassByName = await Sclass.findOne({
       gradelevel,
       section,
-      school: adminID,
+      homeroomteacher: null,
     });
 
     if (existingSclassByName) {
@@ -32,7 +31,7 @@ const sclassCreate = async (req, res) => {
 
 const sclassList = async (req, res) => {
   try {
-    let sclasses = await Sclass.find({ school: req.params.id });
+    let sclasses = await Sclass.find();
     if (sclasses.length > 0) {
       res.send(sclasses);
     } else {
@@ -45,7 +44,10 @@ const sclassList = async (req, res) => {
 
 const getSclassDetail = async (req, res) => {
   try {
-    let sclass = await Sclass.findById(req.params.id);
+    let sclass = await Sclass.findById(req.params.id).populate(
+      "homeroomteacher",
+      "name "
+    );
     console.log(sclass);
     if (sclass) {
       res.send(sclass);
@@ -109,6 +111,40 @@ const deleteSclasses = async (req, res) => {
   }
 };
 
+const updateHomeroomTeacher = async (req, res) => {
+  try {
+    const { teacherID } = req.body; // Get classId and teacherId from request body
+
+    const classId = req.params.id;
+    // Find the class by its ID
+    const theClass = await Sclass.findById(classId);
+    const teacher = await Teacher.findById(teacherID);
+
+    if (!theClass) {
+      return res.status(404).send("Class not found"); // Handle class not found error
+    }
+
+    if (!teacher) {
+      return res.status(400).send("Teacher not found");
+    }
+
+    teacher.role = "HomeRoomTeacher"; // Update teacher's role
+
+    await teacher.save();
+    // Update the homeroomteacher reference
+    theClass.homeroomteacher = teacherID;
+
+    // Save the updated class document
+    await theClass.save();
+
+    // Respond with success message or updated class data
+    return res.status(200).send("Homeroom teacher updated successfully");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("An error occurred during update"); // Handle internal server error
+  }
+};
+
 module.exports = {
   sclassCreate,
   sclassList,
@@ -116,4 +152,5 @@ module.exports = {
   deleteSclasses,
   getSclassDetail,
   getSclassStudents,
+  updateHomeroomTeacher,
 };

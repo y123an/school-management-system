@@ -4,7 +4,7 @@ const Subject = require("../models/subjectSchema.js");
 const Sclass = require("../models/sclassSchema.js");
 
 const teacherRegister = async (req, res) => {
-  const { name, email, password, role, school, classes } = req.body;
+  const { name, email, password, role, classes, gender, phone } = req.body;
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(password, salt);
@@ -14,7 +14,8 @@ const teacherRegister = async (req, res) => {
       email,
       password: hashedPass,
       role,
-      school,
+      gender,
+      phone,
       classes,
     });
 
@@ -58,9 +59,15 @@ const teacherLogIn = async (req, res) => {
         teacher.password
       );
       if (validated) {
-        teacher = await teacher.populate("teachSubject", "subName sessions");
+        teacher = await teacher.populate(
+          "classes.teachSubject",
+          "subName sessions"
+        );
         teacher = await teacher.populate("school", "schoolName");
-        teacher = await teacher.populate("teachSclass", "sclassName");
+        teacher = await teacher.populate(
+          "classes.teachSclass",
+          "sclassName gradelevel section"
+        );
         teacher.password = undefined;
         res.send(teacher);
       } else {
@@ -76,7 +83,7 @@ const teacherLogIn = async (req, res) => {
 
 const getTeachers = async (req, res) => {
   try {
-    const teachers = await Teacher.find({ school: req.params.id })
+    const teachers = await Teacher.find()
       .populate({
         path: "classes.teachSubject",
         select: "subName",
@@ -119,16 +126,20 @@ const getTeacherDetail = async (req, res) => {
     const teacher = await Teacher.findById(req.params.id)
       .populate({ path: "classes.teachSubject", select: "subName sessions" })
       .populate({ path: "school", select: "schoolName" })
-      .populate({ path: "classes.teachSclass", select: "sclassName" });
+      .populate({
+        path: "classes.teachSclass",
+        select: "sclassName gradelevel section",
+      });
 
     if (teacher) {
       const modifiedClasses = teacher.classes.map((cls) => ({
         teachSubject: {
-          sunName: cls.teachSubject.subName,
+          subName: cls.teachSubject.subName,
           _id: cls.teachSubject._id,
         },
         teachSclass: {
-          sclassName: cls.teachSclass.sclassName,
+          gradelevel: cls.teachSclass.gradelevel,
+          section: cls.teachSclass.section,
           _id: cls.teachSclass._id,
         },
       }));
@@ -184,7 +195,7 @@ const deleteTeacher = async (req, res) => {
 
 const deleteTeachers = async (req, res) => {
   try {
-    const deletionResult = await Teacher.deleteMany({ school: req.params.id });
+    const deletionResult = await Teacher.deleteMany();
 
     const deletedCount = deletionResult.deletedCount || 0;
 

@@ -12,10 +12,6 @@ const sclassSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "teacher",
     },
-    school: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "admin",
-    },
   },
   { timestamps: true }
 );

@@ -6,6 +6,7 @@ import { sclassReducer } from "./sclassRelated/sclassSlice";
 import { teacherReducer } from "./teacherRelated/teacherSlice";
 import { complainReducer } from "./complainRelated/complainSlice";
 import { adminReducer } from "./adminRelated/adminSlice";
+import { parentReducer } from "./parentRelated/parentSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     complain: complainReducer,
     sclass: sclassReducer,
     admin: adminReducer,
+    parent: parentReducer,
   },
 });
 

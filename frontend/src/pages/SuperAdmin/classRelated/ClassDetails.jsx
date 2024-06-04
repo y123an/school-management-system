@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   getClassDetails,
   getClassStudents,
@@ -350,9 +350,27 @@ const ClassDetails = () => {
                   </div>
                 </div>
                 <div className="flex justify-end mt-3">
-                  <button className="bg-green-500 text-white px-4 py-2 rounded">
-                    Add Home room teacher
-                  </button>
+                  {sclassDetails?.homeroomteacher ? (
+                    <div className="flex justify-end flex-col items-end">
+                      <p>
+                        <span>Home Room Teacher: </span>
+                        {sclassDetails?.homeroomteacher.name}
+                      </p>
+                      <Link
+                        to={`/SuperAdmin/classes/homeRoom/${classID}`}
+                        className="bg-green-500 text-white px-4 py-2 rounded"
+                      >
+                        update
+                      </Link>
+                    </div>
+                  ) : (
+                    <Link
+                      to={`/SuperAdmin/classes/homeRoom/${classID}`}
+                      className="bg-green-500 text-white px-4 py-2 rounded"
+                    >
+                      Add Home room teacher
+                    </Link>
+                  )}
                 </div>
                 <div className="mt-8">
                   {value === "1" && <ClassDetailsSection />}

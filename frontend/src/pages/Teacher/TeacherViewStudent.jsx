@@ -225,9 +225,7 @@ const TeacherViewStudent = () => {
                 )}
                 <PurpleButton
                   onClick={() =>
-                    navigate(
-                      `/Teacher/class/student/attendance/${studentID}/${teachSubjectID}`
-                    )
+                    navigate(`/Teacher/class/student/attendance/${studentID}`)
                   }
                   className="bg-gradient-to-r from-green-500 to-green-700 text-white p-2 rounded-sm"
                 >
@@ -262,9 +260,7 @@ const TeacherViewStudent = () => {
                 )}
                 <button
                   onClick={() =>
-                    navigate(
-                      `/Teacher/class/student/marks/${studentID}/${teachSubjectID}`
-                    )
+                    navigate(`/Teacher/class/student/marks/${studentID}`)
                   }
                   className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-2 rounded-sm"
                 >

@@ -56,6 +56,9 @@ import TeacherStudentExamMarks from "./pages/Teacher/StudentExamMarks";
 import TeacherComplain from "./pages/Teacher/TeacherComplain";
 import UpdateAdmin from "./pages/SuperAdmin/adminRelated/UpdateAdmin";
 import AddSubject from "./pages/SuperAdmin/teacherRelated/AddSubject";
+import SuperAdminShowParents from "./pages/SuperAdmin/parentRelated/ShowParents";
+import SuperAdminAddParent from "./pages/SuperAdmin/parentRelated/AddParent";
+import AddHomeRoom from "./pages/SuperAdmin/classRelated/AddHomeRoom";
 
 const App = () => {
   return (
@@ -78,6 +81,10 @@ const App = () => {
         <Route
           path="/SuperAdmin/classes/class/:id"
           element={<SuperAdminClassDetails />}
+        />
+        <Route
+          path="/SuperAdmin/classes/homeRoom/:id"
+          element={<AddHomeRoom />}
         />
 
         {/* students */}
@@ -166,6 +173,13 @@ const App = () => {
         <Route
           path="/SuperAdmin/teachers/addsubject/:id"
           element={<AddSubject situation="Norm" />}
+        />
+
+        {/* parents */}
+        <Route path="/SuperAdmin/parents" element={<SuperAdminShowParents />} />
+        <Route
+          path="/SuperAdmin/addParents"
+          element={<SuperAdminAddParent />}
         />
 
         {/* admins */}
@@ -279,12 +293,12 @@ const App = () => {
           element={<TeacherViewStudent />}
         />
         <Route
-          path="/Teacher/class/student/attendance/:studentID/:subjectID"
-          element={<TeacherStudentAttendance situation="Subject" />}
+          path="/Teacher/class/student/attendance/:studentID"
+          element={<TeacherStudentAttendance situation="Student" />}
         />
         <Route
-          path="/Teacher/class/student/marks/:studentID/:subjectID"
-          element={<TeacherStudentExamMarks situation="Subject" />}
+          path="/Teacher/class/student/marks/:studentID"
+          element={<TeacherStudentExamMarks situation="Student" />}
         />
         <Route path="/Teacher/complain" element={<TeacherComplain />} />
 

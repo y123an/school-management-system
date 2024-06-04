@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 
 const TeacherSideBar = () => {
   const { currentUser } = useSelector((state) => state.user);
-  const sclassName = currentUser.teachSclass;
+  // const sclassName = currentUser.teachSclass;
   const location = useLocation();
 
   return (
@@ -38,7 +38,7 @@ const TeacherSideBar = () => {
           }`}
         >
           <FaChalkboardTeacher className="w-6 h-6 mr-2" />
-          <span>Class {sclassName.sclassName}</span>
+          <span>Classes</span>
         </Link>
         <Link
           to="/Teacher/complain"

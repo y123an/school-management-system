@@ -415,18 +415,23 @@ const ViewStudent = () => {
       <div className="p-6 bg-white rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-4">Student Details:</h3>
         <div className="mb-2">
-          <span className="font-semibold">Name:</span> {userDetails.name}
+          <span className="font-semibold">First Name:</span>{" "}
+          {userDetails.firstName}
         </div>
         <div className="mb-2">
-          <span className="font-semibold">Roll Number:</span>{" "}
-          {userDetails.rollNum}
+          <span className="font-semibold">Last Name:</span>{" "}
+          {userDetails.lastName}
         </div>
         <div className="mb-2">
-          <span className="font-semibold">Class:</span> {sclassName.sclassName}
+          <span className="font-semibold">Grand Father Name:</span>{" "}
+          {userDetails.grandfathersName}
         </div>
         <div className="mb-2">
-          <span className="font-semibold">School:</span>{" "}
-          {studentSchool.schoolName}
+          <span className="font-semibold">Class:</span> {userDetails.className}
+        </div>
+        <div className="mb-2">
+          <span className="font-semibold">Student ID:</span>{" "}
+          {userDetails.studentID}
         </div>
         {subjectAttendance &&
           Array.isArray(subjectAttendance) &&

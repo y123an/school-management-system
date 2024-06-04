@@ -34,7 +34,7 @@ const StudentExamMarks = ({ situation }) => {
 
   useEffect(() => {
     if (situation === "Student") {
-      setStudentID(params.id);
+      setStudentID(params.studentID);
       const stdID = params.id;
       dispatch(getUserDetails(stdID, "Student"));
     } else if (situation === "Subject") {

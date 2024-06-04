@@ -18,6 +18,7 @@ const {
   deleteSclasses,
   getSclassDetail,
   getSclassStudents,
+  updateHomeroomTeacher,
 } = require("../controllers/class-controller.js");
 
 const {
@@ -31,6 +32,14 @@ const {
   deleteNotice,
   updateNotice,
 } = require("../controllers/notice-controller.js");
+const {
+  registerParent,
+  parentLogIn,
+  getParentById,
+  getAllParents,
+  deleteParent,
+  updateParent,
+} = require("../controllers/parent-controller.js");
 const {
   studentRegister,
   studentLogIn,
@@ -81,6 +90,14 @@ router.get("/Admin/:id", getAdminDetail);
 router.get("/Admins", getAdmins);
 router.delete("/Admin/:id", deleteAdmin);
 router.put("/Admin/:id", updateAdmin);
+
+// parent
+router.post("/ParentReg", registerParent);
+router.post("/ParentLogin", parentLogIn);
+router.get("/Parent/:id", getParentById);
+router.get("/Parents", getAllParents);
+router.delete("/Parent/:id", deleteParent);
+router.put("/Parent/:id", updateParent);
 
 // Student
 
@@ -150,6 +167,7 @@ router.get("/SclassList/:id", sclassList);
 router.get("/Sclass/:id", getSclassDetail);
 
 router.get("/Sclass/Students/:id", getSclassStudents);
+router.post("/Sclass/homeroom/:id", updateHomeroomTeacher);
 
 router.delete("/Sclasses/:id", deleteSclasses);
 router.delete("/Sclass/:id", deleteSclass);
