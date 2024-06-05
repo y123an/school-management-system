@@ -38,6 +38,7 @@ const ShowNotices = () => {
   const noticeColumns = [
     { id: "title", label: "Title", minWidth: 170 },
     { id: "details", label: "Details", minWidth: 100 },
+    { id: "recipient", label: "Recipient", minWidth: 100 },
     { id: "date", label: "Date", minWidth: 170 },
   ];
 
@@ -53,6 +54,7 @@ const ShowNotices = () => {
       return {
         title: notice.title,
         details: notice.details,
+        recipient: notice.recipient,
         date: dateString,
         id: notice._id,
       };
