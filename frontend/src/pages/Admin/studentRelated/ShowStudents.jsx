@@ -115,7 +115,7 @@ const ShowStudents = () => {
         >
           View
         </button>
-        <div className="relative inline-block text-left">
+        {/* <div className="relative inline-block text-left">
           <div>
             <button
               type="button"
@@ -140,7 +140,7 @@ const ShowStudents = () => {
                 {options.map((option, index) => (
                   <button
                     key={option}
-                    className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
+                    className="text-gray-700 block px-4 py-2 z-50 absolute -top-10 text-sm hover:bg-gray-100 w-full text-left"
                     role="menuitem"
                     onClick={(event) => handleMenuItemClick(event, index)}
                   >
@@ -150,7 +150,7 @@ const ShowStudents = () => {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     );
   };

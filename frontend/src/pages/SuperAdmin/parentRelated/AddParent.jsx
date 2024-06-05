@@ -79,9 +79,10 @@ const AddParent = () => {
     setLoader(true);
     dispatch(registerUser(fields, role));
   };
+  console.log(status);
 
   useEffect(() => {
-    if (status === "added") {
+    if (status === "success") {
       dispatch(underControl());
       navigate("/SuperAdmin/parents");
     } else if (status === "failed") {
@@ -89,7 +90,7 @@ const AddParent = () => {
       setShowPopup(true);
       setLoader(false);
     } else if (status === "error") {
-      setMessage("Network Error");
+      setMessage("Error, check your inputs for same email or invalid inputs");
       setShowPopup(true);
       setLoader(false);
     }

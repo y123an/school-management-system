@@ -80,7 +80,7 @@ const AddTeacher = () => {
   };
 
   useEffect(() => {
-    if (status === "added") {
+    if (status === "success") {
       dispatch(underControl());
       navigate("/SuperAdmin/teachers");
     } else if (status === "failed") {

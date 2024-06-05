@@ -33,6 +33,7 @@ const UpdateAdmin = ({ situation }) => {
     dispatch(updateUser(fields, params.id, role));
   };
 
+  console.log(status);
   useEffect(() => {
     if (status === "success") {
       dispatch(underControl());

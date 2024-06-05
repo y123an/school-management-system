@@ -27,11 +27,9 @@ const registerParent = async (req, res) => {
     });
 
     await newParent.save();
-    res
-      .status(201)
-      .json({ message: "Parent registered successfully", parent: newParent });
+    res.status(201).json(newParent);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 

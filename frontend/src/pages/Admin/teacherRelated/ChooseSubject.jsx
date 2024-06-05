@@ -18,7 +18,7 @@ const ChooseSubject = ({ situation }) => {
   const dispatch = useDispatch();
 
   const [classID, setClassID] = useState("");
-  const [teacherID, setTeacherID] = useState("");
+  const [teacherID, setTeacherID] = useState(null);
   const [loader, setLoader] = useState(false);
 
   const { subjectsList, loading, error, response } = useSelector(
@@ -54,7 +54,7 @@ const ChooseSubject = ({ situation }) => {
           >
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
-          <span className="text-lg font-semibold">Admin Dashboard</span>
+          <span className="text-lg font-semibold">Super Admin Dashboard</span>
           <AccountMenu />
         </div>
         <div className="flex-1 flex">

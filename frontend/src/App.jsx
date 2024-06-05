@@ -34,8 +34,8 @@ import ClassDetails from "./pages/Admin/classRelated/ClassDetails";
 import AddStudent from "./pages/Admin/studentRelated/AddStudent";
 import ShowStudents from "./pages/Admin/studentRelated/ShowStudents";
 import ViewStudent from "./pages/Admin/studentRelated/ViewStudent";
-import StudentAttendance from "./pages/SuperAdmin/studentRelated/StudentAttendance";
-import StudentExamMarks from "./pages/SuperAdmin/studentRelated/StudentExamMarks";
+import StudentAttendance from "./pages/Admin/studentRelated/StudentAttendance";
+import StudentExamMarks from "./pages/Admin/studentRelated/StudentExamMarks";
 import ShowSubjects from "./pages/Admin/subjectRelated/ShowSubjects";
 import SubjectForm from "./pages/Admin/subjectRelated/SubjectForm";
 import ViewSubject from "./pages/Admin/subjectRelated/ViewSubject";
@@ -262,7 +262,7 @@ const App = () => {
 
         {/* teacher */}
 
-        <Route path="/Admin/teachers/addteacher/:id" element={<AddTeacher />} />
+        <Route path="/Admin/teachers/addteacher" element={<AddTeacher />} />
         <Route path="/Admin/teachers" element={<ShowTeachers />} />
         <Route
           path="/Admin/teachers/teacher/:id"

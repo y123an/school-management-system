@@ -68,7 +68,6 @@ const adminRegister = async (req, res) => {
       res.send({ message: "Email already exists" });
     } else {
       let result = await admin.save();
-      result = { ...result };
       result.password = undefined;
 
       res.send(result);

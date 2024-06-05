@@ -204,13 +204,6 @@ const ViewStudent = () => {
                       </td>
                       <td className="border border-gray-300 px-4 py-2 text-center">
                         <button
-                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded transition duration-300"
-                          onClick={() => handleOpen(subId)}
-                        >
-                          {openStates[subId] ? <FiArrowUp /> : <FiArrowDown />}
-                          Details
-                        </button>
-                        <button
                           className="text-red-600 hover:text-red-800 ml-2 transition duration-300"
                           onClick={() => removeSubAttendance(subId)}
                         >
@@ -415,18 +408,23 @@ const ViewStudent = () => {
       <div className="p-6 bg-white rounded-lg shadow-md">
         <h3 className="text-xl font-semibold mb-4">Student Details:</h3>
         <div className="mb-2">
-          <span className="font-semibold">Name:</span> {userDetails.name}
+          <span className="font-semibold">First Name:</span>{" "}
+          {userDetails.firstName}
         </div>
         <div className="mb-2">
-          <span className="font-semibold">Roll Number:</span>{" "}
-          {userDetails.rollNum}
+          <span className="font-semibold">Last Name:</span>{" "}
+          {userDetails.lastName}
         </div>
         <div className="mb-2">
-          <span className="font-semibold">Class:</span> {sclassName.sclassName}
+          <span className="font-semibold">Grand Father Name:</span>{" "}
+          {userDetails.grandfathersName}
         </div>
         <div className="mb-2">
-          <span className="font-semibold">School:</span>{" "}
-          {studentSchool.schoolName}
+          <span className="font-semibold">Class:</span> {userDetails.className}
+        </div>
+        <div className="mb-2">
+          <span className="font-semibold">Student ID:</span>{" "}
+          {userDetails.studentID}
         </div>
         {subjectAttendance &&
           Array.isArray(subjectAttendance) &&
@@ -455,7 +453,7 @@ const ViewStudent = () => {
         >
           {open ? <IoMdArrowBack /> : <IoIosMenu />}
         </button>
-        <span className="text-lg font-semibold">Admin Dashboard</span>
+        <span className="text-lg font-semibold">Super Admin Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex h-full">

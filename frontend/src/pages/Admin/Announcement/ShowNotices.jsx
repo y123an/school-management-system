@@ -31,7 +31,7 @@ const ShowNotices = () => {
 
   const deleteHandler = (deleteID, address) => {
     dispatch(deleteUser(deleteID, address)).then(() => {
-      dispatch(getAllNotices(currentUser._id, currentRole, "Notice"));
+      dispatch(getAllNotices(currentUser._id, "Notice", currentRole));
     });
   };
 

@@ -40,7 +40,7 @@ const ChooseClass = ({ situation }) => {
     sclassesList.length > 0 &&
     sclassesList.map((sclass) => {
       return {
-        name: sclass.sclassName,
+        name: sclass.gradelevel + sclass.section,
         id: sclass._id,
       };
     });
@@ -73,7 +73,7 @@ const ChooseClass = ({ situation }) => {
             >
               {open ? <IoMdArrowBack /> : <IoIosMenu />}
             </button>
-            <span className="text-lg font-semibold">Admin Dashboard</span>
+            <span className="text-lg font-semibold">Super Admin Dashboard</span>
             <AccountMenu />
           </div>
           <div className="flex-1 p-4">

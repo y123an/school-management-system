@@ -84,7 +84,7 @@ const AddStudent = ({ situation }) => {
   };
 
   useEffect(() => {
-    if (status === "added") {
+    if (status === "success") {
       dispatch(underControl());
       navigate(-1);
     } else if (status === "failed") {

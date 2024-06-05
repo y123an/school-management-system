@@ -90,7 +90,7 @@ const StudentExamMarks = ({ situation }) => {
 
   return (
     <>
-      <div className="h-screen">
+      <div className="h-screen font-poppins">
         <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
           <button
             onClick={toggleDrawer}
@@ -98,7 +98,7 @@ const StudentExamMarks = ({ situation }) => {
           >
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
-          <span className="text-lg font-semibold">Admin Dashboard</span>
+          <span className="text-lg font-semibold">Super Admin Dashboard</span>
 
           <AccountMenu />
         </div>
@@ -149,6 +149,7 @@ const StudentExamMarks = ({ situation }) => {
                             className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
                           >
+                            <option value=""></option>
                             {subjectsList ? (
                               subjectsList.map((subject, index) => (
                                 <option key={index} value={subject.subName}>

@@ -57,7 +57,7 @@ export const registerUser = (fields, role) => async (dispatch) => {
     const result = await axiosInstance.post(`/${role}Reg`, fields, {
       headers: { "Content-Type": "application/json" },
     });
-    if (result.data.schoolName) {
+    if (result.data._id) {
       dispatch(authSuccess(result.data));
     } else if (result.data.school) {
       dispatch(stuffAdded());
@@ -108,7 +108,7 @@ export const updateUser = (fields, id, address) => async (dispatch) => {
     const result = await axiosInstance.put(`/${address}/${id}`, fields, {
       headers: { "Content-Type": "application/json" },
     });
-    if (result.data.schoolName) {
+    if (result.data._id) {
       dispatch(authSuccess(result.data));
     } else {
       dispatch(doneSuccess(result.data));
