@@ -26,6 +26,7 @@ const SeeNotice = () => {
   const noticeRows = noticesList.map((notice) => ({
     title: notice.title,
     details: notice.details,
+    recipient: notice.recipient,
     date: new Date(notice.date).toISOString().substring(0, 10),
     id: notice._id,
   }));
@@ -50,6 +51,9 @@ const SeeNotice = () => {
                     Details
                   </th>
                   <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                    Recipient
+                  </th>
+                  <th className="px-6 py-3 border-b border-gray-200 bg-gray-100 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                     Date
                   </th>
                 </tr>
@@ -72,6 +76,11 @@ const SeeNotice = () => {
                     <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                       <div className="text-sm leading-5 text-gray-900">
                         {notice.details}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                      <div className="text-sm leading-5 text-gray-900">
+                        {notice.recipient}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
