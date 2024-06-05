@@ -36,7 +36,7 @@ export const DarkRedButton = ({ children, ...props }) => (
 );
 
 export const BlueButton = ({ children, ...props }) => (
-  <button className={`btn ${buttonStyles.blue}`} {...props}>
+  <button className={`btn bg-blue-900 text-white hover:bg-blue-700`} {...props}>
     {children}
   </button>
 );

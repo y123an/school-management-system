@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   getClassDetails,
   getClassStudents,
@@ -143,14 +143,20 @@ const ClassDetails = () => {
   };
 
   const studentColumns = [
-    { id: "name", label: "Name", minWidth: 170 },
-    { id: "rollNum", label: "Roll Number", minWidth: 100 },
+    { id: "firstName", label: "First Name", minWidth: 170 },
+    { id: "lastName", label: "Last Name", minWidth: 170 },
+    { id: "grandfatherName", label: "Grand Father Name", minWidth: 170 },
+    { id: "studentID", label: "Student ID", minWidth: 100 },
+    { id: "className", label: "Class", minWidth: 170 },
   ];
 
   const studentRows = sclassStudents.map((student) => {
     return {
-      name: student.name,
-      rollNum: student.rollNum,
+      firstName: student.firstName,
+      lastName: student.lastName,
+      grandfatherName: student.grandfathersName,
+      studentID: student.studentID,
+      className: student.className,
       id: student._id,
     };
   });
@@ -237,7 +243,8 @@ const ClassDetails = () => {
           <h4 className="text-xl mb-2 text-center font-thin">
             This is Class{" "}
             <span className="font-semibold capitalize">
-              {sclassDetails && sclassDetails.sclassName}
+              {sclassDetails &&
+                sclassDetails.gradelevel + sclassDetails.section}
             </span>
           </h4>
         </div>
@@ -295,7 +302,7 @@ const ClassDetails = () => {
           >
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
-          <span className="text-lg font-semibold">Super Admin Dashboard</span>
+          <span className="text-lg font-semibold">Admin Dashboard</span>
 
           <AccountMenu />
         </div>
@@ -343,6 +350,29 @@ const ClassDetails = () => {
                       Teachers
                     </button>
                   </div>
+                </div>
+                <div className="flex justify-end mt-3">
+                  {sclassDetails?.homeroomteacher ? (
+                    <div className="flex justify-end flex-col items-end">
+                      <p>
+                        <span>Home Room Teacher: </span>
+                        {sclassDetails?.homeroomteacher.name}
+                      </p>
+                      <Link
+                        to={`/Admin/classes/homeRoom/${classID}`}
+                        className="bg-green-500 text-white px-4 py-2 rounded"
+                      >
+                        update
+                      </Link>
+                    </div>
+                  ) : (
+                    <Link
+                      to={`/Admin/classes/homeRoom/${classID}`}
+                      className="bg-green-500 text-white px-4 py-2 rounded"
+                    >
+                      Add Home room teacher
+                    </Link>
+                  )}
                 </div>
                 <div className="mt-8">
                   {value === "1" && <ClassDetailsSection />}

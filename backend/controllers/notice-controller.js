@@ -14,7 +14,18 @@ const noticeCreate = async (req, res) => {
 
 const noticeList = async (req, res) => {
   try {
-    let notices = await Notice.find();
+    const recipient = req.params.id;
+    let notices;
+    if (recipient === "Teacher" || recipient === "HomeRoomTeacher") {
+      notices = await Notice.find({ recipient: { $in: ["Teacher", "Both"] } });
+    } else if (recipient === "Parent") {
+      notices = await Notice.find({ recipient: { $in: ["Parent", "Both"] } });
+    } else if (recipient === "Admin" || recipient === "SuperAdmin") {
+      notices = await Notice.find();
+    } else {
+      notices = [];
+    }
+
     if (notices.length > 0) {
       res.send(notices);
     } else {

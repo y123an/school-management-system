@@ -35,12 +35,12 @@ const ShowTeachers = () => {
   const deleteHandler = (deleteID, address) => {
     console.log(deleteID);
     console.log(address);
-    setMessage("Sorry the delete function has been disabled for now.");
-    setShowPopup(true);
+    // setMessage("Sorry the delete function has been disabled for now.");
 
-    // dispatch(deleteUser(deleteID, address)).then(() => {
-    //     dispatch(getAllTeachers(currentUser._id));
-    // });
+    dispatch(deleteUser(deleteID, address)).then(() => {
+      dispatch(getAllTeachers(currentUser._id));
+    });
+    setShowPopup(true);
   };
 
   if (loading) {
@@ -57,15 +57,16 @@ const ShowTeachers = () => {
 
   const columns = [
     { id: "name", label: "Name", minWidth: 170 },
-    { id: "teachSubject", label: "Subject", minWidth: 100 },
-    { id: "teachSclass", label: "Class", minWidth: 170 },
+    { id: "email", label: "email", minWidth: 100 },
+    { id: "role", label: "role", minWidth: 170 },
   ];
 
+  console.log(teachersList);
   const rows = teachersList.map((teacher) => ({
     name: teacher.name,
-    teachSubject: teacher.teachSubject?.subName || null,
-    teachSclass: teacher.teachSclass.sclassName,
-    teachSclassID: teacher.teachSclass._id,
+    email: teacher.email,
+    role: teacher.role,
+    teachSclassID: teacher.classes.teachSclass,
     id: teacher._id,
   }));
 
@@ -106,9 +107,7 @@ const ShowTeachers = () => {
                       ) : (
                         <button
                           onClick={() =>
-                            navigate(
-                              `/Admin/teachers/choosesubject/${row.teachSclassID}/${row.id}`
-                            )
+                            navigate(`/Admin/teachers/addSubject/${row.id}`)
                           }
                           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
                         >
@@ -170,7 +169,7 @@ const ShowTeachers = () => {
           >
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
-          <span className="text-lg font-semibold">Super Admin Dashboard</span>
+          <span className="text-lg font-semibold">Admin Dashboard</span>
 
           <AccountMenu />
         </div>
@@ -181,7 +180,7 @@ const ShowTeachers = () => {
           <div className="w-full overflow-hidden p-4">
             <div className="flex justify-end mt-4">
               <button
-                onClick={() => navigate("/Admin/teachers/chooseclass")}
+                onClick={() => navigate("/Admin/teachers/addteacher")}
                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
               >
                 Add Teacher

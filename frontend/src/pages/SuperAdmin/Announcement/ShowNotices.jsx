@@ -17,19 +17,21 @@ const ShowNotices = () => {
   const { noticesList, loading, error, response } = useSelector(
     (state) => state.notice
   );
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, currentRole } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getAllNotices(currentUser._id, "Notice"));
+    dispatch(getAllNotices(currentUser._id, "Notice", currentRole));
   }, [currentUser._id, dispatch]);
 
   if (error) {
     console.log(error);
   }
 
+  console.log(currentRole);
+
   const deleteHandler = (deleteID, address) => {
     dispatch(deleteUser(deleteID, address)).then(() => {
-      dispatch(getAllNotices(currentUser._id, "Notice"));
+      dispatch(getAllNotices(currentUser._id, currentRole, "Notice"));
     });
   };
 
@@ -105,9 +107,9 @@ const ShowNotices = () => {
           </div>
           <>
             {loading ? (
-               <div className="flex justify-center items-center h-full">
-               <FaSpinner className="animate-spin text-blue-500" size={32} />
-             </div>
+              <div className="flex justify-center items-center h-full">
+                <FaSpinner className="animate-spin text-blue-500" size={32} />
+              </div>
             ) : (
               <>
                 {response ? (

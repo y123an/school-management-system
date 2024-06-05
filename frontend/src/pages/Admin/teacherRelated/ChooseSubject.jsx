@@ -54,7 +54,7 @@ const ChooseSubject = ({ situation }) => {
           >
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
-          <span className="text-lg font-semibold">Super Admin Dashboard</span>
+          <span className="text-lg font-semibold">Admin Dashboard</span>
           <AccountMenu />
         </div>
         <div className="flex-1 flex">

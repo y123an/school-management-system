@@ -63,7 +63,6 @@ const teacherLogIn = async (req, res) => {
           "classes.teachSubject",
           "subName sessions"
         );
-        teacher = await teacher.populate("school", "schoolName");
         teacher = await teacher.populate(
           "classes.teachSclass",
           "sclassName gradelevel section"
@@ -92,22 +91,9 @@ const getTeachers = async (req, res) => {
 
     if (teachers.length > 0) {
       const modifiedTeachers = teachers.map((teacher) => {
-        const modifiedClasses = teacher.classes.map((cls) => ({
-          teachSubject: {
-            sunName: cls.teachSubject.subName,
-            _id: cls.teachSubject._id,
-          },
-          teachSclass: {
-            gradelevel: cls.teachSclass.gradelevel,
-            section: cls.teachSclass.section,
-            _id: cls.teachSclass._id,
-          },
-        }));
-
         return {
           ...teacher._doc,
           password: undefined,
-          classes: modifiedClasses,
         };
       });
 
@@ -125,7 +111,6 @@ const getTeacherDetail = async (req, res) => {
   try {
     const teacher = await Teacher.findById(req.params.id)
       .populate({ path: "classes.teachSubject", select: "subName sessions" })
-      .populate({ path: "school", select: "schoolName" })
       .populate({
         path: "classes.teachSclass",
         select: "sclassName gradelevel section",

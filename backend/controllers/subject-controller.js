@@ -81,7 +81,10 @@ const getSubjectDetail = async (req, res) => {
   try {
     let subject = await Subject.findById(req.params.id);
     if (subject) {
-      subject = await subject.populate("sclassName", "sclassName");
+      subject = await subject.populate(
+        "sclassName",
+        "sclassName gradelevel section"
+      );
       subject = await subject.populate("teacher", "name");
       res.send(subject);
     } else {

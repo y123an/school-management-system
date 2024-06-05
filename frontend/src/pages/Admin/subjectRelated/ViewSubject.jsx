@@ -39,8 +39,11 @@ const ViewSubject = () => {
     "py-2 px-4 cursor-pointer bg-white border-l border-t border-r rounded-t shadow-md";
 
   const studentRows = sclassStudents.map((student) => ({
-    rollNum: student.rollNum,
-    name: student.name,
+    firstName: student.firstName,
+    lastName: student.lastName,
+    grandfatherName: student.grandfathersName,
+    studentID: student.studentID,
+    className: student.className,
     id: student._id,
   }));
 
@@ -101,10 +104,13 @@ const ViewSubject = () => {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Roll No.
+                    First Name
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
+                    Last Name
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    studentID
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -118,12 +124,15 @@ const ViewSubject = () => {
                     className={index % 2 === 0 ? "bg-gray-100" : ""}
                   >
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {student.rollNum}
+                      {student.firstName}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {student.name}
+                      {student.lastName}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {student.studentID}
+                    </td>
+                    <td className="px-6 py-4 flex gap-3 whitespace-nowrap text-sm font-medium">
                       {tabIndex === 1 ? (
                         <StudentsAttendanceButtonHaver row={student} />
                       ) : (
@@ -165,19 +174,19 @@ const ViewSubject = () => {
         <div className="mb-4">
           <h6 className="text-lg mb-2 font-semibold">Subject Name:</h6>
           <p className="text-lg mb-2">
-            {subjectDetails ? subjectDetails.subName : "N/A"}
+            {subjectDetails[0] ? subjectDetails[0].subName : "N/A"}
           </p>
         </div>
         <div className="mb-4">
           <h6 className="text-lg mb-2 font-semibold">Subject Code:</h6>
           <p className="text-lg mb-2">
-            {subjectDetails ? subjectDetails.subCode : "N/A"}
+            {subjectDetails[0] ? subjectDetails[0].subCode : "N/A"}
           </p>
         </div>
         <div className="mb-4">
           <h6 className="text-lg mb-2 font-semibold">Subject Sessions:</h6>
           <p className="text-lg mb-2">
-            {subjectDetails ? subjectDetails.sessions : "N/A"}
+            {subjectDetails[0] ? subjectDetails[0].sessions : "N/A"}
           </p>
         </div>
         <div className="mb-4">
@@ -187,28 +196,18 @@ const ViewSubject = () => {
         <div className="mb-4">
           <h6 className="text-lg mb-2 font-semibold">Class Name:</h6>
           <p className="text-lg mb-2">
-            {subjectDetails &&
-            subjectDetails.sclassName &&
-            subjectDetails.sclassName.sclassName
-              ? subjectDetails.sclassName.sclassName
+            {subjectDetails[0]?.sclassName
+              ? subjectDetails[0]?.sclassName?.gradelevel +
+                subjectDetails[0]?.sclassName?.section
               : "N/A"}
           </p>
         </div>
         <div className="mb-4">
-          {subjectDetails && subjectDetails.teacher ? (
+          {subjectDetails && subjectDetails.teacher && (
             <>
               <h6 className="text-lg mb-2 font-semibold">Teacher Name:</h6>
               <p className="text-lg mb-2">{subjectDetails.teacher.name}</p>
             </>
-          ) : (
-            <button
-              className="bg-green-500 text-white py-2 px-4 rounded-md shadow-md hover:bg-green-600"
-              onClick={() =>
-                navigate("/Admin/teachers/addteacher/" + subjectDetails._id)
-              }
-            >
-              Add Subject Teacher
-            </button>
           )}
         </div>
       </div>
@@ -227,7 +226,7 @@ const ViewSubject = () => {
         >
           {open ? <IoMdArrowBack /> : <IoIosMenu />}
         </button>
-        <span className="text-lg font-semibold">Super Admin Dashboard</span>
+        <span className="text-lg font-semibold">Admin Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex h-screen">

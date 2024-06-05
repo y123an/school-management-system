@@ -143,14 +143,20 @@ const ClassDetails = () => {
   };
 
   const studentColumns = [
-    { id: "name", label: "Name", minWidth: 170 },
-    { id: "rollNum", label: "Roll Number", minWidth: 100 },
+    { id: "firstName", label: "First Name", minWidth: 170 },
+    { id: "lastName", label: "Last Name", minWidth: 170 },
+    { id: "grandfatherName", label: "Grand Father Name", minWidth: 170 },
+    { id: "studentID", label: "Student ID", minWidth: 100 },
+    { id: "className", label: "Class", minWidth: 170 },
   ];
 
   const studentRows = sclassStudents.map((student) => {
     return {
-      name: student.name,
-      rollNum: student.rollNum,
+      firstName: student.firstName,
+      lastName: student.lastName,
+      grandfatherName: student.grandfathersName,
+      studentID: student.studentID,
+      className: student.className,
       id: student._id,
     };
   });

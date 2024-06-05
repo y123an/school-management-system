@@ -109,7 +109,7 @@ const AddSubject = () => {
         >
           {open ? <IoMdArrowBack size={24} /> : <IoIosMenu size={24} />}
         </button>
-        <span className="text-lg font-semibold">Super Admin Dashboard</span>
+        <span className="text-lg font-semibold">Admin Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex flex-grow">

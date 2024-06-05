@@ -43,6 +43,7 @@ const sclassSlice = createSlice({
       const uniqueNewStudents = newStudents.filter(
         (student) => !existingStudentIDs.has(student._id)
       );
+
       state.sclassStudents = [...state.sclassStudents, ...uniqueNewStudents];
       state.loading = false;
       state.error = null;

@@ -23,7 +23,7 @@ const TeacherHomePage = () => {
 
   const classIDs = currentUser.classes.map((cls) => cls.teachSclass?._id);
   const subjectIDs = currentUser.classes.map((cls) => cls.teachSubject?._id);
-
+  console.log(sclassStudents);
   const fetchData = () => {
     classIDs.forEach((id) => {
       if (id) {

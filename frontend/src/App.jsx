@@ -33,7 +33,7 @@ import ShowClasses from "./pages/Admin/classRelated/ShowClasses";
 import ClassDetails from "./pages/Admin/classRelated/ClassDetails";
 import AddStudent from "./pages/Admin/studentRelated/AddStudent";
 import ShowStudents from "./pages/Admin/studentRelated/ShowStudents";
-import ViewStudent from "./pages/SuperAdmin/studentRelated/ViewStudent";
+import ViewStudent from "./pages/Admin/studentRelated/ViewStudent";
 import StudentAttendance from "./pages/SuperAdmin/studentRelated/StudentAttendance";
 import StudentExamMarks from "./pages/SuperAdmin/studentRelated/StudentExamMarks";
 import ShowSubjects from "./pages/Admin/subjectRelated/ShowSubjects";
@@ -55,10 +55,14 @@ import TeacherStudentAttendance from "./pages/Teacher/StudentAttendance";
 import TeacherStudentExamMarks from "./pages/Teacher/StudentExamMarks";
 import TeacherComplain from "./pages/Teacher/TeacherComplain";
 import UpdateAdmin from "./pages/SuperAdmin/adminRelated/UpdateAdmin";
-import AddSubject from "./pages/SuperAdmin/teacherRelated/AddSubject";
+import SuperAdminAddSubject from "./pages/SuperAdmin/teacherRelated/AddSubject";
 import SuperAdminShowParents from "./pages/SuperAdmin/parentRelated/ShowParents";
 import SuperAdminAddParent from "./pages/SuperAdmin/parentRelated/AddParent";
-import AddHomeRoom from "./pages/SuperAdmin/classRelated/AddHomeRoom";
+import SuperAdminAddHomeRoom from "./pages/SuperAdmin/classRelated/AddHomeRoom";
+import AddHomeRoom from "./pages/Admin/classRelated/AddHomeRoom";
+import AddSubject from "./pages/Admin/teacherRelated/AddSubject";
+import ShowParents from "./pages/Admin/parentRelated/ShowParents";
+import AddParent from "./pages/Admin/parentRelated/AddParent";
 
 const App = () => {
   return (
@@ -84,7 +88,7 @@ const App = () => {
         />
         <Route
           path="/SuperAdmin/classes/homeRoom/:id"
-          element={<AddHomeRoom />}
+          element={<SuperAdminAddHomeRoom />}
         />
 
         {/* students */}
@@ -172,7 +176,7 @@ const App = () => {
         />
         <Route
           path="/SuperAdmin/teachers/addsubject/:id"
-          element={<AddSubject situation="Norm" />}
+          element={<SuperAdminAddSubject situation="Norm" />}
         />
 
         {/* parents */}
@@ -205,6 +209,7 @@ const App = () => {
         {/* class */}
         <Route path="/Admin/addclass" element={<AddClass />} />
         <Route path="/Admin/classes" element={<ShowClasses />} />
+        <Route path="/Admin/classes/homeRoom/:id" element={<AddHomeRoom />} />
         <Route path="/Admin/classes/class/:id" element={<ClassDetails />} />
 
         {/* students */}
@@ -251,6 +256,9 @@ const App = () => {
           path="/Admin/subject/student/marks/:studentID/:subjectID"
           element={<StudentExamMarks situation="Subject" />}
         />
+        {/* parents */}
+        <Route path="/Admin/parents" element={<ShowParents />} />
+        <Route path="/Admin/addParents" element={<AddParent />} />
 
         {/* teacher */}
 
@@ -267,6 +275,10 @@ const App = () => {
         <Route
           path="/Admin/teachers/choosesubject/:classID/:teacherID"
           element={<ChooseSubject situation="Teacher" />}
+        />
+        <Route
+          path="/Admin/teachers/addsubject/:id"
+          element={<AddSubject situation="Norm" />}
         />
         <Route
           path="/Admin/teachers/choosesubject/:id"

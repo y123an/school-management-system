@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  getAllSclasses,
   getSubjectDetails,
   getSubjectList,
 } from "../../../redux/sclassRelated/sclassHandle";
@@ -12,9 +11,9 @@ import { underControl } from "../../../redux/userRelated/userSlice";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
-import ChooseClass from "./ChooseClass";
+import { getAllStudents } from "../../../redux/studentRelated/studentHandle";
 
-const AddTeacher = () => {
+const AddParent = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,6 +26,7 @@ const AddTeacher = () => {
   const { subjectDetails, sclassesList, subjectsList } = useSelector(
     (state) => state.sclass
   );
+  const { studentsList } = useSelector((state) => state.student);
 
   useEffect(() => {
     dispatch(getSubjectDetails(subjectID, "Subject"));
@@ -37,8 +37,10 @@ const AddTeacher = () => {
   }, [currentUser._id, dispatch]);
 
   useEffect(() => {
-    dispatch(getAllSclasses(currentUser._id, "Sclass"));
+    dispatch(getAllStudents(currentUser._id, "Allstudents"));
   }, [currentUser._id, dispatch]);
+
+  console.log(studentsList);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -49,18 +51,18 @@ const AddTeacher = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
   const [loader, setLoader] = useState(false);
-  const [sclassName, setSclassName] = useState("");
+  const [student, setStudent] = useState("");
   const [className, setClassName] = useState("");
   const [subjectName, setSubjectName] = useState("");
   const [chosenSub, setChosenSub] = useState("");
 
-  const role = "Teacher";
-  const school = subjectDetails && subjectDetails.school;
-  const teachSubject = subjectDetails && subjectDetails._id;
-  const teachSclass =
-    subjectDetails &&
-    subjectDetails.sclassName &&
-    subjectDetails.sclassName._id;
+  const role = "Parent";
+  //   const school = subjectDetails && subjectDetails.school;
+  //   const teachSubject = subjectDetails && subjectDetails._id;
+  //   const teachSclass =
+  //     subjectDetails &&
+  //     subjectDetails.sclassName &&
+  //     subjectDetails.sclassName._id;
 
   const fields = {
     name,
@@ -69,8 +71,7 @@ const AddTeacher = () => {
     role,
     phone,
     gender,
-    school: currentUser._id,
-    classes: [{ teachSubject: chosenSub, teachSclass: sclassName }],
+    children: [{ child: student }],
   };
 
   const submitHandler = (event) => {
@@ -82,7 +83,7 @@ const AddTeacher = () => {
   useEffect(() => {
     if (status === "added") {
       dispatch(underControl());
-      navigate("/SuperAdmin/teachers");
+      navigate("/Admin/parents");
     } else if (status === "failed") {
       setMessage(response);
       setShowPopup(true);
@@ -99,30 +100,30 @@ const AddTeacher = () => {
     setOpen(!open);
   };
 
-  const changeHandler = (event) => {
-    if (event.target.value === "Select Class") {
-      setClassName("Select Class");
-      setSclassName("");
-    } else {
-      const selectedClass = sclassesList.find(
-        (classItem) => classItem._id === event.target.value
-      );
-      setClassName(selectedClass._id);
-      setSclassName(selectedClass._id);
-    }
-  };
+  //   const changeHandler = (event) => {
+  //     if (event.target.value === "Select Class") {
+  //       setClassName("Select Class");
+  //       setSclassName("");
+  //     } else {
+  //       const selectedClass = sclassesList.find(
+  //         (classItem) => classItem._id === event.target.value
+  //       );
+  //       setClassName(selectedClass._id);
+  //       setSclassName(selectedClass._id);
+  //     }
+  //   };
 
-  const changeSubjectHandler = (event) => {
-    if (event.target.value === "Select Subject") {
-      setSubjectName("Select Subject");
+  const changeStudentHandler = (event) => {
+    if (event.target.value === "Select Child") {
+      setSubjectName("Select Child");
       setChosenSub("");
     } else {
-      const selectedSub = subjectsList.find(
+      const selectedStu = studentsList.find(
         (classItem) => classItem._id === event.target.value
       );
 
-      setSubjectName(selectedSub._id);
-      setChosenSub(selectedSub._id);
+      //   setSubjectName(selectedStu._id);
+      setStudent(selectedStu._id);
     }
   };
 
@@ -136,7 +137,7 @@ const AddTeacher = () => {
           >
             {open ? <IoMdArrowBack size={24} /> : <IoIosMenu size={24} />}
           </button>
-          <span className="text-lg font-semibold">Super Admin Dashboard</span>
+          <span className="text-lg font-semibold">Admin Dashboard</span>
           <AccountMenu />
         </div>
         <div className="flex flex-grow">
@@ -151,59 +152,14 @@ const AddTeacher = () => {
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
               <form className="space-y-6" onSubmit={submitHandler}>
                 <h2 className="text-2xl font-bold text-center text-gray-800">
-                  Add Teacher
+                  Add Parent
                 </h2>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Subject</label>
-                  <select
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={subjectName}
-                    onChange={changeSubjectHandler}
-                    required
-                  >
-                    <option value="Select subject">Select Subject</option>
-                    {subjectsList.map((classItem) => (
-                      <option key={classItem._id} value={classItem._id}>
-                        {classItem.subName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Class</label>
-                  <select
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={className}
-                    onChange={changeHandler}
-                    required
-                  >
-                    <option value="Select Class">Select Class</option>
-                    {sclassesList.map((classItem) => (
-                      <option key={classItem._id} value={classItem._id}>
-                        {classItem.gradelevel} {classItem.section}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Gender</label>
-                  <select
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={gender}
-                    onChange={(e) => setGender(e.target.value)}
-                    required
-                  >
-                    <option value="Select Class">Select Class</option>
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                  </select>
-                </div>
                 <div>
                   <label className="block text-gray-700">Name</label>
                   <input
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="text"
-                    placeholder="Enter teacher's name..."
+                    placeholder="Enter parent's name..."
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     autoComplete="name"
@@ -215,7 +171,7 @@ const AddTeacher = () => {
                   <input
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="number"
-                    placeholder="Enter teacher's name..."
+                    placeholder="Enter parent's phone..."
                     value={phone}
                     onChange={(event) => setPhone(event.target.value)}
                     autoComplete="name"
@@ -227,19 +183,49 @@ const AddTeacher = () => {
                   <input
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="email"
-                    placeholder="Enter teacher's email..."
+                    placeholder="Enter parent's email..."
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="email"
                     required
                   />
                 </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Gender</label>
+                  <select
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    required
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Children</label>
+                  <select
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={student}
+                    onChange={changeStudentHandler}
+                    required
+                  >
+                    <option value="Select Child">Select Child</option>
+                    {studentsList.map((classItem) => (
+                      <option key={classItem._id} value={classItem._id}>
+                        {classItem.firstName} {classItem.lastName}{" "}
+                        {classItem.grandfathersName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div>
                   <label className="block text-gray-700">Password</label>
                   <input
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="password"
-                    placeholder="Enter teacher's password..."
+                    placeholder="Enter parent's password..."
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="new-password"
@@ -271,4 +257,4 @@ const AddTeacher = () => {
   );
 };
 
-export default AddTeacher;
+export default AddParent;

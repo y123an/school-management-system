@@ -204,13 +204,6 @@ const ViewStudent = () => {
                       </td>
                       <td className="border border-gray-300 px-4 py-2 text-center">
                         <button
-                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded transition duration-300"
-                          onClick={() => handleOpen(subId)}
-                        >
-                          {openStates[subId] ? <FiArrowUp /> : <FiArrowDown />}
-                          Details
-                        </button>
-                        <button
                           className="text-red-600 hover:text-red-800 ml-2 transition duration-300"
                           onClick={() => removeSubAttendance(subId)}
                         >

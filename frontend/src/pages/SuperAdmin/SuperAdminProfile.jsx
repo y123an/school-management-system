@@ -42,10 +42,7 @@ const SuperAdminProfile = () => {
                 <span className="text-gray-600 font-semibold">Email:</span>
                 <p className="text-gray-800">{currentUser.email}</p>
               </div>
-              <div className="flex flex-col">
-                <span className="text-gray-600 font-semibold">School:</span>
-                <p className="text-gray-800">{currentUser.schoolName}</p>
-              </div>
+
               {/* Add Delete and Edit Profile functionality */}
             </div>
           </div>

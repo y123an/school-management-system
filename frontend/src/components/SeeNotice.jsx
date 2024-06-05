@@ -14,8 +14,8 @@ const SeeNotice = () => {
     const fetchNotices = async () => {
       try {
         const userId =
-          currentRole === "Admin" ? currentUser._id : currentUser.school._id;
-        await dispatch(getAllNotices(userId, "Notice"));
+          currentRole === "Admin" ? currentUser._id : currentUser._id;
+        dispatch(getAllNotices(userId, "Notice", currentRole));
       } catch (error) {
         console.log("Error fetching notices:", error);
       }

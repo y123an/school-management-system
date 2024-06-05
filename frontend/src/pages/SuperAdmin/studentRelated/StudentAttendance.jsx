@@ -138,6 +138,7 @@ const StudentAttendance = ({ situation }) => {
                             className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
                           >
+                            <option value=""></option>
                             {subjectsList ? (
                               subjectsList.map((subject, index) => (
                                 <option key={index} value={subject.subName}>
@@ -166,6 +167,7 @@ const StudentAttendance = ({ situation }) => {
                           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           required
                         >
+                          <option value=""></option>
                           <option value="Present">Present</option>
                           <option value="Absent">Absent</option>
                         </select>

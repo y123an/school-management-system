@@ -9,6 +9,7 @@ import SpeedDialTemplate from "../../../components/SpeedDialTemplate";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
+import { FaSpinner } from "react-icons/fa";
 
 const ShowNotices = () => {
   const navigate = useNavigate();
@@ -16,19 +17,21 @@ const ShowNotices = () => {
   const { noticesList, loading, error, response } = useSelector(
     (state) => state.notice
   );
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, currentRole } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getAllNotices(currentUser._id, "Notice"));
+    dispatch(getAllNotices(currentUser._id, "Notice", currentRole));
   }, [currentUser._id, dispatch]);
 
   if (error) {
     console.log(error);
   }
 
+  console.log(currentRole);
+
   const deleteHandler = (deleteID, address) => {
     dispatch(deleteUser(deleteID, address)).then(() => {
-      dispatch(getAllNotices(currentUser._id, "Notice"));
+      dispatch(getAllNotices(currentUser._id, currentRole, "Notice"));
     });
   };
 
@@ -70,7 +73,7 @@ const ShowNotices = () => {
     {
       icon: <FiPlus className="text-blue-500" />,
       name: "Add New Notice",
-      action: () => navigate("/Admin/addnotice"),
+      action: () => navigate("/SuperAdmin/addnotice"),
     },
     {
       icon: <FiTrash2 className="text-red-500" />,
@@ -94,7 +97,7 @@ const ShowNotices = () => {
           >
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
-          <span className="text-lg font-semibold">Super Admin Dashboard</span>
+          <span className="text-lg font-semibold">Admin Dashboard</span>
 
           <AccountMenu />
         </div>
@@ -104,8 +107,8 @@ const ShowNotices = () => {
           </div>
           <>
             {loading ? (
-              <div className="flex justify-center items-center h-screen">
-                Loading...
+              <div className="flex justify-center items-center h-full">
+                <FaSpinner className="animate-spin text-blue-500" size={32} />
               </div>
             ) : (
               <>
@@ -113,7 +116,7 @@ const ShowNotices = () => {
                   <div className="flex justify-end mt-4">
                     <button
                       className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-                      onClick={() => navigate("/Admin/addnotice")}
+                      onClick={() => navigate("/SuperAdmin/addnotice")}
                     >
                       Add Notice
                     </button>

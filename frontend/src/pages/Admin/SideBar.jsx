@@ -75,7 +75,17 @@ const SideBar = () => {
           <RiUserLine className="mr-3 text-xl" />
           <span className="text-md font-medium">Students</span>
         </Link>
-
+        <Link
+          to="/Admin/parents"
+          className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
+            isActive("/Admin/parents")
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
+          }`}
+        >
+          <RiUserLine className="mr-3 text-xl" />
+          <span className="text-md font-medium">Parents</span>
+        </Link>
         <Link
           to="/Admin/notices"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
@@ -86,17 +96,6 @@ const SideBar = () => {
         >
           <RiNotification2Line className="mr-3 text-xl" />
           <span className="text-md font-medium">Announcement</span>
-        </Link>
-        <Link
-          to="/Admin/complains"
-          className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
-            isActive("/Admin/complains")
-              ? "bg-blue-500 text-white"
-              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
-          }`}
-        >
-          <RiAlertLine className="mr-3 text-xl" />
-          <span className="text-md font-medium">Complains</span>
         </Link>
       </React.Fragment>
       <hr className="my-3 border-gray-300" />
