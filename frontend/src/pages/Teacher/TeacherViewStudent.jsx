@@ -27,10 +27,8 @@ const TeacherViewStudent = () => {
 
   const address = "Student";
   const studentID = params.id;
-  const teachSubject = currentUser.teachSubject?.subName;
+  const teachSubject = currentUser?.classes[0]?.teachSubject?.subName;
   const teachSubjectID = currentUser.teachSubject?._id;
-
-  console.log(currentRole);
 
   useEffect(() => {
     dispatch(getUserDetails(studentID, address));
@@ -106,14 +104,16 @@ const TeacherViewStudent = () => {
           ) : (
             <>
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">{userDetails.name}</h2>
+                <h2 className="text-2xl font-bold mb-4">
+                  {userDetails.firstName} {userDetails.lastName}
+                </h2>
                 <p className="text-gray-700">
-                  <span className="font-semibold">Roll Number:</span>{" "}
-                  {userDetails.rollNum}
+                  <span className="font-semibold">StudentID:</span>{" "}
+                  {userDetails.studentID}
                 </p>
                 <p className="text-gray-700">
                   <span className="font-semibold">Class:</span>{" "}
-                  {sclassName.sclassName}
+                  {sclassName.gradelevel} {sclassName.section}
                 </p>
                 {currentRole === "HomeRoomTeacher" && (
                   <div>

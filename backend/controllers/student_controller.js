@@ -44,7 +44,10 @@ const studentRegister = async (req, res) => {
 
 const getStudents = async (req, res) => {
   try {
-    let students = await Student.find().populate("sclassName", "sclassName");
+    let students = await Student.find().populate(
+      "sclassName",
+      "sclassName gradelevel section"
+    );
     if (students.length > 0) {
       let modifiedStudents = students.map((student) => {
         return { ...student._doc };
@@ -61,7 +64,7 @@ const getStudents = async (req, res) => {
 const getStudentDetail = async (req, res) => {
   try {
     let student = await Student.findById(req.params.id)
-      .populate("sclassName", "sclassName")
+      .populate("sclassName", "sclassName gradelevel section")
       .populate("examResult.subName", "subName")
       .populate("attendance.subName", "subName sessions");
     if (student) {
