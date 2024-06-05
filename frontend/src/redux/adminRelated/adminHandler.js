@@ -9,11 +9,29 @@ import {
 
 const REACT_APP_BASE_URL = "http://localhost:4000";
 
-export const getAllAdmins = (id) => async (dispatch) => {
+// Create an Axios instance
+const axiosInstance = axios.create({
+  baseURL: REACT_APP_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
+
+// Intercept requests to add the authorization header dynamically
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export const getAllAdmins = () => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(`${REACT_APP_BASE_URL}/Admins/`);
+    const result = await axiosInstance.get(`/Admins/`);
     if (result.data.message) {
       dispatch(getFailed(result.data.message));
     } else {
@@ -29,13 +47,7 @@ export const updateStudentFields =
     dispatch(getRequest());
 
     try {
-      const result = await axios.put(
-        `${REACT_APP_BASE_URL}/${address}/${id}`,
-        fields,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const result = await axiosInstance.put(`/${address}/${id}`, fields);
       if (result.data.message) {
         dispatch(getFailed(result.data.message));
       } else {
@@ -50,7 +62,7 @@ export const removeStuff = (id, address) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.put(`${REACT_APP_BASE_URL}/${address}/${id}`);
+    const result = await axiosInstance.put(`/${address}/${id}`);
     if (result.data.message) {
       dispatch(getFailed(result.data.message));
     } else {

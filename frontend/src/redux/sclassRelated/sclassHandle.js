@@ -12,15 +12,32 @@ import {
   getSubDetailsRequest,
   stuffDone,
 } from "./sclassSlice";
+
 const REACT_APP_BASE_URL = "http://localhost:4000";
+
+// Create an Axios instance
+const axiosInstance = axios.create({
+  baseURL: REACT_APP_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
+
+// Intercept requests to add the authorization header dynamically
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export const getAllSclasses = (id, address) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(
-      `${REACT_APP_BASE_URL}/${address}List/${id}`
-    );
+    const result = await axiosInstance.get(`${address}List/${id}`);
     if (result.data.message) {
       dispatch(getFailedTwo(result.data.message));
     } else {
@@ -35,12 +52,9 @@ export const addSubject = (fields, id) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.post(
-      `${REACT_APP_BASE_URL}/Teacher/addSubject/${id}`,
-      fields,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
+    const result = await axiosInstance.post(
+      `/Teacher/addSubject/${id}`,
+      fields
     );
     if (result.data.message) {
       dispatch(getFailed(result.data.message));
@@ -56,9 +70,7 @@ export const getClassStudents = (id) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(
-      `${REACT_APP_BASE_URL}/Sclass/Students/${id}`
-    );
+    const result = await axiosInstance.get(`/Sclass/Students/${id}`);
     if (result.data.message) {
       dispatch(getFailedTwo(result.data.message));
     } else {
@@ -68,12 +80,13 @@ export const getClassStudents = (id) => async (dispatch) => {
     dispatch(getError(error));
   }
 };
+
 export const updateHomeRoom = (fields, classID) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.post(
-      `${REACT_APP_BASE_URL}/Sclass/homeroom/${classID}`,
+    const result = await axiosInstance.post(
+      `/Sclass/homeroom/${classID}`,
       fields
     );
     if (result.data.message) {
@@ -90,7 +103,7 @@ export const getClassDetails = (id, address) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(`${REACT_APP_BASE_URL}/${address}/${id}`);
+    const result = await axiosInstance.get(`/${address}/${id}`);
     if (result.data) {
       dispatch(detailsSuccess(result.data));
     }
@@ -103,7 +116,7 @@ export const getSubjectList = (id, address) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(`${REACT_APP_BASE_URL}/${address}/${id}`);
+    const result = await axiosInstance.get(`/${address}/${id}`);
     if (result.data.message) {
       dispatch(getFailed(result.data.message));
     } else {
@@ -118,9 +131,7 @@ export const getTeacherFreeClassSubjects = (id) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(
-      `${REACT_APP_BASE_URL}/FreeSubjectList/${id}`
-    );
+    const result = await axiosInstance.get(`/FreeSubjectList/${id}`);
     if (result.data.message) {
       dispatch(getFailed(result.data.message));
     } else {
@@ -135,7 +146,7 @@ export const getSubjectDetails = (id, address) => async (dispatch) => {
   dispatch(getSubDetailsRequest());
 
   try {
-    const result = await axios.get(`${REACT_APP_BASE_URL}/${address}/${id}`);
+    const result = await axiosInstance.get(`/${address}/${id}`);
     if (result.data) {
       dispatch(getSubDetailsSuccess(result.data));
     }

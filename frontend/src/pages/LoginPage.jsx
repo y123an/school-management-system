@@ -72,7 +72,10 @@ const LoginPage = () => {
         navigate("/Admin/dashboard");
       } else if (currentRole === "SuperAdmin") {
         navigate("/SuperAdmin/dashboard");
-      } else if (currentRole === "Teacher") {
+      } else if (
+        currentRole === "Teacher" ||
+        currentRole === "HomeRoomTeacher"
+      ) {
         navigate("/Teacher/dashboard");
       }
     } else if (status === "failed") {

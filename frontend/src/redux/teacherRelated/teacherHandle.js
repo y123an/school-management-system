@@ -10,11 +10,29 @@ import {
 
 const REACT_APP_BASE_URL = "http://localhost:4000";
 
+// Create an Axios instance
+const axiosInstance = axios.create({
+  baseURL: REACT_APP_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
+
+// Intercept requests to add the authorization header dynamically
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const getAllTeachers = (id) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(`${REACT_APP_BASE_URL}/Teachers/${id}`);
+    const result = await axiosInstance.get(`/Teachers/${id}`);
     if (result.data.message) {
       dispatch(getFailed(result.data.message));
     } else {
@@ -29,7 +47,7 @@ export const getTeacherDetails = (id) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(`${REACT_APP_BASE_URL}/Teacher/${id}`);
+    const result = await axiosInstance.get(`/Teacher/${id}`);
     if (result.data) {
       dispatch(doneSuccess(result.data));
     }
@@ -43,8 +61,8 @@ export const updateTeachSubject =
     dispatch(getRequest());
 
     try {
-      await axios.put(
-        `${REACT_APP_BASE_URL}/TeacherSubject`,
+      await axiosInstance.put(
+        `/TeacherSubject`,
         { teacherId, teachSubject },
         {
           headers: { "Content-Type": "application/json" },

@@ -23,7 +23,7 @@ const TeacherHomePage = () => {
 
   const classIDs = currentUser.classes.map((cls) => cls.teachSclass?._id);
   const subjectIDs = currentUser.classes.map((cls) => cls.teachSubject?._id);
-  console.log(sclassStudents);
+
   const fetchData = () => {
     classIDs.forEach((id) => {
       if (id) {
@@ -89,13 +89,7 @@ const TeacherHomePage = () => {
                 <span>{numberOfSessions}</span>
               </p>
             </div>
-            <div className="bg-gradient-to-r from-red-500 to-red-700 text-white p-6 rounded-lg shadow-md flex flex-col justify-between items-center">
-              <img src={Tests} alt="Tests" className="w-16 h-16" />
-              <p className="text-lg font-semibold">Tests Taken</p>
-              <p className="text-4xl font-bold">
-                <span>24</span>
-              </p>
-            </div>
+
             <div className="bg-gradient-to-r from-yellow-500 to-yellow-700 text-white p-6 rounded-lg shadow-md flex flex-col justify-between items-center">
               <img src={Time} alt="Time" className="w-16 h-16" />
               <p className="text-lg font-semibold">Total Hours</p>

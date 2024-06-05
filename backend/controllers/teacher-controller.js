@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const Teacher = require("../models/teacherSchema.js");
 const Subject = require("../models/subjectSchema.js");
 const Sclass = require("../models/sclassSchema.js");
+const jwt = require("jsonwebtoken");
 
 const teacherRegister = async (req, res) => {
   const { name, email, password, role, classes, gender, phone } = req.body;
@@ -27,16 +28,13 @@ const teacherRegister = async (req, res) => {
 
     let result = await teacher.save();
 
-    // Update all subjects and classes to reference the new teacher
     for (const cls of classes) {
-      // Update subject reference
       if (cls.teachSubject) {
         await Subject.findByIdAndUpdate(cls.teachSubject, {
           $addToSet: { teachers: teacher._id },
         });
       }
 
-      // Update class reference
       await Sclass.findByIdAndUpdate(cls.teachSclass, {
         $addToSet: { teachers: teacher._id },
       });
@@ -67,16 +65,28 @@ const teacherLogIn = async (req, res) => {
           "classes.teachSclass",
           "sclassName gradelevel section"
         );
-        teacher.password = undefined;
-        res.send(teacher);
+
+        const payload = {
+          email: teacher.email,
+          role: "Teacher",
+        };
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+
+        teacher.password = undefined; // Remove the password field before sending the response
+
+        // Send the token along with the teacher details
+        res.send({ user: teacher, token });
       } else {
-        res.send({ message: "Invalid password" });
+        res.status(401).send({ message: "Invalid password" });
       }
     } else {
-      res.send({ message: "Teacher not found" });
+      res.status(404).send({ message: "Teacher not found" });
     }
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ message: "An error occurred", error: err.message });
   }
 };
 

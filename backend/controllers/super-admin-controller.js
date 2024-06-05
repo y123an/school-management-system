@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const SuperAdmin = require("../models/superAdminSchema.js");
+const jwt = require("jsonwebtoken");
 
 const superAdminLogIn = async (req, res) => {
   if (req.body.email && req.body.password) {
@@ -11,8 +12,22 @@ const superAdminLogIn = async (req, res) => {
           admin.password
         );
         if (passwordMatch) {
-          admin.password = undefined; // Remove the password field before sending the response
-          res.send(admin);
+          // Create a payload for the JWT
+          const payload = {
+            email: admin.email,
+            role: "SuperAdmin",
+          };
+
+          // Sign the JWT token
+          const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+          });
+
+          // Do not send the password back
+          admin.password = undefined;
+
+          // Send the token along with the admin details
+          res.send({ user: admin, token });
         } else {
           res.status(401).send({ message: "Invalid password" });
         }

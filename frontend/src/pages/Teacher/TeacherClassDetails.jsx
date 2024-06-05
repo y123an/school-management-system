@@ -17,21 +17,31 @@ const TeacherClassDetails = () => {
   const { sclassStudents, loading, error, getresponse } = useSelector(
     (state) => state.sclass
   );
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, currentRole } = useSelector((state) => state.user);
 
-  const classID = currentUser.teachSclass?._id;
-  const subjectID = currentUser.teachSubject?._id;
+  const classIDs = currentUser.classes.map((cls) => cls.teachSclass?._id);
+
+  const fetchData = () => {
+    classIDs.forEach((id) => {
+      if (id) {
+        dispatch(getClassStudents(id));
+      }
+    });
+  };
 
   useEffect(() => {
-    dispatch(getClassStudents(classID));
-  }, [dispatch, classID]);
+    fetchData();
+  }, []);
 
   if (error) {
     console.log(error);
   }
 
   const StudentsButtonHaver = ({ row }) => {
-    const options = ["Take Attendance", "Provide Marks"];
+    const options = [
+      currentRole === "HomeRoomTeacher" ? "Take Attendance" : null,
+      "Provide Marks",
+    ];
     const [open, setOpen] = useState(false);
     const anchorRef = useRef(null);
     const [selectedIndex, setSelectedIndex] = useState(0);
@@ -78,7 +88,7 @@ const TeacherClassDetails = () => {
         >
           View
         </button>
-        <div className="relative inline-block text-left">
+        {/* <div className="relative inline-block text-left">
           <button
             className="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
             onClick={handleToggle}
@@ -101,7 +111,7 @@ const TeacherClassDetails = () => {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     );
   };
@@ -163,9 +173,7 @@ const TeacherClassDetails = () => {
                               <th className="py-3 px-6 text-left">
                                 Grand Father Name
                               </th>
-                              <th className="py-3 px-6 text-left">
-                                Grand Father Name
-                              </th>
+
                               <th className="py-3 px-6 text-left">StudentID</th>
                               <th className="py-3 px-6 text-left">
                                 Class Name

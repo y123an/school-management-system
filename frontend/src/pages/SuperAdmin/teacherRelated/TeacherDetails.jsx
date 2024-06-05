@@ -33,8 +33,6 @@ const TeacherDetails = () => {
     setOpen(!open);
   };
 
-  console.log(teacherDetails);
-
   return (
     <>
       <div className="h-screen font-poppins">

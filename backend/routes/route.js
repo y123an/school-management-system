@@ -79,79 +79,93 @@ const {
   teacherAttendance,
   addClassToTeacher,
 } = require("../controllers/teacher-controller.js");
+const {
+  verifySuperAdmin,
+  verifyAdmin,
+  verifyTeacherOrAdmin,
+} = require("../middleware/VertifyUser.js");
 
 // superadmin
 router.post("/SuperAdminLogin", superAdminLogIn);
 
 // Admin
-router.post("/AdminReg", adminRegister);
+router.post("/AdminReg", verifySuperAdmin, adminRegister);
 router.post("/AdminLogin", adminLogIn);
-router.get("/Admin/:id", getAdminDetail);
-router.get("/Admins", getAdmins);
-router.delete("/Admin/:id", deleteAdmin);
-router.put("/Admin/:id", updateAdmin);
+router.get("/Admin/:id", verifySuperAdmin, getAdminDetail);
+router.get("/Admins", verifySuperAdmin, getAdmins);
+router.delete("/Admin/:id", verifySuperAdmin, deleteAdmin);
+router.put("/Admin/:id", verifySuperAdmin, updateAdmin);
 
 // parent
-router.post("/ParentReg", registerParent);
+router.post("/ParentReg", verifyAdmin, registerParent);
 router.post("/ParentLogin", parentLogIn);
-router.get("/Parent/:id", getParentById);
-router.get("/Parents", getAllParents);
-router.delete("/Parent/:id", deleteParent);
-router.put("/Parent/:id", updateParent);
+router.get("/Parent/:id", verifyAdmin, getParentById);
+router.get("/Parents", verifyAdmin, getAllParents);
+router.delete("/Parent/:id", verifyAdmin, deleteParent);
+router.put("/Parent/:id", verifyAdmin, updateParent);
 
 // Student
 
-router.post("/StudentReg", studentRegister);
+router.post("/StudentReg", verifyAdmin, studentRegister);
 
-router.get("/Students/:id", getStudents);
-router.get("/Student/:id", getStudentDetail);
+router.get("/Students/:id", verifyTeacherOrAdmin, getStudents);
+router.get("/Student/:id", verifyTeacherOrAdmin, getStudentDetail);
 
-router.delete("/Students/:id", deleteStudents);
-router.delete("/StudentsClass/:id", deleteStudentsByClass);
-router.delete("/Student/:id", deleteStudent);
+router.delete("/Students/:id", verifyAdmin, deleteStudents);
+router.delete("/StudentsClass/:id", verifyAdmin, deleteStudentsByClass);
+router.delete("/Student/:id", verifyAdmin, deleteStudent);
 
-router.put("/Student/:id", updateStudent);
+router.put("/Student/:id", verifyAdmin, updateStudent);
 
 router.put("/UpdateExamResult/:id", updateExamResult);
 
-router.put("/StudentAttendance/:id", studentAttendance);
+router.put("/StudentAttendance/:id", verifyTeacherOrAdmin, studentAttendance);
 
 router.put(
   "/RemoveAllStudentsSubAtten/:id",
+  verifyAdmin,
   clearAllStudentsAttendanceBySubject
 );
-router.put("/RemoveAllStudentsAtten/:id", clearAllStudentsAttendance);
+router.put(
+  "/RemoveAllStudentsAtten/:id",
+  verifyAdmin,
+  clearAllStudentsAttendance
+);
 
-router.put("/RemoveStudentSubAtten/:id", removeStudentAttendanceBySubject);
-router.put("/RemoveStudentAtten/:id", removeStudentAttendance);
+router.put(
+  "/RemoveStudentSubAtten/:id",
+  verifyAdmin,
+  removeStudentAttendanceBySubject
+);
+router.put("/RemoveStudentAtten/:id", verifyAdmin, removeStudentAttendance);
 
 // Teacher
 
-router.post("/TeacherReg", teacherRegister);
+router.post("/TeacherReg", verifyAdmin, teacherRegister);
 router.post("/TeacherLogin", teacherLogIn);
-router.post("/Teacher/addSubject/:id", addClassToTeacher);
+router.post("/Teacher/addSubject/:id", verifyAdmin, addClassToTeacher);
 
-router.get("/Teachers/:id", getTeachers);
-router.get("/Teacher/:id", getTeacherDetail);
+router.get("/Teachers/:id", verifyAdmin, getTeachers);
+router.get("/Teacher/:id", verifyAdmin, getTeacherDetail);
 
-router.delete("/Teachers/:id", deleteTeachers);
-router.delete("/TeachersClass/:id", deleteTeachersByClass);
-router.delete("/Teacher/:id", deleteTeacher);
+router.delete("/Teachers/:id", verifyAdmin, deleteTeachers);
+router.delete("/TeachersClass/:id", verifyAdmin, deleteTeachersByClass);
+router.delete("/Teacher/:id", verifyAdmin, deleteTeacher);
 
-router.put("/TeacherSubject", updateTeacherSubject);
+router.put("/TeacherSubject", verifyAdmin, updateTeacherSubject);
 
-router.post("/TeacherAttendance/:id", teacherAttendance);
+router.post("/TeacherAttendance/:id", verifyTeacherOrAdmin, teacherAttendance);
 
 // Notice
 
-router.post("/NoticeCreate", noticeCreate);
+router.post("/NoticeCreate", verifyAdmin, noticeCreate);
 
 router.get("/NoticeList/:id", noticeList);
 
-router.delete("/Notices/:id", deleteNotices);
-router.delete("/Notice/:id", deleteNotice);
+router.delete("/Notices/:id", verifyAdmin, deleteNotices);
+router.delete("/Notice/:id", verifyAdmin, deleteNotice);
 
-router.put("/Notice/:id", updateNotice);
+router.put("/Notice/:id", verifyAdmin, updateNotice);
 
 // Complain
 
@@ -161,28 +175,28 @@ router.get("/ComplainList/:id", complainList);
 
 // Sclass
 
-router.post("/SclassCreate", sclassCreate);
+router.post("/SclassCreate", verifyAdmin, sclassCreate);
 
-router.get("/SclassList/:id", sclassList);
-router.get("/Sclass/:id", getSclassDetail);
+router.get("/SclassList/:id", verifyTeacherOrAdmin, sclassList);
+router.get("/Sclass/:id", verifyTeacherOrAdmin, getSclassDetail);
 
-router.get("/Sclass/Students/:id", getSclassStudents);
-router.post("/Sclass/homeroom/:id", updateHomeroomTeacher);
+router.get("/Sclass/Students/:id", verifyTeacherOrAdmin, getSclassStudents);
+router.post("/Sclass/homeroom/:id", verifyAdmin, updateHomeroomTeacher);
 
-router.delete("/Sclasses/:id", deleteSclasses);
-router.delete("/Sclass/:id", deleteSclass);
+router.delete("/Sclasses/:id", verifyAdmin, deleteSclasses);
+router.delete("/Sclass/:id", verifyAdmin, deleteSclass);
 
 // Subject
 
-router.post("/SubjectCreate", subjectCreate);
+router.post("/SubjectCreate", verifyAdmin, subjectCreate);
 
-router.get("/AllSubjects/:id", allSubjects);
-router.get("/ClassSubjects/:id", classSubjects);
-router.get("/FreeSubjectList/:id", freeSubjectList);
-router.get("/Subject/:id", getSubjectDetail);
+router.get("/AllSubjects/:id", verifyAdmin, allSubjects);
+router.get("/ClassSubjects/:id", verifyTeacherOrAdmin, classSubjects);
+router.get("/FreeSubjectList/:id", verifyTeacherOrAdmin, freeSubjectList);
+router.get("/Subject/:id", verifyTeacherOrAdmin, getSubjectDetail);
 
-router.delete("/Subject/:id", deleteSubject);
-router.delete("/Subjects/:id", deleteSubjects);
-router.delete("/SubjectsClass/:id", deleteSubjectsByClass);
+router.delete("/Subject/:id", verifyAdmin, deleteSubject);
+router.delete("/Subjects/:id", verifyAdmin, deleteSubjects);
+router.delete("/SubjectsClass/:id", verifyAdmin, deleteSubjectsByClass);
 
 module.exports = router;

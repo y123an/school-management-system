@@ -15,18 +15,33 @@ import {
 
 const REACT_APP_BASE_URL = "http://localhost:4000";
 
+// Create an Axios instance
+const axiosInstance = axios.create({
+  baseURL: REACT_APP_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+  },
+});
+
+// Intercept requests to add the authorization header dynamically
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export const loginUser = (fields, role) => async (dispatch) => {
   dispatch(authRequest());
   try {
-    const result = await axios.post(
-      `${REACT_APP_BASE_URL}/${role}Login`,
-      fields,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    if (result.data.role) {
-      dispatch(authSuccess(result.data));
+    const result = await axiosInstance.post(`/${role}Login`, fields, {
+      headers: { "Content-Type": "application/json" },
+    });
+    if (result.data.user) {
+      localStorage.setItem("token", result.data.token);
+      dispatch(authSuccess(result.data.user));
     } else {
       dispatch(authFailed(result.data.message));
     }
@@ -39,13 +54,9 @@ export const registerUser = (fields, role) => async (dispatch) => {
   dispatch(authRequest());
 
   try {
-    const result = await axios.post(
-      `${REACT_APP_BASE_URL}/${role}Reg`,
-      fields,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const result = await axiosInstance.post(`/${role}Reg`, fields, {
+      headers: { "Content-Type": "application/json" },
+    });
     if (result.data.schoolName) {
       dispatch(authSuccess(result.data));
     } else if (result.data.school) {
@@ -66,7 +77,7 @@ export const getUserDetails = (id, address) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(`${REACT_APP_BASE_URL}/${address}/${id}`);
+    const result = await axiosInstance.get(`/${address}/${id}`);
     if (result.data) {
       dispatch(doneSuccess(result.data));
     }
@@ -79,7 +90,7 @@ export const deleteUser = (id, address) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.delete(`${REACT_APP_BASE_URL}/${address}/${id}`);
+    const result = await axiosInstance.delete(`/${address}/${id}`);
     if (result.data.message) {
       dispatch(getFailed(result.data.message));
     } else {
@@ -90,22 +101,13 @@ export const deleteUser = (id, address) => async (dispatch) => {
   }
 };
 
-// export const deleteUser = (id, address) => async (dispatch) => {
-//   dispatch(getRequest());
-//   dispatch(getFailed("Sorry the delete function has been disabled for now."));
-// };
-
 export const updateUser = (fields, id, address) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.put(
-      `${REACT_APP_BASE_URL}/${address}/${id}`,
-      fields,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const result = await axiosInstance.put(`/${address}/${id}`, fields, {
+      headers: { "Content-Type": "application/json" },
+    });
     if (result.data.schoolName) {
       dispatch(authSuccess(result.data));
     } else {
@@ -120,13 +122,9 @@ export const addStuff = (fields, address) => async (dispatch) => {
   dispatch(authRequest());
 
   try {
-    const result = await axios.post(
-      `${REACT_APP_BASE_URL}/${address}Create`,
-      fields,
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const result = await axiosInstance.post(`/${address}Create`, fields, {
+      headers: { "Content-Type": "application/json" },
+    });
 
     if (result.data.message) {
       dispatch(authFailed(result.data.message));

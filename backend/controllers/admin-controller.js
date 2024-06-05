@@ -6,6 +6,7 @@ const Teacher = require("../models/teacherSchema.js");
 const Subject = require("../models/subjectSchema.js");
 const Notice = require("../models/noticeSchema.js");
 const Complain = require("../models/complainSchema.js");
+const jwt = require("jsonwebtoken");
 
 // const adminRegister = async (req, res) => {
 //     try {
@@ -82,8 +83,22 @@ const adminLogIn = async (req, res) => {
     let admin = await Admin.findOne({ email: req.body.email });
     if (admin) {
       if (req.body.password === admin.password) {
+        // Create a payload for the JWT
+        const payload = {
+          email: admin.email,
+          role: "Admin",
+        };
+
+        // Sign the JWT token
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+
+        // Do not send the password back
         admin.password = undefined;
-        res.send(admin);
+
+        // Send the token along with the admin details
+        res.send({ user: admin, token });
       } else {
         res.send({ message: "Invalid password" });
       }

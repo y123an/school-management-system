@@ -9,6 +9,9 @@ export const getAllNotices = (id, address, role) => async (dispatch) => {
     const result = await axios({
       method: "get",
       url: `${REACT_APP_BASE_URL}/NoticeList/${role}`,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     });
     if (result.data.message) {
       dispatch(getFailed(result.data.message));
