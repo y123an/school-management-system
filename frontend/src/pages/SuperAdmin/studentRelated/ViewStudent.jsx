@@ -209,7 +209,7 @@ const ViewStudent = () => {
                         >
                           <FiTrash />
                         </button>
-                        <button
+                        {/* <button
                           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded ml-2 transition duration-300"
                           onClick={() =>
                             navigate(
@@ -218,7 +218,7 @@ const ViewStudent = () => {
                           }
                         >
                           Change
-                        </button>
+                        </button> */}
                       </td>
                     </tr>
                   );
@@ -230,7 +230,7 @@ const ViewStudent = () => {
             Overall Attendance Percentage:{" "}
             {overallAttendancePercentage.toFixed(2)}%
           </div>
-          <button
+          {/* <button
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300"
             onClick={() => removeHandler(studentID, "RemoveStudentAtten")}
           >
@@ -243,7 +243,7 @@ const ViewStudent = () => {
             }
           >
             Add Attendance
-          </button>
+          </button> */}
         </>
       );
     };
@@ -293,14 +293,15 @@ const ViewStudent = () => {
             </div>
           </>
         ) : (
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-            onClick={() =>
-              navigate("/SuperAdmin/students/student/attendance/" + studentID)
-            }
-          >
-            Add Attendance
-          </button>
+          <div></div>
+          // <button
+          //   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+          //   onClick={() =>
+          //     navigate("/SuperAdmin/students/student/attendance/" + studentID)
+          //   }
+          // >
+          //   Add Attendance
+          // </button>
         )}
       </>
     );
@@ -336,14 +337,14 @@ const ViewStudent = () => {
               })}
             </tbody>
           </table>
-          <button
+          {/* <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300"
             onClick={() =>
               navigate("/SuperAdmin/students/student/marks/" + studentID)
             }
           >
             Add Marks
-          </button>
+          </button> */}
         </>
       );
     };
@@ -390,14 +391,15 @@ const ViewStudent = () => {
             </div>
           </>
         ) : (
-          <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-            onClick={() =>
-              navigate("/SuperAdmin/students/student/marks/" + studentID)
-            }
-          >
-            Add Marks
-          </button>
+          <div></div>
+          // <button
+          //   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+          //   onClick={() =>
+          //     navigate("/SuperAdmin/students/student/marks/" + studentID)
+          //   }
+          // >
+          //   Add Marks
+          // </button>
         )}
       </>
     );
@@ -429,12 +431,12 @@ const ViewStudent = () => {
         {subjectAttendance &&
           Array.isArray(subjectAttendance) &&
           subjectAttendance.length > 0 && <CustomPieChart data={chartData} />}
-        <button
+        {/* <button
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300"
           onClick={deleteHandler}
         >
           Delete
-        </button>
+        </button> */}
       </div>
     );
   };

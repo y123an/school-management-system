@@ -61,7 +61,6 @@ const ShowTeachers = () => {
     { id: "role", label: "role", minWidth: 170 },
   ];
 
-  console.log(teachersList);
   const rows = teachersList.map((teacher) => ({
     name: teacher.name,
     email: teacher.email,

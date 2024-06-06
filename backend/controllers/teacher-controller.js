@@ -154,6 +154,7 @@ const getTeacherDetail = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 const updateTeacherSubject = async (req, res) => {
   const { teacherId, teachSubject } = req.body;
   try {
@@ -303,12 +304,62 @@ const addClassToTeacher = async (req, res) => {
     teacher.classes.push({ teachSclass, teachSubject });
     await teacher.save();
 
-    res
-      .status(200)
-      .json({ message: "Class added successfully for the teacher" });
+    res.json({
+      add: true,
+      message: "Class added successfully for the teacher",
+    });
   } catch (error) {
     console.error("Error adding class to teacher:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+const getTeachersByClassId = async (req, res) => {
+  try {
+    const classId = req.params.id; // Get the class ID from the request parameters
+
+    // Find all teachers who teach the specified class
+    const teachers = await Teacher.find({
+      "classes.teachSclass": classId,
+    }).populate("classes.teachSubject", "subject");
+
+    if (!teachers || teachers.length === 0) {
+      return res.send({ message: "No teachers found for the specified class" });
+    }
+
+    return res.status(200).send(teachers);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("An error occurred while fetching teachers");
+  }
+};
+const removeClassFromTeacher = async (req, res) => {
+  try {
+    const { teacherID, classID } = req.params; // Get teacher ID and class ID from request parameters
+
+    // Find the teacher by their ID
+    const teacher = await Teacher.findById(teacherID);
+
+    if (!teacher) {
+      return res.status(404).send("Teacher not found"); // Handle teacher not found error
+    }
+
+    // Filter out the class to be removed
+    teacher.classes = teacher.classes.filter(
+      (cls) => cls.teachSclass.toString() !== classID
+    );
+
+    // Save the updated teacher document
+    await teacher.save();
+
+    // Respond with success message
+    return res.status(200).send({
+      removed: true,
+      message: "Class removed from teacher successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("An error occurred while removing the class"); // Handle internal server error
   }
 };
 
@@ -323,4 +374,6 @@ module.exports = {
   deleteTeachersByClass,
   teacherAttendance,
   addClassToTeacher,
+  getTeachersByClassId,
+  removeClassFromTeacher,
 };

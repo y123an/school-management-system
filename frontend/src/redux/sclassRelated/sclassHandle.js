@@ -11,6 +11,7 @@ import {
   getSubDetailsSuccess,
   getSubDetailsRequest,
   stuffDone,
+  getClassTeacherSuccess,
 } from "./sclassSlice";
 
 const REACT_APP_BASE_URL = "http://localhost:4000";
@@ -56,13 +57,16 @@ export const addSubject = (fields, id) => async (dispatch) => {
       `/Teacher/addSubject/${id}`,
       fields
     );
-    if (result.data.message) {
-      dispatch(getFailed(result.data.message));
-    } else {
+    console.log(result.result.add);
+
+    if (result.data.add) {
       dispatch(stuffDone());
+    } else {
+      dispatch(getFailed(result.data.message));
     }
   } catch (error) {
-    dispatch(getError(error));
+    console.log("ths");
+    dispatch(getFailed("error while addnig"));
   }
 };
 
@@ -89,10 +93,10 @@ export const updateHomeRoom = (fields, classID) => async (dispatch) => {
       `/Sclass/homeroom/${classID}`,
       fields
     );
-    if (result.data.message) {
-      dispatch(getFailedTwo(result.data.message));
+    if (result.data.added) {
+      dispatch(stuffDone());
     } else {
-      dispatch(getStudentsSuccess(result.data));
+      dispatch(getFailed());
     }
   } catch (error) {
     dispatch(getError(error));
@@ -106,6 +110,21 @@ export const getClassDetails = (id, address) => async (dispatch) => {
     const result = await axiosInstance.get(`/${address}/${id}`);
     if (result.data) {
       dispatch(detailsSuccess(result.data));
+    }
+  } catch (error) {
+    dispatch(getError(error));
+  }
+};
+
+export const getTeachersByClassID = (id) => async (dispatch) => {
+  dispatch(getRequest());
+
+  try {
+    const result = await axiosInstance.get(`/Teacher/class/${id}`);
+    if (result.data.message) {
+      dispatch(getFailed(result.data.message));
+    } else {
+      dispatch(getClassTeacherSuccess(result.data));
     }
   } catch (error) {
     dispatch(getError(error));
@@ -141,6 +160,24 @@ export const getTeacherFreeClassSubjects = (id) => async (dispatch) => {
     dispatch(getError(error));
   }
 };
+
+export const deleteClassFromTeacher =
+  (teacherID, classID) => async (dispatch) => {
+    dispatch(getRequest());
+
+    try {
+      const result = await axiosInstance.delete(
+        `/Teacher/class/${teacherID}/${classID}`
+      );
+      if (!result.data.removed) {
+        dispatch(getFailed(result.data.message));
+      } else {
+        dispatch(stuffDone());
+      }
+    } catch (error) {
+      dispatch(getError(error));
+    }
+  };
 
 export const getSubjectDetails = (id, address) => async (dispatch) => {
   dispatch(getSubDetailsRequest());

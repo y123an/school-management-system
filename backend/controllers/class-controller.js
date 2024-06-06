@@ -113,35 +113,35 @@ const deleteSclasses = async (req, res) => {
 
 const updateHomeroomTeacher = async (req, res) => {
   try {
-    const { teacherID } = req.body; // Get classId and teacherId from request body
+    const { teacherID } = req.body;
 
     const classId = req.params.id;
-    // Find the class by its ID
+
     const theClass = await Sclass.findById(classId);
     const teacher = await Teacher.findById(teacherID);
 
     if (!theClass) {
-      return res.status(404).send("Class not found"); // Handle class not found error
+      return res.status(404).send("Class not found");
     }
 
     if (!teacher) {
       return res.status(400).send("Teacher not found");
     }
 
-    teacher.role = "HomeRoomTeacher"; // Update teacher's role
+    teacher.role = "HomeRoomTeacher";
 
     await teacher.save();
-    // Update the homeroomteacher reference
+
     theClass.homeroomteacher = teacherID;
 
-    // Save the updated class document
     await theClass.save();
 
-    // Respond with success message or updated class data
-    return res.status(200).send("Homeroom teacher updated successfully");
+    return res
+      .status(200)
+      .send({ added: true, message: "Homeroom teacher updated successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).send("An error occurred during update"); // Handle internal server error
+    return res.status(500).send("An error occurred during update");
   }
 };
 

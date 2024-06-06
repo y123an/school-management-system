@@ -78,6 +78,8 @@ const {
   updateTeacherSubject,
   teacherAttendance,
   addClassToTeacher,
+  getTeachersByClassId,
+  removeClassFromTeacher,
 } = require("../controllers/teacher-controller.js");
 const {
   verifySuperAdmin,
@@ -147,6 +149,12 @@ router.post("/Teacher/addSubject/:id", verifyAdmin, addClassToTeacher);
 
 router.get("/Teachers/:id", verifyAdmin, getTeachers);
 router.get("/Teacher/:id", verifyAdmin, getTeacherDetail);
+router.get("/Teacher/class/:id", verifyAdmin, getTeachersByClassId);
+router.delete(
+  "/Teacher/class/:teacherID/:classID",
+  verifyAdmin,
+  removeClassFromTeacher
+);
 
 router.delete("/Teachers/:id", verifyAdmin, deleteTeachers);
 router.delete("/TeachersClass/:id", verifyAdmin, deleteTeachersByClass);

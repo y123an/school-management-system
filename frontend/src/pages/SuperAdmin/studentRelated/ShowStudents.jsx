@@ -115,7 +115,7 @@ const ShowStudents = () => {
         >
           View
         </button>
-        <div className="relative inline-block text-left">
+        {/* <div className="relative inline-block text-left">
           <div>
             <button
               type="button"
@@ -150,7 +150,7 @@ const ShowStudents = () => {
               </div>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     );
   };

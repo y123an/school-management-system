@@ -7,11 +7,13 @@ import AccountMenu from "../../../components/AccountMenu";
 import SideBar from "../SideBar";
 import Popup from "../../../components/Popup";
 import { updateHomeRoom } from "../../../redux/sclassRelated/sclassHandle";
+import { underControl } from "../../../redux/sclassRelated/sclassSlice";
 const AddHomeRoom = () => {
   const params = useParams();
   const { teachersList, loading, error, response, getresponse } = useSelector(
     (state) => state.teacher
   );
+  const { status } = useSelector((state) => state.sclass);
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const [loader, setLoader] = useState(false);
@@ -47,6 +49,22 @@ const AddHomeRoom = () => {
     setLoader(true);
     dispatch(updateHomeRoom(fields, classID));
   };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (status === "success") {
+      dispatch(underControl());
+      navigate(-1);
+    } else if (status === "failed") {
+      setMessage(response);
+      setShowPopup(true);
+      setLoader(false);
+    } else if (status === "error") {
+      setMessage("Network Error");
+      setShowPopup(true);
+      setLoader(false);
+    }
+  }, [status, navigate, error, response, dispatch]);
 
   return (
     <div className="h-screen font-poppins">

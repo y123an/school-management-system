@@ -36,7 +36,7 @@ const TableTemplate = ({ buttonHaver: ButtonHaver, columns, rows }) => {
           <tbody className="bg-white divide-y divide-gray-200">
             {rows
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row) => (
+              ?.map((row) => (
                 <tr key={row.id} className="hover:bg-gray-100">
                   {columns.map((column) => {
                     const value = row[column.id];

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   sclassesList: [],
   sclassStudents: [],
+  sclassTeachers: [],
   sclassDetails: [],
   subjectsList: [],
   subjectDetails: [],
@@ -11,6 +12,7 @@ const initialState = {
   error: null,
   response: null,
   getresponse: null,
+  status: "idel",
 };
 
 const sclassSlice = createSlice({
@@ -28,6 +30,7 @@ const sclassSlice = createSlice({
       state.error = null;
       state.response = null;
       state.statestatus = "added";
+      state.status = "success";
     },
     getSuccess: (state, action) => {
       state.sclassesList = action.payload;
@@ -62,8 +65,15 @@ const sclassSlice = createSlice({
       state.error = null;
       state.response = null;
     },
+    getClassTeacherSuccess: (state, action) => {
+      state.sclassTeachers = action.payload;
+      state.loading = false;
+      state.error = null;
+      state.response = null;
+    },
     getFailed: (state, action) => {
       state.subjectsList = [];
+      state.sclassTeachers = [];
       state.response = action.payload;
       state.loading = false;
       state.error = null;
@@ -100,6 +110,12 @@ const sclassSlice = createSlice({
       state.subjectsList = [];
       state.sclassesList = [];
     },
+    underControl: (state) => {
+      state.loading = false;
+      state.response = null;
+      state.error = null;
+      state.status = "idle";
+    },
   },
 });
 
@@ -113,8 +129,10 @@ export const {
   detailsSuccess,
   getFailedTwo,
   resetSubjects,
+  underControl,
   getSubDetailsSuccess,
   getSubDetailsRequest,
+  getClassTeacherSuccess,
   stuffDone,
 } = sclassSlice.actions;
 

@@ -47,22 +47,15 @@ const AddParent = () => {
   const [password, setPassword] = useState("");
   const [gender, setGender] = useState("");
   const [phone, setPhone] = useState("");
+  const [search, setSearch] = useState("");
+  const [selectedStudentName, setSelectedStudentName] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
   const [loader, setLoader] = useState(false);
   const [student, setStudent] = useState("");
-  const [className, setClassName] = useState("");
-  const [subjectName, setSubjectName] = useState("");
-  const [chosenSub, setChosenSub] = useState("");
 
   const role = "Parent";
-  //   const school = subjectDetails && subjectDetails.school;
-  //   const teachSubject = subjectDetails && subjectDetails._id;
-  //   const teachSclass =
-  //     subjectDetails &&
-  //     subjectDetails.sclassName &&
-  //     subjectDetails.sclassName._id;
 
   const fields = {
     name,
@@ -76,10 +69,15 @@ const AddParent = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    if (!student) {
+      setMessage("No student selected. Please select a student.");
+      setShowPopup(true);
+      setLoader(false);
+      return;
+    }
     setLoader(true);
     dispatch(registerUser(fields, role));
   };
-  console.log(status);
 
   useEffect(() => {
     if (status === "success") {
@@ -101,32 +99,22 @@ const AddParent = () => {
     setOpen(!open);
   };
 
-  //   const changeHandler = (event) => {
-  //     if (event.target.value === "Select Class") {
-  //       setClassName("Select Class");
-  //       setSclassName("");
-  //     } else {
-  //       const selectedClass = sclassesList.find(
-  //         (classItem) => classItem._id === event.target.value
-  //       );
-  //       setClassName(selectedClass._id);
-  //       setSclassName(selectedClass._id);
-  //     }
-  //   };
-
   const changeStudentHandler = (event) => {
-    if (event.target.value === "Select Child") {
-      setSubjectName("Select Child");
-      setChosenSub("");
-    } else {
-      const selectedStu = studentsList.find(
-        (classItem) => classItem._id === event.target.value
-      );
-
-      //   setSubjectName(selectedStu._id);
-      setStudent(selectedStu._id);
-    }
+    setSearch(event.target.value);
+    setSelectedStudentName(""); // Clear selected student name when typing
   };
+
+  const selectStudent = (studentId, studentName) => {
+    setStudent(studentId);
+    setSelectedStudentName(studentName);
+    setSearch("");
+  };
+
+  const filteredStudents = studentsList.filter((student) =>
+    `${student.firstName} ${student.lastName} ${student.grandfathersName}`
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
 
   return (
     <>
@@ -206,20 +194,38 @@ const AddParent = () => {
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700 mb-2">Children</label>
-                  <select
+                  <input
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={student}
+                    type="text"
+                    placeholder="Search for child..."
+                    value={search || selectedStudentName}
                     onChange={changeStudentHandler}
-                    required
-                  >
-                    <option value="Select Child">Select Child</option>
-                    {studentsList.map((classItem) => (
-                      <option key={classItem._id} value={classItem._id}>
-                        {classItem.firstName} {classItem.lastName}{" "}
-                        {classItem.grandfathersName}
-                      </option>
-                    ))}
-                  </select>
+                  />
+                  {search && (
+                    <ul className="mt-2 bg-white border border-gray-300 rounded-lg max-h-40 overflow-auto">
+                      {filteredStudents.length > 0 ? (
+                        filteredStudents.map((student) => (
+                          <li
+                            key={student._id}
+                            className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                            onClick={() =>
+                              selectStudent(
+                                student._id,
+                                `${student.firstName} ${student.lastName} ${student.grandfathersName}`
+                              )
+                            }
+                          >
+                            {student.firstName} {student.lastName}{" "}
+                            {student.grandfathersName}
+                          </li>
+                        ))
+                      ) : (
+                        <li className="px-4 py-2 text-red-500">
+                          No students found
+                        </li>
+                      )}
+                    </ul>
+                  )}
                 </div>
                 <div>
                   <label className="block text-gray-700">Password</label>

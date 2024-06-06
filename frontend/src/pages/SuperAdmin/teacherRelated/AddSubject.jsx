@@ -48,9 +48,9 @@ const AddSubject = () => {
     setLoader(true);
     dispatch(addSubject(fields, teacherID));
   };
-
+  console.log(status);
   useEffect(() => {
-    if (status === "added") {
+    if (status === "success") {
       dispatch(underControl());
       navigate("/SuperAdmin/teachers");
     } else if (status === "failed") {
