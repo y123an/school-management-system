@@ -1,25 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import {
   getSubjectDetails,
   getSubjectList,
 } from "../../../redux/sclassRelated/sclassHandle";
 import Popup from "../../../components/Popup";
-import { registerUser } from "../../../redux/userRelated/userHandle";
+import {
+  registerUser,
+  updateUser,
+} from "../../../redux/userRelated/userHandle";
 import { underControl } from "../../../redux/userRelated/userSlice";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import { getAllStudents } from "../../../redux/studentRelated/studentHandle";
 
-const AddParent = () => {
+const UpdateParent = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const subjectID = params.id;
-
+  const { state } = useLocation();
   const { status, response, error, currentUser } = useSelector(
     (state) => state.user
   );
@@ -40,13 +43,13 @@ const AddParent = () => {
     dispatch(getAllStudents(currentUser._id, "Allstudents"));
   }, [currentUser._id, dispatch]);
 
-  console.log(studentsList);
+  console.log(state);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState(state?.parent.name);
+  const [email, setEmail] = useState(state?.parent.email);
   const [password, setPassword] = useState("");
-  const [gender, setGender] = useState("");
-  const [phone, setPhone] = useState("");
+  const [gender, setGender] = useState(state?.parent.gender);
+  const [phone, setPhone] = useState(state?.parent.phone);
   const [search, setSearch] = useState("");
   const [selectedStudentName, setSelectedStudentName] = useState("");
 
@@ -76,13 +79,13 @@ const AddParent = () => {
       return;
     }
     setLoader(true);
-    dispatch(registerUser(fields, role));
+    dispatch(updateUser(fields, params.id, "Teacher/update"));
   };
-
+  console.log(status);
   useEffect(() => {
     if (status === "success") {
       dispatch(underControl());
-      navigate("/Admin/parents");
+      navigate("/SuperAdmin/parents");
     } else if (status === "failed") {
       setMessage(response);
       setShowPopup(true);
@@ -126,7 +129,7 @@ const AddParent = () => {
           >
             {open ? <IoMdArrowBack size={24} /> : <IoIosMenu size={24} />}
           </button>
-          <span className="text-lg font-semibold">Admin Dashboard</span>
+          <span className="text-lg font-semibold">Super Admin Dashboard</span>
           <AccountMenu />
         </div>
         <div className="flex flex-grow">
@@ -141,7 +144,7 @@ const AddParent = () => {
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
               <form className="space-y-6" onSubmit={submitHandler}>
                 <h2 className="text-2xl font-bold text-center text-gray-800">
-                  Add Parent
+                  Update Parent
                 </h2>
                 <div>
                   <label className="block text-gray-700">Name</label>
@@ -247,7 +250,7 @@ const AddParent = () => {
                   {loader ? (
                     <div className="flex justify-center">loading</div>
                   ) : (
-                    "Register"
+                    "Update"
                   )}
                 </button>
               </form>
@@ -264,4 +267,4 @@ const AddParent = () => {
   );
 };
 
-export default AddParent;
+export default UpdateParent;

@@ -65,6 +65,8 @@ import ShowParents from "./pages/Admin/parentRelated/ShowParents";
 import AddParent from "./pages/Admin/parentRelated/AddParent";
 import TeacherClass from "./pages/Teacher/TeacherClass";
 import TeacherShowNotices from "./pages/Teacher/TeacherShowNotices";
+import SuperAdminUpdateParent from "./pages/SuperAdmin/parentRelated/UpdateParent";
+import UpdateParent from "./pages/Admin/parentRelated/UpdateParent";
 
 const App = () => {
   return (
@@ -187,6 +189,10 @@ const App = () => {
           path="/SuperAdmin/addParents"
           element={<SuperAdminAddParent />}
         />
+        <Route
+          path="/SuperAdmin/parents/update/:id"
+          element={<SuperAdminUpdateParent />}
+        />
 
         {/* admins */}
         <Route path="/SuperAdmin/admins" element={<SuperAdminShowAdmins />} />
@@ -260,6 +266,7 @@ const App = () => {
         />
         {/* parents */}
         <Route path="/Admin/parents" element={<ShowParents />} />
+        <Route path="/Admin/parents/update/:id" element={<UpdateParent />} />
         <Route path="/Admin/addParents" element={<AddParent />} />
 
         {/* teacher */}

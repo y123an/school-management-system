@@ -140,7 +140,7 @@ const ShowStudents = () => {
                 {options.map((option, index) => (
                   <button
                     key={option}
-                    className="text-gray-700 block px-4 py-2 z-50 absolute -top-10 text-sm hover:bg-gray-100 w-full text-left"
+                    className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
                     role="menuitem"
                     onClick={(event) => handleMenuItemClick(event, index)}
                   >
@@ -183,7 +183,7 @@ const ShowStudents = () => {
         >
           {open ? <IoMdArrowBack /> : <IoIosMenu />}
         </button>
-        <span className="text-lg font-semibold">Admin Dashboard</span>
+        <span className="text-lg font-semibold">Super Admin Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex">

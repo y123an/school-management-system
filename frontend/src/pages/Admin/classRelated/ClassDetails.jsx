@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
+  deleteClassFromTeacher,
   getClassDetails,
   getClassStudents,
   getSubjectList,
+  getTeachersByClassID,
 } from "../../../redux/sclassRelated/sclassHandle";
 import { deleteUser } from "../../../redux/userRelated/userHandle";
 import { resetSubjects } from "../../../redux/sclassRelated/sclassSlice";
@@ -30,6 +32,7 @@ const ClassDetails = () => {
     subjectsList,
     sclassStudents,
     sclassDetails,
+    sclassTeachers,
     loading,
     error,
     response,
@@ -42,12 +45,14 @@ const ClassDetails = () => {
     dispatch(getClassDetails(classID, "Sclass"));
     dispatch(getSubjectList(classID, "ClassSubjects"));
     dispatch(getClassStudents(classID));
+    dispatch(getTeachersByClassID(classID));
   }, [dispatch, classID]);
 
   if (error) {
     console.log(error);
   }
 
+  console.log(sclassTeachers);
   const [value, setValue] = useState("1");
 
   const handleChange = (event, newValue) => {
@@ -80,6 +85,23 @@ const ClassDetails = () => {
         id: subject._id,
       };
     });
+
+  const teacherColumuns = [
+    { id: "name", label: "Name", minWidth: 170 },
+    { id: "email", label: "email", minWidth: 100 },
+    { id: "role", label: "role", minWidth: 170 },
+  ];
+
+  const teacherRows =
+    sclassTeachers && sclassTeachers.length > 0
+      ? sclassTeachers.map((teacher) => ({
+          name: teacher.name,
+          email: teacher.email,
+          role: teacher.role,
+          teachSclassID: teacher.classes.teachSclass,
+          id: teacher._id,
+        }))
+      : [];
 
   const SubjectsButtonHaver = ({ row }) => {
     return (
@@ -161,6 +183,36 @@ const ClassDetails = () => {
     };
   });
 
+  const TeacherButtonHaver = ({ row }) => {
+    return (
+      <div className="flex space-x-2">
+        <button
+          onClick={() => {
+            console.log("sds");
+            dispatch(deleteClassFromTeacher(row.id, classID));
+            dispatch(getTeachersByClassID(classID));
+          }}
+          className="text-red-500"
+        >
+          <FaUserMinus />
+        </button>
+        <button
+          className="bg-blue-500 text-white px-2 py-1 rounded"
+          onClick={() => navigate(`/Admin/teachers/teacher/${row.id}`)}
+        >
+          View
+        </button>
+        {/* <button
+          className="bg-purple-500 text-white px-2 py-1 rounded"
+          onClick={() =>
+            navigate("/Admin/students/student/attendance/" + row.id)
+          }
+        >
+          Attendance
+        </button> */}
+      </div>
+    );
+  };
   const StudentsButtonHaver = ({ row }) => {
     return (
       <div className="flex space-x-2">
@@ -176,14 +228,14 @@ const ClassDetails = () => {
         >
           View
         </button>
-        <button
+        {/* <button
           className="bg-purple-500 text-white px-2 py-1 rounded"
           onClick={() =>
             navigate("/Admin/students/student/attendance/" + row.id)
           }
         >
           Attendance
-        </button>
+        </button> */}
       </div>
     );
   };
@@ -229,7 +281,30 @@ const ClassDetails = () => {
   };
 
   const ClassTeachersSection = () => {
-    return <div>Teachers</div>;
+    return (
+      <div>
+        {getresponse ? (
+          <div className="flex justify-end mt-4">
+            <button
+              className="bg-green-500 text-white px-4 py-2 rounded"
+              onClick={() => navigate("Admin/teachers/addteacher")}
+            >
+              Add Teacher
+            </button>
+          </div>
+        ) : (
+          <div>
+            <h5 className="text-lg font-semibold mb-4">Students List:</h5>
+            <TableTemplate
+              buttonHaver={TeacherButtonHaver}
+              columns={teacherColumuns}
+              rows={teacherRows}
+            />
+            <SpeedDialTemplate actions={studentActions} />
+          </div>
+        )}
+      </div>
+    );
   };
 
   const ClassDetailsSection = () => {

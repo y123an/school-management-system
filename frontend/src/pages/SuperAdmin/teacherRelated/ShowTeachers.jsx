@@ -233,7 +233,7 @@ const ShowTeachers = () => {
               </div>
             </div>
             {/* Action Buttons */}
-            <div className="fixed bottom-16 right-16">
+            {/* <div className="fixed bottom-16 right-16">
               {actions.map((action) => (
                 <div key={action.name} className="mb-4">
                   <button
@@ -244,7 +244,7 @@ const ShowTeachers = () => {
                   </button>
                 </div>
               ))}
-            </div>
+            </div> */}
             {/* Popup */}
             <Popup
               message={message}

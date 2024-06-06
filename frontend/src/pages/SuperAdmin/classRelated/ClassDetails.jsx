@@ -289,7 +289,7 @@ const ClassDetails = () => {
           <div className="flex justify-end mt-4">
             <button
               className="bg-green-500 text-white px-4 py-2 rounded"
-              onClick={() => navigate("SuperAdmin/teachers/addteacher")}
+              onClick={() => navigate("/SuperAdmin/teachers/addteacher")}
             >
               Add Teacher
             </button>

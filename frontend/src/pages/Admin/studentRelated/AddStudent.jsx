@@ -18,14 +18,17 @@ const AddStudent = ({ situation }) => {
   const { status, currentUser, response, error } = userState;
   const { sclassesList } = useSelector((state) => state.sclass);
 
-  const [name, setName] = useState("");
-  const [rollNum, setRollNum] = useState("");
-  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [grandfathersName, setGrandfathersName] = useState("");
+  const [studentID, setStudentID] = useState("");
+  const [gender, setGender] = useState("");
   const [className, setClassName] = useState("");
   const [sclassName, setSclassName] = useState("");
 
   const adminID = currentUser._id;
   const role = "Student";
+  const examResult = [];
   const attendance = [];
 
   useEffect(() => {
@@ -44,20 +47,28 @@ const AddStudent = ({ situation }) => {
       setSclassName("");
     } else {
       const selectedClass = sclassesList.find(
-        (classItem) => classItem.sclassName === event.target.value
+        (classItem) => classItem._id === event.target.value
       );
-      setClassName(selectedClass.sclassName);
+      console.log(selectedClass);
+      setClassName(selectedClass._id);
       setSclassName(selectedClass._id);
     }
   };
 
   const fields = {
-    name,
-    rollNum,
-    password,
+    firstName,
+    lastName,
+    grandfathersName,
+    studentID,
     sclassName,
+    gender,
+    className:
+      sclassesList.find((classItem) => classItem._id === className)
+        ?.gradelevel +
+      sclassesList.find((classItem) => classItem._id === className)?.section,
     adminID,
     role,
+    examResult,
     attendance,
   };
 
@@ -73,7 +84,7 @@ const AddStudent = ({ situation }) => {
   };
 
   useEffect(() => {
-    if (status === "added") {
+    if (status === "success") {
       dispatch(underControl());
       navigate(-1);
     } else if (status === "failed") {
@@ -99,79 +110,100 @@ const AddStudent = ({ situation }) => {
   return (
     <>
       <div className="h-screen flex flex-col font-poppins">
-        <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <button
             onClick={toggleDrawer}
             className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
           >
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
-          <span className="text-lg font-semibold">Admin Dashboard</span>
-
+          <span className="text-lg font-semibold">Super Admin Dashboard</span>
           <AccountMenu />
         </div>
         <div className="flex">
           <SideBar />
           <div className="flex-grow flex items-center justify-center bg-gray-100">
             <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
-              <form action="" onSubmit={submitHandler}>
-                <h2 className="text-2xl font-bold mb-6 text-center">
-                  Add Student
-                </h2>
-                {situation === "Student" && (
-                  <div className="mb-4">
-                    <label className="block text-gray-700 mb-2">Class</label>
-                    <select
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      value={className}
-                      onChange={changeHandler}
-                      required
-                    >
-                      <option value="Select Class">Select Class</option>
-                      {sclassesList.map((classItem, index) => (
-                        <option key={index} value={classItem.sclassName}>
-                          {classItem.sclassName}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
+              <h2 className="text-2xl font-bold mb-6 text-center">
+                Add Student
+              </h2>
+              <form onSubmit={submitHandler}>
                 <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Name</label>
+                  <label className="block text-gray-700 mb-2">First Name</label>
                   <input
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="text"
-                    placeholder="Enter student's name..."
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
-                    autoComplete="name"
+                    placeholder="Enter student's first name..."
+                    value={firstName}
+                    onChange={(event) => setFirstName(event.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Last Name</label>
+                  <input
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    type="text"
+                    placeholder="Enter student's last name..."
+                    value={lastName}
+                    onChange={(event) => setLastName(event.target.value)}
                     required
                   />
                 </div>
                 <div className="mb-4">
                   <label className="block text-gray-700 mb-2">
-                    Roll Number
+                    Grandfather's Name
                   </label>
                   <input
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="number"
-                    placeholder="Enter student's Roll Number..."
-                    value={rollNum}
-                    onChange={(event) => setRollNum(event.target.value)}
+                    type="text"
+                    placeholder="Enter student's grandfather's name..."
+                    value={grandfathersName}
+                    onChange={(event) =>
+                      setGrandfathersName(event.target.value)
+                    }
                     required
                   />
                 </div>
                 <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Password</label>
+                  <label className="block text-gray-700 mb-2">Student ID</label>
                   <input
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="password"
-                    placeholder="Enter student's password..."
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    autoComplete="new-password"
+                    type="number"
+                    placeholder="Enter student's ID..."
+                    value={studentID}
+                    onChange={(event) => setStudentID(event.target.value)}
                     required
                   />
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Gender</label>
+                  <select
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    required
+                  >
+                    <option value="Select Class">Select Class</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Class</label>
+                  <select
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={className}
+                    onChange={changeHandler}
+                    required
+                  >
+                    <option value="Select Class">Select Class</option>
+                    {sclassesList.map((classItem) => (
+                      <option key={classItem._id} value={classItem._id}>
+                        {classItem.gradelevel} {classItem.section}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="flex items-center justify-center">
                   <button

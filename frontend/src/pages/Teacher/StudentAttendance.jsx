@@ -57,7 +57,7 @@ const StudentAttendance = ({ situation }) => {
     setChosenSubName(selectedSubject._id);
   };
 
-  const fields = { subName: chosenSubName, status, date };
+  const fields = { status, date };
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -122,35 +122,6 @@ const StudentAttendance = ({ situation }) => {
                   </div>
                   <form onSubmit={submitHandler}>
                     <div className="space-y-6">
-                      {situation === "Student" && (
-                        <div className="w-full">
-                          <label
-                            htmlFor="subject-select"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Select Subject
-                          </label>
-                          <select
-                            id="subject-select"
-                            value={subjectName}
-                            onChange={changeHandler}
-                            className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            required
-                          >
-                            {subjectsList ? (
-                              subjectsList.map((subject, index) => (
-                                <option key={index} value={subject.subName}>
-                                  {subject.subName}
-                                </option>
-                              ))
-                            ) : (
-                              <option value="">
-                                Add Subjects For Attendance
-                              </option>
-                            )}
-                          </select>
-                        </div>
-                      )}
                       <div className="w-full">
                         <label
                           htmlFor="status-select"

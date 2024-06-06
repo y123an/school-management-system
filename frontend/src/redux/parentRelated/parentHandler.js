@@ -57,6 +57,20 @@ export const updateStudentFields =
       dispatch(getError(error));
     }
   };
+export const updateParent = (id, fields, address) => async (dispatch) => {
+  dispatch(getRequest());
+
+  try {
+    const result = await axiosInstance.put(`/${address}/${id}`, fields);
+    if (result.data.message) {
+      dispatch(getFailed(result.data.message));
+    } else {
+      dispatch(stuffDone());
+    }
+  } catch (error) {
+    dispatch(getError(error));
+  }
+};
 
 export const removeStuff = (id, address) => async (dispatch) => {
   dispatch(getRequest());

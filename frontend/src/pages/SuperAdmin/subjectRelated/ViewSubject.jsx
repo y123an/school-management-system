@@ -55,16 +55,6 @@ const ViewSubject = () => {
       >
         View
       </button>
-      <button
-        className="text-green-500 hover:text-green-700"
-        onClick={() =>
-          navigate(
-            `/SuperAdmin/subject/student/attendance/${row.id}/${subjectID}`
-          )
-        }
-      >
-        Take Attendance
-      </button>
     </>
   );
 
@@ -75,14 +65,6 @@ const ViewSubject = () => {
         onClick={() => navigate("/SuperAdmin/students/student/" + row.id)}
       >
         View
-      </button>
-      <button
-        className="text-green-500 hover:text-green-700"
-        onClick={() =>
-          navigate(`/SuperAdmin/subject/student/marks/${row.id}/${subjectID}`)
-        }
-      >
-        Provide Marks
       </button>
     </>
   );

@@ -149,6 +149,7 @@ router.post("/Teacher/addSubject/:id", verifyAdmin, addClassToTeacher);
 
 router.get("/Teachers/:id", verifyAdmin, getTeachers);
 router.get("/Teacher/:id", verifyAdmin, getTeacherDetail);
+router.put("/Teacher/update/:id", verifyAdmin, updateParent);
 router.get("/Teacher/class/:id", verifyAdmin, getTeachersByClassId);
 router.delete(
   "/Teacher/class/:teacherID/:classID",

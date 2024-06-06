@@ -29,6 +29,8 @@ const ShowParents = () => {
     console.log(error);
   }
 
+  console.log(parentsList);
+
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -46,18 +48,23 @@ const ShowParents = () => {
   const studentColumns = [
     { id: "name", label: "Name", minWidth: 170 },
     { id: "email", label: "Email", minWidth: 100 },
-    { id: "schoolName", label: "School Name", minWidth: 170 },
+    { id: "gender", label: "Gender", minWidth: 170 },
+    { id: "phone", label: "Phone", minWidth: 170 },
+    { id: "role", label: "Role", minWidth: 170 },
   ];
 
   const studentRows =
     parentsList &&
     parentsList.length > 0 &&
-    parentsList.map((admin) => {
+    parentsList.map((parent) => {
       return {
-        name: admin.name,
-        email: admin.email,
-        schoolName: admin.schoolName,
-        id: admin._id,
+        name: parent.name,
+        email: parent.email,
+        schoolName: parent.schoolName,
+        gender: parent.gender,
+        phone: parent.phone,
+        role: parent.role,
+        id: parent._id,
       };
     });
 
@@ -111,9 +118,9 @@ const ShowParents = () => {
         <button
           className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
           onClick={() =>
-            navigate("/Admin/parents/update/" + row.id, {
+            navigate("/Admin/Parents/update/" + row.id, {
               state: {
-                admin: row,
+                parent: row,
               },
             })
           }

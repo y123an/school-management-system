@@ -108,14 +108,7 @@ const TeacherShowNotices = () => {
             ) : (
               <>
                 {response ? (
-                  <div className="flex items-end flex-col w-full  mt-4">
-                    <button
-                      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-                      onClick={() => navigate("/SuperAdmin/addnotice")}
-                    >
-                      Add Notice
-                    </button>
-                  </div>
+                  <div className="flex items-end flex-col w-full  mt-4"></div>
                 ) : (
                   <div className="w-full overflow-hidden p-4">
                     {Array.isArray(noticesList) && noticesList.length > 0 && (
