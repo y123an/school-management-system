@@ -64,6 +64,7 @@ import AddSubject from "./pages/Admin/teacherRelated/AddSubject";
 import ShowParents from "./pages/Admin/parentRelated/ShowParents";
 import AddParent from "./pages/Admin/parentRelated/AddParent";
 import TeacherClass from "./pages/Teacher/TeacherClass";
+import TeacherShowNotices from "./pages/Teacher/TeacherShowNotices";
 
 const App = () => {
   return (
@@ -314,6 +315,8 @@ const App = () => {
           path="/Teacher/class/student/marks/:studentID"
           element={<TeacherStudentExamMarks situation="Student" />}
         />
+        <Route path="/Teacher/notice" element={<TeacherShowNotices />} />
+
         <Route path="/Teacher/complain" element={<TeacherComplain />} />
 
         <Route path="*" element={<Navigate to="/" />} />

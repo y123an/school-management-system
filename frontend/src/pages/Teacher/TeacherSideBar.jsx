@@ -40,6 +40,18 @@ const TeacherSideBar = () => {
           <FaChalkboardTeacher className="w-6 h-6 mr-2" />
           <span>Classes</span>
         </Link>
+
+        <Link
+          to="/Teacher/notice"
+          className={`py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
+            location.pathname.startsWith("/Teacher/notice")
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
+          }`}
+        >
+          <FaChalkboardTeacher className="w-6 h-6 mr-2" />
+          <span>Announcement</span>
+        </Link>
       </div>
       <hr className="my-4 border-t border-gray-300" />
       <div className="mt-4">
