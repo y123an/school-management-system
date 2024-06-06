@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getClassStudents } from "../../redux/sclassRelated/sclassHandle";
 import {
   IoIosArrowDown,
@@ -11,26 +11,15 @@ import {
 import TeacherSideBar from "./TeacherSideBar";
 import AccountMenu from "../../components/AccountMenu";
 
-const TeacherClassDetails = () => {
+const TeacherClass = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { sclassStudents, loading, error, getresponse } = useSelector(
     (state) => state.sclass
   );
-  const params = useParams();
-  const classID = params.id;
-
   const { currentUser, currentRole } = useSelector((state) => state.user);
 
-  // const classIDs = currentUser.classes.map((cls) => cls.teachSclass?._id);
-
-  const fetchData = () => {
-    dispatch(getClassStudents(classID));
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const classes = currentUser.classes;
 
   if (error) {
     console.log(error);
@@ -77,13 +66,13 @@ const TeacherClassDetails = () => {
       setOpen(false);
     };
 
-    console.log(sclassStudents);
+    console.log(classes);
 
     return (
       <div className="flex items-center space-x-2">
         <button
           className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
-          onClick={() => navigate("/Teacher/class/student/" + row._id)}
+          onClick={() => navigate("/Teacher/class/" + row.teachSclass._id)}
         >
           View
         </button>
@@ -152,12 +141,12 @@ const TeacherClassDetails = () => {
               </h4>
               {getresponse ? (
                 <div className="flex justify-center mt-4 text-xl font-semibold text-gray-600">
-                  No Students Found
+                  No Class Found
                 </div>
               ) : (
                 <div className="mt-8">
                   <h5 className="text-lg font-semibold text-gray-700 mb-4">
-                    Students List:
+                    Class List:
                   </h5>
                   <div className="overflow-x-auto">
                     <div className="min-w-full">
@@ -165,44 +154,33 @@ const TeacherClassDetails = () => {
                         <table className="min-w-max w-full table-auto">
                           <thead>
                             <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                              <th className="py-3 px-6 text-left">
-                                First Name
-                              </th>
-                              <th className="py-3 px-6 text-left">Last Name</th>
-                              <th className="py-3 px-6 text-left">
-                                Grand Father Name
-                              </th>
-
-                              <th className="py-3 px-6 text-left">StudentID</th>
-                              <th className="py-3 px-6 text-left">
-                                Class Name
-                              </th>
+                              <th className="py-3 px-6 text-left">Grade</th>
+                              <th className="py-3 px-6 text-left">Section</th>
+                              <th className="py-3 px-6 text-left">Subject</th>
+                              <th className="py-3 px-6 text-left">Session</th>
                               <th className="py-3 px-6 text-center">Actions</th>
                             </tr>
                           </thead>
                           <tbody className="text-gray-600 text-sm font-light">
-                            {sclassStudents.map((student) => (
+                            {classes.map((cls) => (
                               <tr
-                                key={student._id}
+                                key={cls._id}
                                 className="border-b border-gray-200 hover:bg-gray-100"
                               >
                                 <td className="py-3 px-6 text-left whitespace-nowrap">
-                                  {student.firstName}
+                                  {cls.teachSclass.gradelevel}
                                 </td>
                                 <td className="py-3 px-6 text-left whitespace-nowrap">
-                                  {student.lastName}
+                                  {cls.teachSclass.section}
                                 </td>
                                 <td className="py-3 px-6 text-left whitespace-nowrap">
-                                  {student.grandfathersName}
+                                  {cls.teachSubject.subName}
                                 </td>
                                 <td className="py-3 px-6 text-left whitespace-nowrap">
-                                  {student.studentID}
-                                </td>
-                                <td className="py-3 px-6 text-left whitespace-nowrap">
-                                  {student.className}
+                                  {cls.teachSubject.sessions}
                                 </td>
                                 <td className="py-3 px-6 text-center">
-                                  <StudentsButtonHaver row={student} />
+                                  <StudentsButtonHaver row={cls} />
                                 </td>
                               </tr>
                             ))}
@@ -221,4 +199,4 @@ const TeacherClassDetails = () => {
   );
 };
 
-export default TeacherClassDetails;
+export default TeacherClass;

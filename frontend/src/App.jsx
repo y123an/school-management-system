@@ -63,6 +63,7 @@ import AddHomeRoom from "./pages/Admin/classRelated/AddHomeRoom";
 import AddSubject from "./pages/Admin/teacherRelated/AddSubject";
 import ShowParents from "./pages/Admin/parentRelated/ShowParents";
 import AddParent from "./pages/Admin/parentRelated/AddParent";
+import TeacherClass from "./pages/Teacher/TeacherClass";
 
 const App = () => {
   return (
@@ -299,7 +300,8 @@ const App = () => {
 
         <Route path="/Teacher/dashboard" element={<TeacherHomePage />} />
         <Route path="/Teacher/profile" element={<TeacherProfile />} />
-        <Route path="/Teacher/class" element={<TeacherClassDetails />} />
+        <Route path="/Teacher/class" element={<TeacherClass />} />
+        <Route path="/Teacher/class/:id" element={<TeacherClassDetails />} />
         <Route
           path="/Teacher/class/student/:id"
           element={<TeacherViewStudent />}
