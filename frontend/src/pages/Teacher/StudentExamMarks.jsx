@@ -90,7 +90,7 @@ const StudentExamMarks = ({ situation }) => {
 
   return (
     <>
-      <div className="h-screen">
+      <div className="h-screen font-poppins">
         <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
           <button
             onClick={toggleDrawer}
@@ -123,7 +123,7 @@ const StudentExamMarks = ({ situation }) => {
                   <div className="mb-6">
                     <h4 className="text-2xl font-bold mb-2 flex items-center">
                       <MdOutlinePerson className="mr-2" /> Student Name:{" "}
-                      {userDetails.name}
+                      {userDetails.firstName + " " + userDetails.lastName}
                     </h4>
                     {currentUser.teachSubject && (
                       <h4 className="text-2xl font-bold mb-2 flex items-center">
@@ -149,15 +149,13 @@ const StudentExamMarks = ({ situation }) => {
                             className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                             required
                           >
-                            {subjectsList ? (
+                            <option value=""></option>
+                            {subjectsList &&
                               subjectsList.map((subject, index) => (
                                 <option key={index} value={subject.subName}>
                                   {subject.subName}
                                 </option>
-                              ))
-                            ) : (
-                              <option value="">Add Subjects For Marks</option>
-                            )}
+                              ))}
                           </select>
                         </div>
                       )}
@@ -181,7 +179,7 @@ const StudentExamMarks = ({ situation }) => {
                     <BlueButton
                       fullWidth
                       size="large"
-                      className="mt-6"
+                      className="mt-6 bg-blue-600 text-white p-2 rounded-md"
                       variant="contained"
                       type="submit"
                       disabled={loader}

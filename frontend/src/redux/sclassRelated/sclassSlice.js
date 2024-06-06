@@ -47,7 +47,7 @@ const sclassSlice = createSlice({
         (student) => !existingStudentIDs.has(student._id)
       );
 
-      state.sclassStudents = [...state.sclassStudents, ...uniqueNewStudents];
+      state.sclassStudents = action.payload;
       state.loading = false;
       state.error = null;
       state.getresponse = null;

@@ -40,7 +40,9 @@ const TeacherHomePage = () => {
     fetchData();
   }, []);
 
-  const numberOfStudents = sclassStudents && sclassStudents.length;
+  console.log(currentUser.classes.length);
+
+  const numberOfClass = currentUser.classes.length;
   const numberOfSessions = subjectDetails
     ? subjectDetails.reduce(
         (sum, subject) => sum + parseInt(subject.sessions, 10),
@@ -77,9 +79,9 @@ const TeacherHomePage = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-lg shadow-md flex flex-col justify-between items-center">
               <img src={Students} alt="Students" className="w-16 h-16" />
-              <p className="text-lg font-semibold">Class Students</p>
+              <p className="text-lg font-semibold">Classes</p>
               <p className="text-4xl font-bold">
-                <span>{numberOfStudents}</span>
+                <span>{numberOfClass}</span>
               </p>
             </div>
             <div className="bg-gradient-to-r from-green-500 to-green-700 text-white p-6 rounded-lg shadow-md flex flex-col justify-between items-center">
