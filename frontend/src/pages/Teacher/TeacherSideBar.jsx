@@ -7,6 +7,7 @@ import {
   FaChalkboardTeacher,
   FaSignOutAlt,
 } from "react-icons/fa";
+import { MdChatBubble } from "react-icons/md";
 import { useSelector } from "react-redux";
 
 const TeacherSideBar = () => {
