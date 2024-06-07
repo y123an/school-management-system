@@ -69,6 +69,17 @@ const TeacherSideBar = () => {
       <div className="mt-4">
         <p className="text-gray-500 text-sm">User</p>
         <Link
+          to="/Teacher/calender"
+          className={`py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
+            location.pathname.startsWith("/Teacher/calender")
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
+          }`}
+        >
+          <FaUserCircle className="w-6 h-6 mr-2" />
+          <span>Calender</span>
+        </Link>
+        <Link
           to="/Teacher/profile"
           className={`py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
             location.pathname.startsWith("/Teacher/profile")

@@ -115,6 +115,17 @@ const SideBar = () => {
           User
         </span>
         <Link
+          to="/Admin/calender"
+          className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
+            isActive("/Admin/calender")
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
+          }`}
+        >
+          <RiAccountCircleLine className="mr-3 text-xl" />
+          <span className="text-md font-medium">Calender</span>
+        </Link>
+        <Link
           to="/Admin/profile"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
             isActive("/Admin/profile")

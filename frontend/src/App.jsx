@@ -67,6 +67,9 @@ import TeacherClass from "./pages/Teacher/TeacherClass";
 import TeacherShowNotices from "./pages/Teacher/TeacherShowNotices";
 import SuperAdminUpdateParent from "./pages/SuperAdmin/parentRelated/UpdateParent";
 import UpdateParent from "./pages/Admin/parentRelated/UpdateParent";
+import SuperAdminCalender from "./pages/SuperAdmin/calenderRelated/Calender";
+import Calendar from "./pages/Admin/calenderRelated/Calender";
+import TeacherCalendar from "./pages/Teacher/TeacherCalender";
 
 const App = () => {
   return (
@@ -210,6 +213,10 @@ const App = () => {
           element={<SuperAdminSeeComplains />}
         />
 
+        {/* Calender */}
+
+        <Route path="/SuperAdmin/calender" element={<SuperAdminCalender />} />
+
         {/* admin */}
         <Route path="/Admin/dashboard/*" element={<AdminHomePage />} />
         <Route path="/Admin/profile" element={<AdminProfile />} />
@@ -294,6 +301,9 @@ const App = () => {
           element={<ChooseSubject situation="Norm" />}
         />
 
+        {/* calender */}
+        <Route path="/Admin/calender" element={<Calendar />} />
+
         {/* anouncement  */}
         <Route path="/Admin/notices" element={<ShowNotices />} />
         <Route path="/Admin/addnotice" element={<AddNotice />} />
@@ -325,6 +335,7 @@ const App = () => {
         <Route path="/Teacher/notice" element={<TeacherShowNotices />} />
 
         <Route path="/Teacher/complain" element={<TeacherComplain />} />
+        <Route path="/Teacher/calender" element={<TeacherCalendar />} />
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

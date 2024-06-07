@@ -26,6 +26,12 @@ const {
   complainList,
 } = require("../controllers/complain-controller.js");
 const {
+  getEvents,
+  addEvent,
+  updateEvent,
+  deleteEvent,
+} = require("../controllers/eventController.js");
+const {
   noticeCreate,
   noticeList,
   deleteNotices,
@@ -207,5 +213,11 @@ router.get("/Subject/:id", verifyTeacherOrAdmin, getSubjectDetail);
 router.delete("/Subject/:id", verifyAdmin, deleteSubject);
 router.delete("/Subjects/:id", verifyAdmin, deleteSubjects);
 router.delete("/SubjectsClass/:id", verifyAdmin, deleteSubjectsByClass);
+
+//events
+router.get("/events/:id", getEvents);
+router.post("/events", addEvent);
+router.get("/events/:id", updateEvent);
+router.delete("/events/:id", deleteEvent);
 
 module.exports = router;
