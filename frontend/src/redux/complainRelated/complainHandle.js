@@ -7,9 +7,7 @@ export const getAllComplains = (id, address) => async (dispatch) => {
   dispatch(getRequest());
 
   try {
-    const result = await axios.get(
-      `${REACT_APP_BASE_URL}/${address}List/${id}`
-    );
+    const result = await axios.get(`${REACT_APP_BASE_URL}/${address}List`);
     if (result.data.message) {
       dispatch(getFailed(result.data.message));
     } else {

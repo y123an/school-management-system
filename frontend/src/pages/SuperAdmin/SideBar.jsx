@@ -108,6 +108,17 @@ const SideBar = () => {
           <RiNotification2Line className="mr-3 text-xl" />
           <span className="text-md font-medium">Announcement</span>
         </Link>
+        <Link
+          to="/SuperAdmin/complains"
+          className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
+            isActive("/SuperAdmin/complains")
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
+          }`}
+        >
+          <RiNotification2Line className="mr-3 text-xl" />
+          <span className="text-md font-medium">Complains</span>
+        </Link>
       </React.Fragment>
       <hr className="my-3 border-gray-300" />
       <React.Fragment>
