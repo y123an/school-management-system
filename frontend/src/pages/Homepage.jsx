@@ -16,15 +16,12 @@ const Homepage = () => {
             <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
               Welcome to the
               <br />
-              School Management
+              parent and teacher help desk
               <br />
               System
             </h1>
             <p className="mt-4 text-lg font-light text-gray-600 leading-relaxed">
-              Simplify school administration, organize classes efficiently, and
-              manage student and faculty enrollment. Easily monitor attendance,
-              evaluate performance, and offer feedback. Access and review
-              records, track grades, and communicate smoothly.
+              Simplify your communication
             </p>
           </div>
           <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
