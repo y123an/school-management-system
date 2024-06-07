@@ -180,7 +180,7 @@ router.put("/Notice/:id", verifyAdmin, updateNotice);
 
 router.post("/ComplainCreate", complainCreate);
 
-router.get("/ComplainList/:id", complainList);
+router.get("/ComplainList", complainList);
 
 // Sclass
 
