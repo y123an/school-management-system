@@ -1,5 +1,6 @@
 import Students from "./students.svg";
-import bgpic from "./designlogin.jpg";
+//import bgpic from "./designlogin.jpg";
+import bgpic from "./parent and teacher.png";
 import img1 from "./img1.png";
 import img2 from "./img2.png";
 import img3 from "./img3.png";
