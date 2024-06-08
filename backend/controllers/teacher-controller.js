@@ -3,7 +3,10 @@ const Teacher = require("../models/teacherSchema.js");
 const Subject = require("../models/subjectSchema.js");
 const Sclass = require("../models/sclassSchema.js");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
+const dotenv = require("dotenv");
 
+dotenv.config();
 const teacherRegister = async (req, res) => {
   const { name, email, password, role, classes, gender, phone } = req.body;
   try {
@@ -39,7 +42,13 @@ const teacherRegister = async (req, res) => {
       classes,
     });
 
-    let result = await teacher.save();
+    const existingTeacherByEmail = await Teacher.findOne({ email });
+
+    if (existingTeacherByEmail) {
+      return res.send({ message: "Email already exists" });
+    }
+
+    //  let result = await teacher.save();
 
     // Update the Subject and Sclass collections
     for (const cls of classes) {

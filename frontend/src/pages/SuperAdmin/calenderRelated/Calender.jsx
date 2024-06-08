@@ -130,9 +130,18 @@ const Calendar = () => {
                 <ViewDirective option="Week" />
                 <ViewDirective option="WorkWeek" />
                 <ViewDirective option="Month" />
+                <ViewDirective option="Agenda" />
               </ViewsDirective>
               <Inject
-                services={[Day, Week, WorkWeek, Month, Resize, DragAndDrop]}
+                services={[
+                  Day,
+                  Week,
+                  WorkWeek,
+                  Month,
+                  Agenda,
+                  Resize,
+                  DragAndDrop,
+                ]}
               />
             </ScheduleComponent>
             <PropertyPane>
