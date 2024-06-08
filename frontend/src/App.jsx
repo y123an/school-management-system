@@ -70,6 +70,7 @@ import UpdateParent from "./pages/Admin/parentRelated/UpdateParent";
 import SuperAdminCalender from "./pages/SuperAdmin/calenderRelated/Calender";
 import Calendar from "./pages/Admin/calenderRelated/Calender";
 import TeacherCalendar from "./pages/Teacher/TeacherCalender";
+import TeacherChat from "./pages/Teacher/TeacherChat";
 
 const App = () => {
   return (
@@ -336,6 +337,7 @@ const App = () => {
 
         <Route path="/Teacher/complain" element={<TeacherComplain />} />
         <Route path="/Teacher/calender" element={<TeacherCalendar />} />
+        <Route path="/Teacher/Chat" element={<TeacherChat />} />
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
