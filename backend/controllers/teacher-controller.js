@@ -3,7 +3,10 @@ const Teacher = require("../models/teacherSchema.js");
 const Subject = require("../models/subjectSchema.js");
 const Sclass = require("../models/sclassSchema.js");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
+const dotenv = require("dotenv");
 
+dotenv.config();
 const teacherRegister = async (req, res) => {
   const { name, email, password, role, classes, gender, phone } = req.body;
   try {
@@ -20,13 +23,24 @@ const teacherRegister = async (req, res) => {
       classes,
     });
 
-    const existingTeacherByEmail = await Teacher.findOne({ email });
+    // const existingTeacherByEmail = await Teacher.findOne({ email });
+    console.log("yo " + teacher);
+    const username = name;
+    const secret = hashedPass;
+    const nameParts = name.split(" ");
 
+    const first_name = nameParts[0];
+    const last_name = nameParts.slice(1).join(" ");
+    const r = await axios.post(
+      "https://api.chatengine.io/users/",
+      { username, secret, email, first_name, last_name },
+      { headers: { "Private-Key": process.env.CHAT_ENGINE_PRIVATE_KEY } }
+    );
     if (existingTeacherByEmail) {
       return res.send({ message: "Email already exists" });
     }
 
-    let result = await teacher.save();
+    //  let result = await teacher.save();
 
     for (const cls of classes) {
       if (cls.teachSubject) {

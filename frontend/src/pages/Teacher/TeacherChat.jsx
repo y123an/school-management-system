@@ -2,7 +2,6 @@ import { ChatEngine } from "react-chat-engine";
 import "./chat.css";
 import TeacherSideBar from "./TeacherSideBar";
 const projectID = "fb3e7c3a-f951-4453-ade3-88d31e3dd1da";
-
 const TeacherChat = () => {
   return (
     <div className="flex h-full">
