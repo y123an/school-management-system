@@ -70,6 +70,13 @@ import UpdateParent from "./pages/Admin/parentRelated/UpdateParent";
 import SuperAdminCalender from "./pages/SuperAdmin/calenderRelated/Calender";
 import Calendar from "./pages/Admin/calenderRelated/Calender";
 import TeacherCalendar from "./pages/Teacher/TeacherCalender";
+import SuperAdminUpdateStudent from "./pages/SuperAdmin/studentRelated/UpdateStudent";
+import SuperAdminUpdateSubject from "./pages/SuperAdmin/subjectRelated/UpdateSubject";
+import SuperAdminUpdateTeacher from "./pages/SuperAdmin/teacherRelated/UpdateTeacher";
+import UpdateStudent from "./pages/Admin/studentRelated/UpdateStudent";
+import UpdateSubject from "./pages/Admin/subjectRelated/UpdateSubject";
+import UpdateTeacher from "./pages/Admin/teacherRelated/UpdateTeacher";
+import TeacherChat from "./pages/Teacher/Chat/Chat";
 
 const App = () => {
   return (

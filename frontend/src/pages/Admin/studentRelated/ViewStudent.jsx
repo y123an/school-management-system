@@ -1,22 +1,13 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteUser,
-  getUserDetails,
-  updateUser,
-} from "../../../redux/userRelated/userHandle";
+import { getUserDetails } from "../../../redux/userRelated/userHandle";
 import { useNavigate, useParams } from "react-router-dom";
 import { getSubjectList } from "../../../redux/sclassRelated/sclassHandle";
-import {
-  removeStuff,
-  AdminFields,
-} from "../../../redux/studentRelated/studentHandle";
 import { calculateOverallAttendancePercentage } from "../../../components/attendanceCalculator";
 import CustomBarChart from "../../../components/CustomBarChart";
 import CustomPieChart from "../../../components/CustomPieChart";
 import Popup from "../../../components/Popup";
 
-import { FiArrowUp, FiArrowDown, FiTrash } from "react-icons/fi";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
@@ -67,18 +58,7 @@ const ViewStudent = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleOpen = (subId) => {
-    setOpenStates((prevState) => ({
-      ...prevState,
-      [subId]: !prevState[subId],
-    }));
-  };
-
   const [value, setValue] = useState("1");
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   const [selectedSection, setSelectedSection] = useState("table");
   const handleSectionChange = (event, newSection) => {
@@ -98,41 +78,6 @@ const ViewStudent = () => {
       setSubjectAttendance(userDetails.attendance || []);
     }
   }, [userDetails]);
-
-  const submitHandler = (event) => {
-    event.preventDefault();
-    dispatch(updateUser(fields, studentID, address))
-      .then(() => {
-        dispatch(getUserDetails(studentID, address));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const deleteHandler = () => {
-    setMessage("Sorry the delete function has been disabled for now.");
-    setShowPopup(true);
-
-    // dispatch(deleteUser(studentID, address))
-    //     .then(() => {
-    //         navigate(-1)
-    //     })
-  };
-
-  const removeHandler = (id, deladdress) => {
-    dispatch(removeStuff(id, deladdress)).then(() => {
-      dispatch(getUserDetails(studentID, address));
-    });
-  };
-
-  const removeSubAttendance = (subId) => {
-    dispatch(AdminFields(studentID, { subId }, "RemoveStudentSubAtten")).then(
-      () => {
-        dispatch(getUserDetails(studentID, address));
-      }
-    );
-  };
 
   const overallAttendancePercentage =
     calculateOverallAttendancePercentage(subjectAttendance);
@@ -184,7 +129,7 @@ const ViewStudent = () => {
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 ml-2 transition duration-300"
             onClick={() =>
-              navigate("/SuperAdmin/students/student/attendance/" + studentID)
+              navigate("/Admin/students/student/attendance/" + studentID)
             }
           >
             Add Attendance
@@ -242,7 +187,7 @@ const ViewStudent = () => {
           // <button
           //   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
           //   onClick={() =>
-          //     navigate("/SuperAdmin/students/student/attendance/" + studentID)
+          //     navigate("/Admin/students/student/attendance/" + studentID)
           //   }
           // >
           //   Add Attendance
@@ -296,7 +241,7 @@ const ViewStudent = () => {
           {/* <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mt-4 transition duration-300"
             onClick={() =>
-              navigate("/SuperAdmin/students/student/marks/" + studentID)
+              navigate("/Admin/students/student/marks/" + studentID)
             }
           >
             Add Marks
@@ -351,7 +296,7 @@ const ViewStudent = () => {
           // <button
           //   className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
           //   onClick={() =>
-          //     navigate("/SuperAdmin/students/student/marks/" + studentID)
+          //     navigate("/Admin/students/student/marks/" + studentID)
           //   }
           // >
           //   Add Marks

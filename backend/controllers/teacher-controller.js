@@ -42,8 +42,6 @@ const teacherRegister = async (req, res) => {
       classes,
     });
 
-    const existingTeacherByEmail = await Teacher.findOne({ email });
-
     if (existingTeacherByEmail) {
       return res.send({ message: "Email already exists" });
     }
