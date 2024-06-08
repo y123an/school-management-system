@@ -24,7 +24,7 @@ const teacherRegister = async (req, res) => {
     });
 
     // const existingTeacherByEmail = await Teacher.findOne({ email });
-    console.log("yo " + teacher);
+
     const username = name;
     const secret = hashedPass;
     const nameParts = name.split(" ");
@@ -33,9 +33,22 @@ const teacherRegister = async (req, res) => {
     const last_name = nameParts.slice(1).join(" ");
     const r = await axios.post(
       "https://api.chatengine.io/users/",
-      { username, secret, email, first_name, last_name },
+      {
+        username,
+        secret,
+        email,
+        first_name,
+        last_name,
+        custom_json: '{ "role": "teacher" }',
+      },
       { headers: { "Private-Key": process.env.CHAT_ENGINE_PRIVATE_KEY } }
     );
+    console.log(`Data: ${JSON.stringify(r.data)}`);
+    if (r.data.role) {
+      console.log(`Role: ${r.data.custom_json[0]}`);
+    } else {
+      console.log("Role not found in the response data.");
+    }
     if (existingTeacherByEmail) {
       return res.send({ message: "Email already exists" });
     }
