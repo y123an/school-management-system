@@ -39,11 +39,20 @@ const studentSchema = new mongoose.Schema({
       subName: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "subject",
+        required: true,
       },
-      marksObtained: {
-        type: Number,
-        default: 0,
-      },
+      results: [
+        {
+          title: {
+            type: String,
+            required: true,
+          },
+          marks: {
+            type: Number,
+            default: 0,
+          },
+        },
+      ],
     },
   ],
   attendance: [
@@ -55,11 +64,6 @@ const studentSchema = new mongoose.Schema({
       status: {
         type: String,
         enum: ["Present", "Absent"],
-        required: true,
-      },
-      subName: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "subject",
         required: true,
       },
     },

@@ -3,16 +3,17 @@ const Teacher = require("../models/teacherSchema.js");
 const Parent = require("../models/parentSchema.js");
 
 const complainCreate = async (req, res) => {
-  let { userId, userType, complaint, name, role } = req.body;
+  let { userId, userType, complaint, title, name, role } = req.body;
 
   // Check if the user exists and is valid
   let user;
-  if (userType === "teacher") {
+  if (userType === "Teacher") {
     user = await Teacher.findById(userId);
+    userType = "teacher";
   } else if (userType === "HomeRoomTeacher") {
     user = await Teacher.findById(userId);
     userType = "teacher";
-  } else if (userType === "parent") {
+  } else if (userType === "Parent") {
     user = await Parent.findById(userId);
   }
 
@@ -24,6 +25,7 @@ const complainCreate = async (req, res) => {
     user: userId,
     userType,
     name,
+    title,
     role,
     date: new Date(),
     complaint,
@@ -35,6 +37,26 @@ const complainCreate = async (req, res) => {
     res.status(201).json(savedComplaint);
   } catch (err) {
     res.status(400).json({ message: err.message });
+  }
+};
+
+const deleteComplaint = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the complaint by ID and delete it
+    const complaint = await Complain.findByIdAndDelete(id);
+
+    // If no complaint is found, return a 404 error
+    if (!complaint) {
+      return res.status(404).json({ error: "Complaint not found" });
+    }
+
+    // Return a success message
+    res.json({ message: "Complaint deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting complaint:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -53,4 +75,4 @@ const complainList = async (req, res) => {
   }
 };
 
-module.exports = { complainCreate, complainList };
+module.exports = { complainCreate, complainList, deleteComplaint };

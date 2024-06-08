@@ -169,10 +169,37 @@ const deleteSubjectsByClass = async (req, res) => {
   }
 };
 
+const updateSubject = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { subName, subCode, sessions } = req.body;
+
+    // Find the subject by ID
+    const subject = await Subject.findById(id);
+    if (!subject) {
+      return res.status(404).json({ error: "Subject not found" });
+    }
+
+    // Update only the specified fields
+    if (subName) subject.subName = subName;
+    if (subCode) subject.subCode = subCode;
+    if (sessions) subject.sessions = sessions;
+
+    // Save the updated subject
+    const updatedSubject = await subject.save();
+
+    res.json(updatedSubject);
+  } catch (error) {
+    console.error("Error updating subject:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   subjectCreate,
   freeSubjectList,
   classSubjects,
+  updateSubject,
   getSubjectDetail,
   deleteSubjectsByClass,
   deleteSubjects,

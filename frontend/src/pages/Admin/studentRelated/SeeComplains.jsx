@@ -5,6 +5,8 @@ import { AiOutlineCheckSquare } from "react-icons/ai";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
+import { MdDelete } from "react-icons/md";
+import axios from "axios";
 
 const SeeComplains = () => {
   const dispatch = useDispatch();
@@ -36,7 +38,7 @@ const SeeComplains = () => {
           >
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
-          <span className="text-lg font-semibold">Admin Dashboard</span>
+          <span className="text-lg font-semibold">Super Admin Dashboard</span>
           <AccountMenu />
         </div>
         <div className="flex h-screen">
@@ -72,19 +74,44 @@ const SeeComplains = () => {
                             <div className="flex items-center justify-between">
                               <div className="flex items-center space-x-2">
                                 <span className="text-sm font-semibold">
-                                  {complain.user.name}
+                                  {complain.name}
                                 </span>
                                 <span className="text-xs text-gray-500">
                                   {dateString}
                                 </span>
                               </div>
-                              <div className="text-green-600">
-                                <AiOutlineCheckSquare />
-                              </div>
+                              <button
+                                onClick={async () => {
+                                  await axios
+                                    .delete(
+                                      `http://localhost:4000/Complain/${complain._id}`,
+                                      {
+                                        headers: {
+                                          "Content-Type": "application/json",
+                                          Authorization: `Bearer ${localStorage.getItem(
+                                            "token"
+                                          )}`,
+                                        },
+                                      }
+                                    )
+                                    .then((res) => {
+                                      dispatch(
+                                        getAllComplains(
+                                          currentUser._id,
+                                          "Complain"
+                                        )
+                                      );
+                                    });
+                                }}
+                                className="text-green-600"
+                              >
+                                <MdDelete />
+                              </button>
                             </div>
                             <div className="mt-1 text-xs text-gray-500">
-                              Role: {complain.user.role}
+                              Role: {complain.role}
                             </div>
+                            <h1 className="font-bold"> {complain.title}</h1>
                             <p className="mt-2 text-gray-800">
                               {complain.complaint}
                             </p>

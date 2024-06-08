@@ -10,6 +10,25 @@ const teacherRegister = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPass = await bcrypt.hash(password, salt);
 
+    const existingTeacherByEmail = await Teacher.findOne({ email });
+    if (existingTeacherByEmail) {
+      return res.send({ message: "Email already exists" });
+    }
+
+    // Check if any class is already assigned to another teacher
+    for (const cls of classes) {
+      const existingTeacherWithClass = await Teacher.findOne({
+        "classes.teachSclass": cls.teachSclass,
+        "classes.teachSubject": cls.teachSubject,
+      });
+
+      if (existingTeacherWithClass) {
+        return res.send({
+          message: `Class with and Subject is already assigned to another teacher`,
+        });
+      }
+    }
+
     const teacher = new Teacher({
       name,
       email,
@@ -20,14 +39,9 @@ const teacherRegister = async (req, res) => {
       classes,
     });
 
-    const existingTeacherByEmail = await Teacher.findOne({ email });
-
-    if (existingTeacherByEmail) {
-      return res.send({ message: "Email already exists" });
-    }
-
     let result = await teacher.save();
 
+    // Update the Subject and Sclass collections
     for (const cls of classes) {
       if (cls.teachSubject) {
         await Subject.findByIdAndUpdate(cls.teachSubject, {
@@ -279,30 +293,39 @@ const addClassToTeacher = async (req, res) => {
 
     // Check if teachSclass is provided
     if (!teachSclass) {
-      return res.status(400).json({ error: "teachSclass is required" });
+      return res.json({ message: "teachSclass is required" });
     }
 
     // Check if the teacher exists
     const teacher = await Teacher.findById(teacherId);
     if (!teacher) {
-      return res.status(404).json({ error: "Teacher not found" });
+      return res.status.json({ message: "Teacher not found" });
     }
 
     // Check if the class already exists in teacher's classes array
     const existingClass = teacher.classes.find(
       (cls) =>
-        (cls.teachSclass.toString() === teachSclass) &
-        (cls.teachSubject.toString() === teachSubject)
+        cls.teachSclass.toString() === teachSclass &&
+        cls.teachSubject?.toString() === teachSubject?.toString()
     );
     if (existingClass) {
-      return res
-        .status(400)
-        .json({ error: "Class already exists for the teacher" });
+      return res.json({ message: "Class already exists for the teacher" });
     }
 
     // Add the class to the teacher's classes array
     teacher.classes.push({ teachSclass, teachSubject });
     await teacher.save();
+
+    // Update the Subject and Sclass collections
+    if (teachSubject) {
+      await Subject.findByIdAndUpdate(teachSubject, {
+        $addToSet: { teachers: teacher._id },
+      });
+    }
+
+    await Sclass.findByIdAndUpdate(teachSclass, {
+      $addToSet: { teachers: teacher._id },
+    });
 
     res.json({
       add: true,
@@ -363,11 +386,46 @@ const removeClassFromTeacher = async (req, res) => {
   }
 };
 
+const updateTeacher = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, email, password, phone, gender } = req.body;
+
+    // Find the teacher by ID
+    const teacher = await Teacher.findById(id);
+    if (!teacher) {
+      return res.status(404).json({ error: "Teacher not found" });
+    }
+
+    // Update only the specified fields
+    if (name) teacher.name = name;
+    if (email) teacher.email = email;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      teacher.password = await bcrypt.hash(password, salt);
+    }
+    if (phone) teacher.phone = phone;
+    if (gender) teacher.gender = gender;
+
+    // Save the updated teacher
+    const updatedTeacher = await teacher.save();
+
+    // Hide the password in the response
+    updatedTeacher.password = undefined;
+
+    res.json(updatedTeacher);
+  } catch (error) {
+    console.error("Error updating teacher:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports = {
   teacherRegister,
   teacherLogIn,
   getTeachers,
   getTeacherDetail,
+  updateTeacher,
   updateTeacherSubject,
   deleteTeacher,
   deleteTeachers,

@@ -24,13 +24,11 @@ const StudentExamMarks = ({ situation }) => {
   const params = useParams();
 
   const [studentID, setStudentID] = useState("");
-  const [subjectName, setSubjectName] = useState("");
-  const [chosenSubName, setChosenSubName] = useState("");
-  const [marksObtained, setMarksObtained] = useState("");
-
-  const [showPopup, setShowPopup] = useState(false);
-  const [message, setMessage] = useState("");
+  const [chosenSubject, setChosenSubject] = useState("");
+  const [results, setResults] = useState([]);
   const [loader, setLoader] = useState(false);
+  const [ChosenSubName, setChosenSubName] = useState("");
+  const [subjectName, setSubjectName] = useState("");
 
   useEffect(() => {
     if (situation === "Student") {
@@ -41,7 +39,7 @@ const StudentExamMarks = ({ situation }) => {
       const { studentID, subjectID } = params;
       setStudentID(studentID);
       dispatch(getUserDetails(studentID, "Student"));
-      setChosenSubName(subjectID);
+      setChosenSubject(subjectID);
     }
   }, [situation]);
 
@@ -52,20 +50,50 @@ const StudentExamMarks = ({ situation }) => {
   }, [dispatch, userDetails]);
 
   const changeHandler = (event) => {
+    if (event.target.value === "") {
+      setSubjectName("");
+      setChosenSubName("");
+      return;
+    }
     const selectedSubject = subjectsList.find(
       (subject) => subject.subName === event.target.value
     );
     setSubjectName(selectedSubject.subName);
-    setChosenSubName(selectedSubject._id);
+    setChosenSubName(selectedSubject._id); // Store the ID of the selected subject
   };
 
-  const fields = { subName: chosenSubName, marksObtained };
+  const addResult = () => {
+    setResults([...results, { title: "", marks: 0 }]);
+  };
+
+  const removeResult = (index) => {
+    const updatedResults = [...results];
+    updatedResults.splice(index, 1);
+    setResults(updatedResults);
+  };
+
+  const updateResult = (index, key, value) => {
+    const updatedResults = [...results];
+    updatedResults[index][key] = value;
+    setResults(updatedResults);
+  };
 
   const submitHandler = (event) => {
     event.preventDefault();
     setLoader(true);
-    dispatch(updateStudentFields(studentID, fields, "UpdateExamResult"));
+
+    // Send the request with the adjusted body
+    dispatch(
+      updateStudentFields(
+        studentID,
+        { subName: ChosenSubName, results },
+        "UpdateExamResult"
+      )
+    );
   };
+
+  const [showPopup, setShowPopup] = useState(false);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (response) {
@@ -87,6 +115,8 @@ const StudentExamMarks = ({ situation }) => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  console.log(currentUser);
 
   return (
     <>
@@ -159,21 +189,48 @@ const StudentExamMarks = ({ situation }) => {
                           </select>
                         </div>
                       )}
-                      <div className="w-full">
-                        <label
-                          htmlFor="marks-input"
-                          className="block text-sm font-medium text-gray-700"
+                      <div>
+                        <h4 className="text-lg font-semibold mb-2">
+                          Exam Results
+                        </h4>
+                        {results.map((result, index) => (
+                          <div key={index} className="flex items-center">
+                            <input
+                              type="text"
+                              value={result.title}
+                              onChange={(e) =>
+                                updateResult(index, "title", e.target.value)
+                              }
+                              className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              placeholder="Result Title"
+                              required
+                            />
+                            <input
+                              type="number"
+                              value={result.marks}
+                              onChange={(e) =>
+                                updateResult(index, "marks", e.target.value)
+                              }
+                              className="mt-1 ml-2 block w-100 py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                              placeholder="Marks Obtained"
+                              required
+                            />
+                            <button
+                              type="button"
+                              onClick={() => removeResult(index)}
+                              className="ml-2 p-2 text-red-500 focus:outline-none"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        ))}
+                        <button
+                          type="button"
+                          onClick={addResult}
+                          className="mt-2 p-2 text-blue-500 focus:outline-none"
                         >
-                          Enter Marks
-                        </label>
-                        <input
-                          id="marks-input"
-                          type="number"
-                          value={marksObtained}
-                          onChange={(e) => setMarksObtained(e.target.value)}
-                          className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                          required
-                        />
+                          Add Result
+                        </button>
                       </div>
                     </div>
                     <BlueButton

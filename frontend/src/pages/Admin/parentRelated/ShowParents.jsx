@@ -33,16 +33,22 @@ const ShowParents = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState(null);
 
-  const deleteHandler = (deleteID, address) => {
-    console.log(deleteID);
-    console.log(address);
-    // setMessage("Sorry, the delete function has been disabled for now.");
-    // setShowPopup(true);
-
+  const confirmDelete = () => {
+    const { deleteID, address } = deleteInfo;
     dispatch(deleteUser(deleteID, address)).then(() => {
       dispatch(getAllParents(currentUser._id));
+      setShowPopup(true);
+      setMessage("Parent deleted successfully!");
     });
+    setShowConfirmModal(false);
+  };
+
+  const deleteHandler = (deleteID, address) => {
+    setDeleteInfo({ deleteID, address });
+    setShowConfirmModal(true);
   };
 
   const studentColumns = [
@@ -64,9 +70,12 @@ const ShowParents = () => {
         gender: parent.gender,
         phone: parent.phone,
         role: parent.role,
+        Children: parent.Children,
         id: parent._id,
       };
     });
+
+  console.log(parentsList);
 
   const StudentButtonHaver = ({ row }) => {
     const options = ["Take Attendance", "Provide Marks"];
@@ -149,7 +158,7 @@ const ShowParents = () => {
           ></path>
         </svg>
       ),
-      name: "Add New admin",
+      name: "Add New Parent",
       action: () => navigate("/Admin/addParents"),
     },
     {
@@ -169,7 +178,7 @@ const ShowParents = () => {
           ></path>
         </svg>
       ),
-      name: "Delete All admins",
+      name: "Delete All Parents",
       action: () => deleteHandler(currentUser._id, "Parents"),
     },
   ];
@@ -182,14 +191,14 @@ const ShowParents = () => {
   return (
     <>
       <div className="h-screen font-poppins">
-        <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <button
             onClick={toggleDrawer}
             className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
           >
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
-          <span className="text-lg font-semibold">Admin Dashboard</span>
+          <span className="text-lg font-semibold">Super Admin Dashboard</span>
 
           <AccountMenu />
         </div>
@@ -235,6 +244,29 @@ const ShowParents = () => {
               setShowPopup={setShowPopup}
               showPopup={showPopup}
             />
+            {/* Confirm Delete Modal */}
+            {showConfirmModal && (
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div className="bg-white p-6 rounded shadow-md">
+                  <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
+                  <p>Are you sure you want to delete this parent?</p>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      onClick={() => setShowConfirmModal(false)}
+                      className="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-700"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={confirmDelete}
+                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         </div>
       </div>

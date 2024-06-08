@@ -19,14 +19,15 @@ const AddSubject = () => {
 
   const teacherID = params.id;
 
-  const { status, response, error, currentUser } = useSelector(
-    (state) => state.user
+  const { currentUser } = useSelector((state) => state.user);
+  const { sclassesList, subjectsList, status, response, error } = useSelector(
+    (state) => state.sclass
   );
-  const { sclassesList, subjectsList } = useSelector((state) => state.sclass);
 
-  useEffect(() => {
-    dispatch(getSubjectList(currentUser._id, "AllSubjects"));
-  }, [currentUser._id, dispatch]);
+  // useEffect(() => {
+  //   dispatch(getSubjectList(currentUser._id, "AllSubjects"));
+  // }, [currentUser._id, dispatch]);
+
   useEffect(() => {
     dispatch(getAllSclasses(currentUser._id, "Sclass"));
   }, [currentUser._id, dispatch]);
@@ -50,9 +51,9 @@ const AddSubject = () => {
   };
 
   useEffect(() => {
-    if (status === "added") {
+    if (status === "success") {
       dispatch(underControl());
-      navigate("/SuperAdmin/teachers");
+      navigate("/Admin/teachers");
     } else if (status === "failed") {
       setMessage(response);
       setShowPopup(true);
@@ -82,6 +83,7 @@ const AddSubject = () => {
       const selectedClass = sclassesList.find(
         (classItem) => classItem._id === event.target.value
       );
+      dispatch(getSubjectList(selectedClass._id, "ClassSubjects"));
       setClassName(selectedClass._id);
       setSclassName(selectedClass._id);
     }
@@ -109,7 +111,7 @@ const AddSubject = () => {
         >
           {open ? <IoMdArrowBack size={24} /> : <IoIosMenu size={24} />}
         </button>
-        <span className="text-lg font-semibold">Admin Dashboard</span>
+        <span className="text-lg font-semibold">Super Admin Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex flex-grow">
@@ -127,22 +129,6 @@ const AddSubject = () => {
                 Add Subject
               </h2>
               <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Subject</label>
-                <select
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={subjectName}
-                  onChange={changeSubjectHandler}
-                  required
-                >
-                  <option value="Select subject">Select Subject</option>
-                  {subjectsList.map((classItem) => (
-                    <option key={classItem._id} value={classItem._id}>
-                      {classItem.subName}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="mb-4">
                 <label className="block text-gray-700 mb-2">Class</label>
                 <select
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -158,6 +144,23 @@ const AddSubject = () => {
                   ))}
                 </select>
               </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Subject</label>
+                <select
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={subjectName}
+                  onChange={changeSubjectHandler}
+                  required
+                >
+                  <option value="Select subject">Select Subject</option>
+                  {subjectsList.map((classItem) => (
+                    <option key={classItem._id} value={classItem._id}>
+                      {classItem.subName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <button
                 className="w-full bg-blue-500 text-white py-3 rounded-lg mt-4 hover:bg-blue-600 transition duration-300"
                 type="submit"

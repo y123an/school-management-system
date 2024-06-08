@@ -10,7 +10,6 @@ const studentRegister = async (req, res) => {
       grandfathersName,
       studentID,
       sclassName,
-
       gender,
       className,
     } = req.body;
@@ -46,7 +45,7 @@ const getStudents = async (req, res) => {
   try {
     let students = await Student.find().populate(
       "sclassName",
-      "sclassName gradelevel section"
+      "sclassName  gradelevel section"
     );
     if (students.length > 0) {
       let modifiedStudents = students.map((student) => {
@@ -65,8 +64,13 @@ const getStudentDetail = async (req, res) => {
   try {
     let student = await Student.findById(req.params.id)
       .populate("sclassName", "sclassName gradelevel section")
-      .populate("examResult.subName", "subName")
-      .populate("attendance.subName", "subName sessions");
+      .populate("examResult.subName", "subName results")
+      .populate({
+        path: "attendance",
+        select: "date status",
+        populate: { path: "subName", select: "subName sessions" },
+      });
+
     if (student) {
       student.password = undefined;
       res.send(student);
@@ -115,25 +119,44 @@ const deleteStudentsByClass = async (req, res) => {
 
 const updateStudent = async (req, res) => {
   try {
-    if (req.body.password) {
-      const salt = await bcrypt.genSalt(10);
-      res.body.password = await bcrypt.hash(res.body.password, salt);
-    }
-    let result = await Student.findByIdAndUpdate(
-      req.params.id,
-      { $set: req.body },
-      { new: true }
-    );
+    const { id } = req.params;
+    const {
+      firstName,
+      lastName,
+      grandfathersName,
+      gender,
+      studentID,
+      sclassName,
+      className,
+    } = req.body;
 
-    result.password = undefined;
-    res.send(result);
+    // Find the student by ID
+    const student = await Student.findById(id);
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    // Update only the specified fields
+    student.firstName = firstName || student.firstName;
+    student.lastName = lastName || student.lastName;
+    student.grandfathersName = grandfathersName || student.grandfathersName;
+    student.gender = gender || student.gender;
+    student.studentID = studentID || student.studentID;
+    student.sclassName = sclassName || student.sclassName;
+    student.className = className || student.className;
+
+    // Save the updated student
+    const updatedStudent = await student.save();
+
+    res.json(updatedStudent);
   } catch (error) {
-    res.status(500).json(error);
+    console.error("Error updating student:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const updateExamResult = async (req, res) => {
-  const { subName, marksObtained } = req.body;
+  const { subName, results } = req.body;
 
   try {
     const student = await Student.findById(req.params.id);
@@ -142,26 +165,38 @@ const updateExamResult = async (req, res) => {
       return res.send({ message: "Student not found" });
     }
 
-    const existingResult = student.examResult.find(
+    let existingResult = student.examResult.find(
       (result) => result.subName.toString() === subName
     );
 
     if (existingResult) {
-      existingResult.marksObtained = marksObtained;
+      // Create a map of existing results by title
+      const existingResultsMap = new Map(
+        existingResult.results.map((result) => [result.title, result])
+      );
+
+      // Update or add new results to the map
+      for (const newResult of results) {
+        existingResultsMap.set(newResult.title, newResult);
+      }
+
+      // Convert the map back to an array
+      existingResult.results = Array.from(existingResultsMap.values());
     } else {
-      student.examResult.push({ subName, marksObtained });
+      // Add new result
+      existingResult = { subName, results };
+      student.examResult.push(existingResult);
     }
 
-    const result = await student.save();
-    return res.send(result);
+    const savedStudent = await student.save();
+    res.send(savedStudent);
   } catch (error) {
     res.status(500).json(error);
   }
 };
 
 const studentAttendance = async (req, res) => {
-  console.log(req.params.id);
-  const { subName, status, date } = req.body;
+  const { status, date } = req.body;
 
   try {
     const student = await Student.findById(req.params.id);
@@ -170,32 +205,20 @@ const studentAttendance = async (req, res) => {
       return res.send({ message: "Student not found" });
     }
 
-    const subject = await Subject.findById(subName);
-
     const existingAttendance = student.attendance.find(
-      (a) =>
-        a.date.toDateString() === new Date(date).toDateString() &&
-        a.subName.toString() === subName
+      (a) => a.date.toDateString() === new Date(date).toDateString()
     );
 
     if (existingAttendance) {
       existingAttendance.status = status;
     } else {
-      // Check if the student has already attended the maximum number of sessions
-      const attendedSessions = student.attendance.filter(
-        (a) => a.subName.toString() === subName
-      ).length;
-
-      if (attendedSessions >= subject.sessions) {
-        return res.send({ message: "Maximum attendance limit reached" });
-      }
-
-      student.attendance.push({ date, status, subName });
+      student.attendance.push({ date, status });
     }
 
     const result = await student.save();
     return res.send(result);
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 };

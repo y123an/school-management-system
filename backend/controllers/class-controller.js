@@ -81,17 +81,20 @@ const deleteSclass = async (req, res) => {
     if (!deletedClass) {
       return res.send({ message: "Class not found" });
     }
-    const deletedStudents = await Student.deleteMany({
-      sclassName: req.params.id,
-    });
-    const deletedSubjects = await Subject.deleteMany({
-      sclassName: req.params.id,
-    });
-    const deletedTeachers = await Teacher.deleteMany({
-      teachSclass: req.params.id,
-    });
+
+    // Delete related students and subjects
+    await Student.deleteMany({ sclassName: req.params.id });
+    await Subject.deleteMany({ sclassName: req.params.id });
+
+    // Remove the deleted class from teachers' classes array
+    const result = await Teacher.updateMany(
+      { "classes.teachSclass": req.params.id },
+      { $pull: { classes: { teachSclass: req.params.id } } }
+    );
+
     res.send(deletedClass);
   } catch (error) {
+    console.log(error);
     res.status(500).json(error);
   }
 };
@@ -104,7 +107,7 @@ const deleteSclasses = async (req, res) => {
     }
     const deletedStudents = await Student.deleteMany({ school: req.params.id });
     const deletedSubjects = await Subject.deleteMany({ school: req.params.id });
-    const deletedTeachers = await Teacher.deleteMany({ school: req.params.id });
+
     res.send(deletedClasses);
   } catch (error) {
     res.status(500).json(error);

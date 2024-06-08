@@ -11,7 +11,7 @@ import Popup from "../../components/Popup";
 
 const TeacherComplain = () => {
   const [complaint, setComplaint] = useState("");
-  const [date, setDate] = useState("");
+  const [title, setTitle] = useState("");
 
   const dispatch = useDispatch();
 
@@ -27,6 +27,7 @@ const TeacherComplain = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   const fields = {
+    title,
     name: currentUser.name,
     role: currentRole,
     userId: user,
@@ -90,13 +91,12 @@ const TeacherComplain = () => {
                   <div className="space-y-6">
                     <div>
                       <label className="block mb-2 text-sm font-medium text-gray-900">
-                        Select Date
+                        Title
                       </label>
                       <input
-                        type="date"
-                        value={date}
-                        onChange={(event) => setDate(event.target.value)}
-                        required
+                        type="text"
+                        value={title}
+                        onChange={(event) => setTitle(event.target.value)}
                         className="block w-full p-2 border border-gray-300 rounded-md"
                       />
                     </div>

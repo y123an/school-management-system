@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getUserDetails } from "../../redux/userRelated/userHandle";
-import { getSubjectList } from "../../redux/sclassRelated/sclassHandle";
 import { updateStudentFields } from "../../redux/studentRelated/studentHandle";
 import Popup from "../../components/Popup";
 import AccountMenu from "../../components/AccountMenu";
@@ -11,18 +9,13 @@ import TeacherSideBar from "./TeacherSideBar";
 
 const StudentAttendance = ({ situation }) => {
   const dispatch = useDispatch();
-  const { currentUser, userDetails, loading } = useSelector(
-    (state) => state.user
-  );
-  const { subjectsList } = useSelector((state) => state.sclass);
+  const { userDetails, loading } = useSelector((state) => state.user);
   const { response, error, statestatus } = useSelector(
     (state) => state.student
   );
   const params = useParams();
 
   const [studentID, setStudentID] = useState("");
-  const [subjectName, setSubjectName] = useState("");
-  const [chosenSubName, setChosenSubName] = useState("");
   const [status, setStatus] = useState("");
   const [date, setDate] = useState("");
 
@@ -33,29 +26,11 @@ const StudentAttendance = ({ situation }) => {
   useEffect(() => {
     if (situation === "Student") {
       setStudentID(params.studentID);
-      const stdID = params.studentID;
-      dispatch(getUserDetails(stdID, "Student"));
     } else if (situation === "Subject") {
-      const { studentID, subjectID } = params;
+      const { studentID } = params;
       setStudentID(studentID);
-      dispatch(getUserDetails(studentID, "Student"));
-      setChosenSubName(subjectID);
     }
-  }, [situation]);
-
-  useEffect(() => {
-    if (userDetails && userDetails.sclassName && situation === "Student") {
-      dispatch(getSubjectList(userDetails.sclassName._id, "ClassSubjects"));
-    }
-  }, [dispatch, userDetails]);
-
-  const changeHandler = (event) => {
-    const selectedSubject = subjectsList.find(
-      (subject) => subject.subName === event.target.value
-    );
-    setSubjectName(selectedSubject.subName);
-    setChosenSubName(selectedSubject._id);
-  };
+  }, [situation, params]);
 
   const fields = { status, date };
 
@@ -89,7 +64,7 @@ const StudentAttendance = ({ situation }) => {
   return (
     <>
       <div className="h-screen font-poppins">
-        <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <button
             onClick={toggleDrawer}
             className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
@@ -110,16 +85,6 @@ const StudentAttendance = ({ situation }) => {
             ) : (
               <div className="flex items-center justify-center flex-1">
                 <div className="max-w-lg px-4 py-24 w-full">
-                  <div className="mb-6">
-                    <h4 className="text-2xl font-bold mb-2">
-                      Student Name: {userDetails.name}
-                    </h4>
-                    {currentUser.teachSubject && (
-                      <h4 className="text-2xl font-bold mb-2">
-                        Subject Name: {currentUser.teachSubject?.subName}
-                      </h4>
-                    )}
-                  </div>
                   <form onSubmit={submitHandler}>
                     <div className="space-y-6">
                       <div className="w-full">
@@ -136,6 +101,7 @@ const StudentAttendance = ({ situation }) => {
                           className="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                           required
                         >
+                          <option value=""></option>
                           <option value="Present">Present</option>
                           <option value="Absent">Absent</option>
                         </select>

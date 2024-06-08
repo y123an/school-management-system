@@ -6,10 +6,7 @@ import {
   getSubjectList,
 } from "../../../redux/sclassRelated/sclassHandle";
 import Popup from "../../../components/Popup";
-import {
-  registerUser,
-  updateUser,
-} from "../../../redux/userRelated/userHandle";
+import { updateUser } from "../../../redux/userRelated/userHandle";
 import { underControl } from "../../../redux/userRelated/userSlice";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
@@ -20,15 +17,10 @@ const UpdateParent = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const subjectID = params.id;
-  const { state } = useLocation();
-  const { status, response, error, currentUser } = useSelector(
-    (state) => state.user
-  );
-  const { subjectDetails, sclassesList, subjectsList } = useSelector(
-    (state) => state.sclass
-  );
+  const { status, response, currentUser } = useSelector((state) => state.user);
   const { studentsList } = useSelector((state) => state.student);
 
   useEffect(() => {
@@ -43,37 +35,37 @@ const UpdateParent = () => {
     dispatch(getAllStudents(currentUser._id, "Allstudents"));
   }, [currentUser._id, dispatch]);
 
-  console.log(state);
-
-  const [name, setName] = useState(state?.parent.name);
-  const [email, setEmail] = useState(state?.parent.email);
-  const [password, setPassword] = useState("");
-  const [gender, setGender] = useState(state?.parent.gender);
-  const [phone, setPhone] = useState(state?.parent.phone);
+  const [name, setName] = useState(state?.parent?.name || "");
+  const [email, setEmail] = useState(state?.parent?.email || "");
+  const [gender, setGender] = useState(state?.parent?.gender || "");
+  const [phone, setPhone] = useState(state?.parent?.phone || "");
   const [search, setSearch] = useState("");
-  const [selectedStudentName, setSelectedStudentName] = useState("");
+  const [selectedChildren, setSelectedChildren] = useState(
+    state?.parent?.Children?.map((child) => ({
+      child: child.child._id,
+      name: `${child.child.firstName} ${child.child.lastName} ${child.child.grandFathersName}`,
+    })) || []
+  );
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
   const [loader, setLoader] = useState(false);
-  const [student, setStudent] = useState("");
 
   const role = "Parent";
 
   const fields = {
     name,
     email,
-    password,
     role,
     phone,
     gender,
-    children: [{ child: student }],
+    children: selectedChildren.map((child) => ({ child: child.child })),
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    if (!student) {
-      setMessage("No student selected. Please select a student.");
+    if (selectedChildren.length === 0) {
+      setMessage("No student selected. Please select at least one student.");
       setShowPopup(true);
       setLoader(false);
       return;
@@ -81,7 +73,7 @@ const UpdateParent = () => {
     setLoader(true);
     dispatch(updateUser(fields, params.id, "Teacher/update"));
   };
-  console.log(status);
+
   useEffect(() => {
     if (status === "success") {
       dispatch(underControl());
@@ -95,7 +87,7 @@ const UpdateParent = () => {
       setShowPopup(true);
       setLoader(false);
     }
-  }, [status, navigate, error, response, dispatch]);
+  }, [status, navigate, response, dispatch]);
 
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
@@ -104,13 +96,22 @@ const UpdateParent = () => {
 
   const changeStudentHandler = (event) => {
     setSearch(event.target.value);
-    setSelectedStudentName(""); // Clear selected student name when typing
   };
 
   const selectStudent = (studentId, studentName) => {
-    setStudent(studentId);
-    setSelectedStudentName(studentName);
+    if (!selectedChildren.some((child) => child.child === studentId)) {
+      setSelectedChildren([
+        ...selectedChildren,
+        { child: studentId, name: studentName },
+      ]);
+    }
     setSearch("");
+  };
+
+  const removeStudent = (studentId) => {
+    setSelectedChildren(
+      selectedChildren.filter((child) => child.child !== studentId)
+    );
   };
 
   const filteredStudents = studentsList.filter((student) =>
@@ -201,7 +202,7 @@ const UpdateParent = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="text"
                     placeholder="Search for child..."
-                    value={search || selectedStudentName}
+                    value={search}
                     onChange={changeStudentHandler}
                   />
                   {search && (
@@ -229,40 +230,45 @@ const UpdateParent = () => {
                       )}
                     </ul>
                   )}
-                </div>
-                <div>
-                  <label className="block text-gray-700">Password</label>
-                  <input
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    type="password"
-                    placeholder="Enter parent's password..."
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    autoComplete="new-password"
-                    required
-                  />
+                  {selectedChildren.length > 0 && (
+                    <ul className="mt-2">
+                      {selectedChildren.map((child) => (
+                        <li
+                          key={child.child}
+                          className="flex justify-between items-center px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg mt-2"
+                        >
+                          {child.name}
+                          <button
+                            type="button"
+                            className="text-red-500"
+                            onClick={() => removeStudent(child.child)}
+                          >
+                            Remove
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
                 <button
-                  className="w-full bg-blue-500 text-white py-3 rounded-lg mt-4 hover:bg-blue-600 transition duration-300"
+                  className={`${
+                    loader ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-600"
+                  } text-white font-bold py-2 px-4 rounded`}
                   type="submit"
                   disabled={loader}
                 >
-                  {loader ? (
-                    <div className="flex justify-center">loading</div>
-                  ) : (
-                    "Update"
-                  )}
+                  {loader ? "Loading..." : "Update"}
                 </button>
               </form>
             </div>
-            <Popup
-              message={message}
-              setShowPopup={setShowPopup}
-              showPopup={showPopup}
-            />
           </div>
         </div>
       </div>
+      {showPopup && (
+        <Popup onClose={() => setShowPopup(false)}>
+          <p>{message}</p>
+        </Popup>
+      )}
     </>
   );
 };

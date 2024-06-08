@@ -11,6 +11,10 @@ const complainSchema = new mongoose.Schema({
     required: true,
     enum: ["teacher", "parent"],
   },
+  title: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,

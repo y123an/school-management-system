@@ -158,19 +158,19 @@ const ViewSubject = () => {
         <div className="mb-4">
           <h6 className="text-lg mb-2 font-semibold">Subject Name:</h6>
           <p className="text-lg mb-2">
-            {subjectDetails[0] ? subjectDetails[0].subName : "N/A"}
+            {subjectDetails ? subjectDetails.subName : "N/A"}
           </p>
         </div>
         <div className="mb-4">
           <h6 className="text-lg mb-2 font-semibold">Subject Code:</h6>
           <p className="text-lg mb-2">
-            {subjectDetails[0] ? subjectDetails[0].subCode : "N/A"}
+            {subjectDetails ? subjectDetails.subCode : "N/A"}
           </p>
         </div>
         <div className="mb-4">
           <h6 className="text-lg mb-2 font-semibold">Subject Sessions:</h6>
           <p className="text-lg mb-2">
-            {subjectDetails[0] ? subjectDetails[0].sessions : "N/A"}
+            {subjectDetails ? subjectDetails.sessions : "N/A"}
           </p>
         </div>
         <div className="mb-4">
@@ -180,9 +180,9 @@ const ViewSubject = () => {
         <div className="mb-4">
           <h6 className="text-lg mb-2 font-semibold">Class Name:</h6>
           <p className="text-lg mb-2">
-            {subjectDetails[0]?.sclassName
-              ? subjectDetails[0]?.sclassName?.gradelevel +
-                subjectDetails[0]?.sclassName?.section
+            {subjectDetails?.sclassName
+              ? subjectDetails?.sclassName?.gradelevel +
+                subjectDetails?.sclassName?.section
               : "N/A"}
           </p>
         </div>

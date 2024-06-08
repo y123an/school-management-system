@@ -25,15 +25,13 @@ const TeacherDetails = () => {
   }
 
   const handleAddSubject = () => {
-    navigate(`/Admin/teachers/addsubject/${teacherDetails?._id}`);
+    navigate(`/SuperAdmin/teachers/addsubject/${teacherDetails?._id}`);
   };
 
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
-  console.log(teacherDetails);
 
   return (
     <>
@@ -45,7 +43,7 @@ const TeacherDetails = () => {
           >
             {open ? <IoMdArrowBack size={24} /> : <IoIosMenu size={24} />}
           </button>
-          <span className="text-lg font-semibold">Admin Dashboard</span>
+          <span className="text-lg font-semibold">Super Admin Dashboard</span>
           <AccountMenu />
         </div>
         <div className="flex flex-grow">

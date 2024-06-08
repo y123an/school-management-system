@@ -31,16 +31,22 @@ const ShowAdmins = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState(null);
 
-  const deleteHandler = (deleteID, address) => {
-    console.log(deleteID);
-    console.log(address);
-    // setMessage("Sorry, the delete function has been disabled for now.");
-    // setShowPopup(true);
-
+  const confirmDelete = () => {
+    const { deleteID, address } = deleteInfo;
     dispatch(deleteUser(deleteID, address)).then(() => {
       dispatch(getAllAdmins(currentUser._id));
+      setShowPopup(true);
+      setMessage("Admin deleted successfully!");
     });
+    setShowConfirmModal(false);
+  };
+
+  const deleteHandler = (deleteID, address) => {
+    setDeleteInfo({ deleteID, address });
+    setShowConfirmModal(true);
   };
 
   const studentColumns = [
@@ -49,7 +55,6 @@ const ShowAdmins = () => {
     { id: "schoolName", label: "School Name", minWidth: 170 },
   ];
 
-  console.log(adminsList);
   const studentRows =
     adminsList &&
     adminsList.length > 0 &&
@@ -63,44 +68,6 @@ const ShowAdmins = () => {
     });
 
   const StudentButtonHaver = ({ row }) => {
-    const options = ["Take Attendance", "Provide Marks"];
-
-    const [open, setOpen] = useState(false);
-    const anchorRef = useRef(null);
-    const [selectedIndex, setSelectedIndex] = useState(0);
-
-    const handleClick = () => {
-      console.info(`You clicked ${options[selectedIndex]}`);
-      if (selectedIndex === 0) {
-        handleAttendance();
-      } else if (selectedIndex === 1) {
-        handleMarks();
-      }
-    };
-
-    const handleAttendance = () => {
-      navigate("/SuperAdmin/students/student/attendance/" + row.id);
-    };
-    const handleMarks = () => {
-      navigate("/SuperAdmin/students/student/marks/" + row.id);
-    };
-
-    const handleMenuItemClick = (event, index) => {
-      setSelectedIndex(index);
-      setOpen(false);
-    };
-
-    const handleToggle = () => {
-      setOpen((prevOpen) => !prevOpen);
-    };
-
-    const handleClose = (event) => {
-      if (anchorRef.current && anchorRef.current.contains(event.target)) {
-        return;
-      }
-      setOpen(false);
-    };
-
     return (
       <>
         <button
@@ -164,7 +131,7 @@ const ShowAdmins = () => {
         </svg>
       ),
       name: "Delete All admins",
-      action: () => deleteHandler(currentUser._id, "Students"),
+      action: () => deleteHandler(currentUser._id, "Admins"),
     },
   ];
 
@@ -176,7 +143,7 @@ const ShowAdmins = () => {
   return (
     <>
       <div className="h-screen font-poppins">
-        <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <button
             onClick={toggleDrawer}
             className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
@@ -229,6 +196,29 @@ const ShowAdmins = () => {
               setShowPopup={setShowPopup}
               showPopup={showPopup}
             />
+            {/* Confirm Delete Modal */}
+            {showConfirmModal && (
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div className="bg-white p-6 rounded shadow-md">
+                  <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
+                  <p>Are you sure you want to delete this admin?</p>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      onClick={() => setShowConfirmModal(false)}
+                      className="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-700"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={confirmDelete}
+                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         </div>
       </div>

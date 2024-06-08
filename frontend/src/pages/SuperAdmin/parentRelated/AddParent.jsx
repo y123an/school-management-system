@@ -40,20 +40,17 @@ const AddParent = () => {
     dispatch(getAllStudents(currentUser._id, "Allstudents"));
   }, [currentUser._id, dispatch]);
 
-  console.log(studentsList);
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [gender, setGender] = useState("");
   const [phone, setPhone] = useState("");
   const [search, setSearch] = useState("");
-  const [selectedStudentName, setSelectedStudentName] = useState("");
+  const [selectedChildren, setSelectedChildren] = useState([]);
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
   const [loader, setLoader] = useState(false);
-  const [student, setStudent] = useState("");
 
   const role = "Parent";
 
@@ -64,13 +61,13 @@ const AddParent = () => {
     role,
     phone,
     gender,
-    children: [{ child: student }],
+    children: selectedChildren.map((child) => ({ child: child.child })),
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    if (!student) {
-      setMessage("No student selected. Please select a student.");
+    if (selectedChildren.length === 0) {
+      setMessage("No student selected. Please select at least one student.");
       setShowPopup(true);
       setLoader(false);
       return;
@@ -101,13 +98,22 @@ const AddParent = () => {
 
   const changeStudentHandler = (event) => {
     setSearch(event.target.value);
-    setSelectedStudentName(""); // Clear selected student name when typing
   };
 
   const selectStudent = (studentId, studentName) => {
-    setStudent(studentId);
-    setSelectedStudentName(studentName);
+    if (!selectedChildren.some((child) => child.child === studentId)) {
+      setSelectedChildren([
+        ...selectedChildren,
+        { child: studentId, name: studentName },
+      ]);
+    }
     setSearch("");
+  };
+
+  const removeStudent = (studentId) => {
+    setSelectedChildren(
+      selectedChildren.filter((child) => child.child !== studentId)
+    );
   };
 
   const filteredStudents = studentsList.filter((student) =>
@@ -198,7 +204,7 @@ const AddParent = () => {
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="text"
                     placeholder="Search for child..."
-                    value={search || selectedStudentName}
+                    value={search}
                     onChange={changeStudentHandler}
                   />
                   {search && (
@@ -224,6 +230,25 @@ const AddParent = () => {
                           No students found
                         </li>
                       )}
+                    </ul>
+                  )}
+                  {selectedChildren.length > 0 && (
+                    <ul className="mt-2">
+                      {selectedChildren.map((child) => (
+                        <li
+                          key={child.child}
+                          className="flex justify-between items-center px-4 py-2 bg-gray-100 border rounded-lg mb-2"
+                        >
+                          <span>{child.name}</span>
+                          <button
+                            type="button"
+                            className="text-red-500"
+                            onClick={() => removeStudent(child.child)}
+                          >
+                            Remove
+                          </button>
+                        </li>
+                      ))}
                     </ul>
                   )}
                 </div>

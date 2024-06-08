@@ -56,6 +56,24 @@ export const getTeacherDetails = (id) => async (dispatch) => {
   }
 };
 
+export const updateTeacherFields =
+  (id, fields, address) => async (dispatch) => {
+    dispatch(getRequest());
+
+    try {
+      const result = await axiosInstance.put(`/${address}/${id}`, fields, {
+        headers: { "Content-Type": "application/json" },
+      });
+      if (result.data.message) {
+        dispatch(getFailed(result.data.message));
+      } else {
+        dispatch(doneSuccess());
+      }
+    } catch (error) {
+      dispatch(getError(error));
+    }
+  };
+
 export const updateTeachSubject =
   (teacherId, teachSubject) => async (dispatch) => {
     dispatch(getRequest());

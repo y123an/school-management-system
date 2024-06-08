@@ -15,7 +15,7 @@ import { FaSpinner } from "react-icons/fa";
 const ShowStudents = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { studentsList, loading, error, response } = useSelector(
+  const { studentsList, loading, error } = useSelector(
     (state) => state.student
   );
   const { currentUser } = useSelector((state) => state.user);
@@ -24,25 +24,30 @@ const ShowStudents = () => {
     dispatch(getAllStudents(currentUser._id));
   }, [currentUser._id, dispatch]);
 
-  if (error) {
-    console.log(error);
-  }
-
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState(null);
 
-  const deleteHandler = (deleteID, address) => {
-    console.log(deleteID);
-    console.log(address);
+  const confirmDelete = () => {
+    const { deleteID, address } = deleteInfo;
     dispatch(deleteUser(deleteID, address)).then(() => {
       dispatch(getAllStudents(currentUser._id));
+      setShowPopup(true);
+      setMessage("Student deleted successfully!");
     });
+    setShowConfirmModal(false);
+  };
+
+  const deleteHandler = (deleteID, address) => {
+    setDeleteInfo({ deleteID, address });
+    setShowConfirmModal(true);
   };
 
   const studentColumns = [
     { id: "firstName", label: "First Name", minWidth: 170 },
     { id: "lastName", label: "Last Name", minWidth: 170 },
-    { id: "grandfatherName", label: "Grand Father Name", minWidth: 170 },
+    { id: "gender", label: "Gender", minWidth: 170 },
     { id: "studentID", label: "Student ID", minWidth: 100 },
     { id: "className", label: "Class", minWidth: 170 },
   ];
@@ -54,7 +59,7 @@ const ShowStudents = () => {
       return {
         firstName: student.firstName,
         lastName: student.lastName,
-        grandfatherName: student.grandfathersName,
+        gender: student.gender,
         studentID: student.studentID,
         className: student.className,
         id: student._id,
@@ -62,45 +67,6 @@ const ShowStudents = () => {
     });
 
   const StudentButtonHaver = ({ row }) => {
-    const options = ["Take Attendance", "Provide Marks"];
-
-    const [open, setOpen] = useState(false);
-    const anchorRef = useRef(null);
-    const [selectedIndex, setSelectedIndex] = useState(0);
-
-    const handleClick = () => {
-      console.info(`You clicked ${options[selectedIndex]}`);
-      if (selectedIndex === 0) {
-        handleAttendance();
-      } else if (selectedIndex === 1) {
-        handleMarks();
-      }
-    };
-
-    const handleAttendance = () => {
-      navigate("/Admin/students/student/attendance/" + row.id);
-    };
-    const handleMarks = () => {
-      navigate("/Admin/students/student/marks/" + row.id);
-    };
-
-    const handleMenuItemClick = (event, index) => {
-      setSelectedIndex(index);
-      setOpen(false);
-      handleClick();
-    };
-
-    const handleToggle = () => {
-      setOpen((prevOpen) => !prevOpen);
-    };
-
-    const handleClose = (event) => {
-      if (anchorRef.current && anchorRef.current.contains(event.target)) {
-        return;
-      }
-      setOpen(false);
-    };
-
     return (
       <div className="flex gap-3">
         <button
@@ -115,42 +81,18 @@ const ShowStudents = () => {
         >
           View
         </button>
-        {/* <div className="relative inline-block text-left">
-          <div>
-            <button
-              type="button"
-              className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              aria-expanded="true"
-              aria-haspopup="true"
-              ref={anchorRef}
-              onClick={handleToggle}
-            >
-              {options[selectedIndex]}
-            </button>
-          </div>
-          {open && (
-            <div
-              className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
-              role="menu"
-              aria-orientation="vertical"
-              aria-labelledby="menu-button"
-              tabIndex="-1"
-            >
-              <div className="py-1" role="none">
-                {options.map((option, index) => (
-                  <button
-                    key={option}
-                    className="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100 w-full text-left"
-                    role="menuitem"
-                    onClick={(event) => handleMenuItemClick(event, index)}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div> */}
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
+          onClick={() =>
+            navigate("/Admin/student/update/" + row.id, {
+              state: {
+                student: row,
+              },
+            })
+          }
+        >
+          Update
+        </button>
       </div>
     );
   };
@@ -172,7 +114,6 @@ const ShowStudents = () => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  console.log(studentsList);
 
   return (
     <div className="h-screen font-poppins bg-gray-100">
@@ -228,6 +169,29 @@ const ShowStudents = () => {
             setShowPopup={setShowPopup}
             showPopup={showPopup}
           />
+          {/* Confirm Delete Modal */}
+          {showConfirmModal && (
+            <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+              <div className="bg-white p-6 rounded shadow-md">
+                <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
+                <p>Are you sure you want to delete this student?</p>
+                <div className="flex justify-end mt-4">
+                  <button
+                    onClick={() => setShowConfirmModal(false)}
+                    className="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-700"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmDelete}
+                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
