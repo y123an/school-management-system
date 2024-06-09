@@ -54,8 +54,6 @@ const Calendar = () => {
       axios
         .post("http://localhost:4000/events", {
           ...args.data[0],
-          userType: currentRole.toLowerCase(),
-          userId: currentUser._id,
         })
         .then((response) => {
           setData([...data, response.data]);
@@ -65,7 +63,7 @@ const Calendar = () => {
         });
     } else if (args.requestType === "eventChange") {
       axios
-        .put(`http://localhost:4000/events/${args.data.Id}`, args.data)
+        .put(`http://localhost:4000/events/${args.data._id}`, args.data)
         .then((response) => {
           setData(
             data.map((event) =>
@@ -78,7 +76,7 @@ const Calendar = () => {
         });
     } else if (args.requestType === "eventRemove") {
       axios
-        .delete(`http://localhost:4000/events/${args.data[0].Id}`)
+        .delete(`http://localhost:4000/events/${args.data[0]._id}}`)
         .then(() => {
           setData(data.filter((event) => event.Id !== args.data[0].Id));
         })

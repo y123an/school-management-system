@@ -54,8 +54,6 @@ const TeacherCalendar = () => {
       axios
         .post("http://localhost:4000/events", {
           ...args.data[0],
-          userType: currentRole.toLowerCase(),
-          userId: currentUser._id,
         })
         .then((response) => {
           setData([...data, response.data]);

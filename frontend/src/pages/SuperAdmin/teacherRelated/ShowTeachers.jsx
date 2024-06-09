@@ -8,7 +8,9 @@ import Popup from "../../../components/Popup";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaFileCsv, FaFilePdf } from "react-icons/fa";
+import { CSVLink } from "react-csv";
+import { jsPDF } from "jspdf";
 
 const ShowTeachers = () => {
   const [open, setOpen] = useState(false);
@@ -183,6 +185,32 @@ const ShowTeachers = () => {
     },
   ];
 
+  const headers = [
+    "Name",
+    "Email",
+    "Phone",
+    "Gender",
+    "Role",
+    "TeachSclassID",
+    "ID",
+  ];
+  const csvData = [headers, ...rows.map((row) => Object.values(row))];
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Teachers Data", 10, 10);
+    let yPos = 20;
+    rows.forEach((teacher) => {
+      doc.text(
+        `${teacher.name} - ${teacher.email} - ${teacher.phone} - ${teacher.gender} - ${teacher.role} - ${teacher.teachSclassID} - ${teacher.id}`,
+        10,
+        yPos
+      );
+      yPos += 10;
+    });
+    doc.save("teachers_data.pdf");
+  };
+
   return (
     <>
       <div className="h-screen font-poppins ">
@@ -198,11 +226,17 @@ const ShowTeachers = () => {
           <AccountMenu />
         </div>
         <div className="flex h-screen">
-          <div className="bg-white border-b border-gray-200 w-64">
-            <SideBar />
+          <div className="">
+            <div
+              className={`bg-white shadow-md transition-transform ${
+                open ? "w-64" : "w-0"
+              } overflow-hidden`}
+            >
+              <SideBar />
+            </div>
           </div>
           <div className="w-full overflow-hidden p-4">
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end ">
               <button
                 onClick={() => navigate("/SuperAdmin/teachers/addteacher")}
                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
@@ -210,8 +244,23 @@ const ShowTeachers = () => {
                 Add Teacher
               </button>
             </div>
-            <div className="overflow-x-auto">
+            <div className="">
               {/* Render Table */}
+              <div className="flex  mt-4">
+                <CSVLink
+                  data={csvData}
+                  filename={"teachers_data.csv"}
+                  className="btn text-green-500 hover:text-gray-500 cursor-pointer"
+                >
+                  <FaFileCsv className="icon" size={30} />
+                </CSVLink>
+                <button
+                  className="btn text-green-500 hover:text-gray-500 cursor-pointer"
+                  onClick={downloadPDF}
+                >
+                  <FaFilePdf className="icon" size={30} />
+                </button>
+              </div>
               <ActionsTable />
             </div>
             {/* Pagination */}

@@ -1,9 +1,8 @@
 const Event = require("../models/eventSchema");
 
 const getEvents = async (req, res) => {
-  const id = req.params.id;
   try {
-    const events = await Event.find({ userId: id });
+    const events = await Event.find();
     res.json(events);
   } catch (err) {
     res.status(500).json({ message: err.message });
