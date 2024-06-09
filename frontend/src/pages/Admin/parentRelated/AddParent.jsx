@@ -169,7 +169,6 @@ const AddParent = () => {
                     placeholder="Enter parent's phone..."
                     value={phone}
                     onChange={(event) => setPhone(event.target.value)}
-                    autoComplete="name"
                     required
                   />
                 </div>

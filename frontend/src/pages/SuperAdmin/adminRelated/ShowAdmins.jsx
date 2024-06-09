@@ -52,7 +52,6 @@ const ShowAdmins = () => {
   const studentColumns = [
     { id: "name", label: "Name", minWidth: 170 },
     { id: "email", label: "Email", minWidth: 100 },
-    { id: "schoolName", label: "School Name", minWidth: 170 },
   ];
 
   const studentRows =
@@ -62,7 +61,7 @@ const ShowAdmins = () => {
       return {
         name: admin.name,
         email: admin.email,
-        schoolName: admin.schoolName,
+
         id: admin._id,
       };
     });

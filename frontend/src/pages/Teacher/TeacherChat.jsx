@@ -10,7 +10,9 @@ let secret = "12345678";
 
 if (token) {
   const decodedToken = jwtDecode(token);
-  username = decodedToken.chat.username;
+  if (decodedToken.role === "Teacher") {
+    username = decodedToken.chat.username;
+  }
 }
 console.log(username);
 const TeacherChat = () => {
