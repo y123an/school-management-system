@@ -287,7 +287,7 @@ const ClassDetails = () => {
           <div className="flex justify-end mt-4">
             <button
               className="bg-green-500 text-white px-4 py-2 rounded"
-              onClick={() => navigate("Admin/teachers/addteacher")}
+              onClick={() => navigate("/Admin/teachers/addteacher")}
             >
               Add Teacher
             </button>
@@ -377,7 +377,7 @@ const ClassDetails = () => {
           >
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
-          <span className="text-lg font-semibold">Admin Dashboard</span>
+          <span className="text-lg font-semibold">Super Admin Dashboard</span>
 
           <AccountMenu />
         </div>

@@ -37,17 +37,22 @@ const ShowClasses = () => {
   }
 
   const [showPopup, setShowPopup] = useState(false);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("Done Successfully");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState(null);
 
-  const deleteHandler = (deleteID, address) => {
-    console.log(deleteID);
-    console.log(address);
-    // setMessage("Sorry, the delete function has been disabled for now.");
-    // Uncomment the lines below if delete function is enabled
+  const confirmDelete = () => {
+    const { deleteID, address } = deleteInfo;
     dispatch(deleteUser(deleteID, address)).then(() => {
       dispatch(getAllSclasses(adminID, "Sclass"));
+      setShowPopup(true);
     });
-    setShowPopup(true);
+    setShowConfirmModal(false);
+  };
+
+  const deleteHandler = (deleteID, address) => {
+    setDeleteInfo({ deleteID, address });
+    setShowConfirmModal(true);
   };
 
   const columns = [
@@ -159,7 +164,7 @@ const ShowClasses = () => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  console.log(sclassesList);
+
   return (
     <div className="h-screen font-poppins bg-gray-100">
       <div className="flex items-center justify-between h-16 px-6 bg-white shadow-md">
@@ -169,7 +174,7 @@ const ShowClasses = () => {
         >
           {open ? <IoMdArrowBack /> : <IoIosMenu />}
         </button>
-        <span className="text-lg font-semibold">Admin Dashboard</span>
+        <span className="text-lg font-semibold">Super Admin Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex h-full">
@@ -228,6 +233,28 @@ const ShowClasses = () => {
           />
         </div>
       </div>
+      {showConfirmModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-lg font-semibold mb-4">Confirm Deletion</h2>
+            <p>Are you sure you want to delete this class?</p>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="bg-gray-300 text-black py-1 px-4 rounded mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 text-white py-1 px-4 rounded"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

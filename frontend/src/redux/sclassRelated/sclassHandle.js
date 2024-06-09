@@ -57,16 +57,14 @@ export const addSubject = (fields, id) => async (dispatch) => {
       `/Teacher/addSubject/${id}`,
       fields
     );
-    console.log(result.result.add);
 
-    if (result.data.add) {
-      dispatch(stuffDone());
-    } else {
+    if (result.data.message) {
       dispatch(getFailed(result.data.message));
+    } else {
+      dispatch(stuffDone());
     }
   } catch (error) {
-    console.log("ths");
-    dispatch(getFailed("error while addnig"));
+    dispatch(getFailed("error while adding"));
   }
 };
 
@@ -84,6 +82,24 @@ export const getClassStudents = (id) => async (dispatch) => {
     dispatch(getError(error));
   }
 };
+
+export const updateSubjectFields =
+  (id, fields, address) => async (dispatch) => {
+    dispatch(getRequest());
+
+    try {
+      const result = await axiosInstance.put(`/${address}/${id}`, fields, {
+        headers: { "Content-Type": "application/json" },
+      });
+      if (result.data.message) {
+        dispatch(getFailed(result.data.message));
+      } else {
+        dispatch(stuffDone());
+      }
+    } catch (error) {
+      dispatch(getError(error));
+    }
+  };
 
 export const updateHomeRoom = (fields, classID) => async (dispatch) => {
   dispatch(getRequest());

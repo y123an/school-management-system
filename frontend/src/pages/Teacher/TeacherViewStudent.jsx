@@ -8,11 +8,7 @@ import {
   IoIosMenu,
   IoMdArrowBack,
 } from "react-icons/io";
-import {
-  calculateOverallAttendancePercentage,
-  calculateSubjectAttendancePercentage,
-  groupAttendanceBySubject,
-} from "../../components/attendanceCalculator";
+import { calculateOverallAttendancePercentage } from "../../components/attendanceCalculator";
 import CustomPieChart from "../../components/CustomPieChart";
 import { PurpleButton } from "../../components/ButtonStyles";
 import TeacherSideBar from "./TeacherSideBar";
@@ -27,8 +23,6 @@ const TeacherViewStudent = () => {
 
   const address = "Student";
   const studentID = params.id;
-  const teachSubject = currentUser?.classes[0]?.teachSubject?.subName;
-  const teachSubjectID = currentUser.teachSubject?._id;
 
   useEffect(() => {
     dispatch(getUserDetails(studentID, address));
@@ -45,13 +39,6 @@ const TeacherViewStudent = () => {
   const [subjectMarks, setSubjectMarks] = useState("");
   const [subjectAttendance, setSubjectAttendance] = useState([]);
   const [openStates, setOpenStates] = useState({});
-
-  const handleOpen = (subId) => {
-    setOpenStates((prevState) => ({
-      ...prevState,
-      [subId]: !prevState[subId],
-    }));
-  };
 
   useEffect(() => {
     if (userDetails) {
@@ -122,93 +109,64 @@ const TeacherViewStudent = () => {
                     Array.isArray(subjectAttendance) &&
                     subjectAttendance.length > 0 ? (
                       <>
-                        {Object.entries(
-                          groupAttendanceBySubject(subjectAttendance)
-                        ).map(
-                          (
-                            [subName, { present, allData, subId, sessions }],
-                            index
-                          ) => {
-                            if (subName === teachSubject) {
-                              const subjectAttendancePercentage =
-                                calculateSubjectAttendancePercentage(
-                                  present,
-                                  sessions
-                                );
-
-                              return (
-                                <div key={index} className="mt-4">
-                                  <div className="flex items-center justify-between">
-                                    <div className="text-gray-700">
-                                      <p className="font-semibold">
-                                        Subject: {subName}
-                                      </p>
-                                      <p>Present: {present}</p>
-                                      <p>Total Sessions: {sessions}</p>
-                                      <p>
-                                        Attendance Percentage:{" "}
-                                        {subjectAttendancePercentage}%
-                                      </p>
-                                    </div>
-                                    <button
-                                      onClick={() => handleOpen(subId)}
-                                      className="flex items-center text-blue-500 hover:text-blue-700"
-                                    >
-                                      {openStates[subId] ? (
-                                        <IoIosArrowUp />
-                                      ) : (
-                                        <IoIosArrowDown />
-                                      )}{" "}
-                                      Details
-                                    </button>
-                                  </div>
-                                  {openStates[subId] && (
-                                    <div className="mt-2">
-                                      <h4 className="font-semibold">
-                                        Attendance Details
-                                      </h4>
-                                      <table className="min-w-full bg-white">
-                                        <thead>
-                                          <tr>
-                                            <th className="py-2 px-4 bg-gray-200">
-                                              Date
-                                            </th>
-                                            <th className="py-2 px-4 bg-gray-200">
-                                              Status
-                                            </th>
-                                          </tr>
-                                        </thead>
-                                        <tbody>
-                                          {allData.map((data, index) => {
-                                            const date = new Date(data.date);
-                                            const dateString =
-                                              date.toString() !== "Invalid Date"
-                                                ? date
-                                                    .toISOString()
-                                                    .substring(0, 10)
-                                                : "Invalid Date";
-                                            return (
-                                              <tr key={index}>
-                                                <td className="border px-4 py-2">
-                                                  {dateString}
-                                                </td>
-                                                <td className="border px-4 py-2">
-                                                  {data.status}
-                                                </td>
-                                              </tr>
-                                            );
-                                          })}
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            } else {
-                              return null;
-                            }
-                          }
-                        )}
+                        <div className="mt-4">
+                          <div className="flex items-center justify-between">
+                            <div className="text-gray-700">
+                              <p className="font-semibold">
+                                Overall Attendance
+                              </p>
+                              <p>
+                                Present:{" "}
+                                {
+                                  subjectAttendance.filter(
+                                    (att) => att.status === "Present"
+                                  ).length
+                                }
+                              </p>
+                              <p>Total Days: {subjectAttendance.length}</p>
+                              <p>
+                                Attendance Percentage:{" "}
+                                {overallAttendancePercentage.toFixed(2)}%
+                              </p>
+                            </div>
+                          </div>
+                          <div className="mt-2">
+                            <h4 className="font-semibold">
+                              Attendance Details
+                            </h4>
+                            <table className="min-w-full bg-white">
+                              <thead>
+                                <tr>
+                                  <th className="py-2 px-4 bg-gray-200">
+                                    Date
+                                  </th>
+                                  <th className="py-2 px-4 bg-gray-200">
+                                    Status
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {subjectAttendance.map((data, index) => {
+                                  const date = new Date(data.date);
+                                  const dateString =
+                                    date.toString() !== "Invalid Date"
+                                      ? date.toISOString().substring(0, 10)
+                                      : "Invalid Date";
+                                  return (
+                                    <tr key={index}>
+                                      <td className="border px-4 py-2">
+                                        {dateString}
+                                      </td>
+                                      <td className="border px-4 py-2">
+                                        {data.status}
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
                         <div className="mt-6">
                           <p className="text-gray-700 font-semibold">
                             Overall Attendance Percentage:{" "}
@@ -240,22 +198,33 @@ const TeacherViewStudent = () => {
                 Array.isArray(subjectMarks) &&
                 subjectMarks.length > 0 ? (
                   subjectMarks.map((result, index) => {
-                    if (result.subName.subName === teachSubject) {
-                      return (
-                        <div key={index} className="mt-4">
-                          <p className="text-gray-700">
-                            <span className="font-semibold">Subject:</span>{" "}
-                            {result.subName.subName}
-                          </p>
-                          <p className="text-gray-700">
-                            <span className="font-semibold">Marks:</span>{" "}
-                            {result.marksObtained}
-                          </p>
-                        </div>
-                      );
-                    } else {
-                      return null;
-                    }
+                    return (
+                      <div key={index} className="mt-4">
+                        <p className="text-gray-700">
+                          <span className="font-semibold">Subject:</span>{" "}
+                          {result.subName.subName}
+                        </p>
+                        {result.results.map((res, idx) => (
+                          <div key={idx}>
+                            <p className="text-gray-700">
+                              <span className="font-semibold">Title:</span>{" "}
+                              {res.title}
+                            </p>
+                            <p className="text-gray-700">
+                              <span className="font-semibold">Marks:</span>{" "}
+                              {res.marks}
+                            </p>
+                          </div>
+                        ))}
+                        <p className="underline font-bold">
+                          Total Result:{"  "}
+                          {result?.results?.reduce(
+                            (partialSum, a) => partialSum + a.marks,
+                            0
+                          )}
+                        </p>
+                      </div>
+                    );
                   })
                 ) : (
                   <p className="text-gray-700 mt-4">

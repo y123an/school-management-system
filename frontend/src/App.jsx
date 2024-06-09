@@ -70,7 +70,13 @@ import UpdateParent from "./pages/Admin/parentRelated/UpdateParent";
 import SuperAdminCalender from "./pages/SuperAdmin/calenderRelated/Calender";
 import Calendar from "./pages/Admin/calenderRelated/Calender";
 import TeacherCalendar from "./pages/Teacher/TeacherCalender";
-import TeacherChat from "./pages/Teacher/TeacherChat";
+import SuperAdminUpdateStudent from "./pages/SuperAdmin/studentRelated/UpdateStudent";
+import SuperAdminUpdateSubject from "./pages/SuperAdmin/subjectRelated/UpdateSubject";
+import SuperAdminUpdateTeacher from "./pages/SuperAdmin/teacherRelated/UpdateTeacher";
+import UpdateStudent from "./pages/Admin/studentRelated/UpdateStudent";
+import UpdateSubject from "./pages/Admin/subjectRelated/UpdateSubject";
+import UpdateTeacher from "./pages/Admin/teacherRelated/UpdateTeacher";
+import TeacherChat from "./pages/Teacher/Chat/Chat";
 
 const App = () => {
   return (
@@ -122,6 +128,11 @@ const App = () => {
         />
 
         <Route
+          path="/SuperAdmin/student/update/:id"
+          element={<SuperAdminUpdateStudent situation="Student" />}
+        />
+
+        <Route
           path="/SuperAdmin/students/student/marks/:id"
           element={<SuperAdminStudentExamMarks situation="Student" />}
         />
@@ -155,12 +166,20 @@ const App = () => {
           path="/SuperAdmin/subject/student/marks/:studentID/:subjectID"
           element={<SuperAdminStudentExamMarks situation="Subject" />}
         />
+        <Route
+          path="/SuperAdmin/subject/update/:id"
+          element={<SuperAdminUpdateSubject />}
+        />
 
         {/* teacher */}
 
         <Route
           path="/SuperAdmin/teachers/addteacher"
           element={<SuperAdminAddTeacher />}
+        />
+        <Route
+          path="/SuperAdmin/teacher/update/:id"
+          element={<SuperAdminUpdateTeacher />}
         />
         <Route
           path="/SuperAdmin/teachers"
@@ -248,7 +267,10 @@ const App = () => {
           path="/Admin/students/student/marks/:id"
           element={<StudentExamMarks situation="Student" />}
         />
-
+        <Route
+          path="/Admin/student/update/:id"
+          element={<UpdateStudent situation="Student" />}
+        />
         {/* subjects */}
         <Route path="/Admin/subjects" element={<ShowSubjects />} />
         <Route path="/Admin/addsubject/:id" element={<SubjectForm />} />
@@ -276,6 +298,7 @@ const App = () => {
         <Route path="/Admin/parents" element={<ShowParents />} />
         <Route path="/Admin/parents/update/:id" element={<UpdateParent />} />
         <Route path="/Admin/addParents" element={<AddParent />} />
+        <Route path="/Admin/subject/update/:id" element={<UpdateSubject />} />
 
         {/* teacher */}
 
@@ -301,6 +324,7 @@ const App = () => {
           path="/Admin/teachers/choosesubject/:id"
           element={<ChooseSubject situation="Norm" />}
         />
+        <Route path="/Admin/eacher/update/:id" element={<UpdateTeacher />} />
 
         {/* calender */}
         <Route path="/Admin/calender" element={<Calendar />} />

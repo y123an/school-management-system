@@ -23,10 +23,10 @@ const registerParent = async (req, res) => {
     const newParent = new Parent({
       name,
       email,
-      password: hashedPassword,
       phone,
       gender,
-      children,
+      Children: children,
+      password: hashedPassword,
     });
 
     await newParent.save();
@@ -59,24 +59,33 @@ const registerParent = async (req, res) => {
 const updateParent = async (req, res) => {
   try {
     const { id } = req.params;
-    const updates = req.body;
+    const { name, email, phone, gender, children } = req.body;
 
-    if (updates.password) {
-      updates.password = await bcrypt.hash(updates.password, 10);
-    }
+    // Create the update object
+    const updates = {
+      name,
+      email,
+      phone,
+      gender,
+      Children: children,
+    };
 
+    // Find and update the parent document
     const updatedParent = await Parent.findByIdAndUpdate(id, updates, {
       new: true,
     });
 
+    // If no parent was found with the given ID, return a 404 error
     if (!updatedParent) {
       return res.status(404).json({ message: "Parent not found" });
     }
 
+    // If the update was successful, return the updated parent
     res
       .status(200)
       .json({ message: "Parent updated successfully", parent: updatedParent });
   } catch (error) {
+    // If an error occurs during the update process, return a 500 error
     res.status(500).json({ message: error.message });
   }
 };
@@ -110,7 +119,10 @@ const parentLogIn = async (req, res) => {
 // Get all parents
 const getAllParents = async (req, res) => {
   try {
-    const parents = await Parent.find().populate("Children");
+    const parents = await Parent.find().populate({
+      path: "Children.child",
+      select: "firstName lastName grandFathersName",
+    });
     res.status(200).json(parents);
   } catch (error) {
     res.status(500).json({ message: error.message });

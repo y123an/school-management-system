@@ -25,12 +25,21 @@ const ShowSubjects = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState(null);
 
-  const deleteHandler = (deleteID, address) => {
+  const confirmDelete = () => {
+    const { deleteID, address } = deleteInfo;
     dispatch(deleteUser(deleteID, address)).then(() => {
       dispatch(getSubjectList(currentUser._id, "AllSubjects"));
+      setShowPopup(true);
     });
-    setShowPopup(true);
+    setShowConfirmModal(false);
+  };
+
+  const deleteHandler = (deleteID, address) => {
+    setDeleteInfo({ deleteID, address });
+    setShowConfirmModal(true);
   };
 
   const subjectColumns = [
@@ -42,6 +51,7 @@ const ShowSubjects = () => {
   const subjectRows = subjectsList.map((subject) => ({
     subName: subject.subName,
     sessions: subject.sessions,
+    subCode: subject.subCode,
     sclassName: subject.sclassName.gradelevel + subject.sclassName.section,
     sclassID: subject.sclassName._id,
     id: subject._id,
@@ -62,6 +72,18 @@ const ShowSubjects = () => {
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
       >
         View
+      </button>
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
+        onClick={() =>
+          navigate("/SuperAdmin/subject/update/" + row.id, {
+            state: {
+              subject: row,
+            },
+          })
+        }
+      >
+        Update
       </button>
     </div>
   );
@@ -141,6 +163,28 @@ const ShowSubjects = () => {
           </div>
         </div>
       </div>
+      {showConfirmModal && (
+        <div className="fixed inset-0 font-poppins flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-lg font-semibold mb-4">Confirm Deletion</h2>
+            <p>Are you sure you want to delete this subject?</p>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="bg-gray-300 text-black py-1 px-4 rounded mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 text-white py-1 px-4 rounded"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

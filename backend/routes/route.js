@@ -24,6 +24,7 @@ const {
 const {
   complainCreate,
   complainList,
+  deleteComplaint,
 } = require("../controllers/complain-controller.js");
 const {
   getEvents,
@@ -71,6 +72,7 @@ const {
   freeSubjectList,
   allSubjects,
   deleteSubjects,
+  updateSubject,
 } = require("../controllers/subject-controller.js");
 const { superAdminLogIn } = require("../controllers/super-admin-controller.js");
 const {
@@ -86,6 +88,7 @@ const {
   addClassToTeacher,
   getTeachersByClassId,
   removeClassFromTeacher,
+  updateTeacher,
 } = require("../controllers/teacher-controller.js");
 const {
   verifySuperAdmin,
@@ -162,6 +165,7 @@ router.delete(
   verifyAdmin,
   removeClassFromTeacher
 );
+router.put("/Teacher/:id", verifyAdmin, updateTeacher);
 
 router.delete("/Teachers/:id", verifyAdmin, deleteTeachers);
 router.delete("/TeachersClass/:id", verifyAdmin, deleteTeachersByClass);
@@ -185,6 +189,7 @@ router.put("/Notice/:id", verifyAdmin, updateNotice);
 // Complain
 
 router.post("/ComplainCreate", complainCreate);
+router.delete("/Complain/:id", verifyAdmin, deleteComplaint);
 
 router.get("/ComplainList", complainList);
 
@@ -209,6 +214,7 @@ router.get("/AllSubjects/:id", verifyAdmin, allSubjects);
 router.get("/ClassSubjects/:id", verifyTeacherOrAdmin, classSubjects);
 router.get("/FreeSubjectList/:id", verifyTeacherOrAdmin, freeSubjectList);
 router.get("/Subject/:id", verifyTeacherOrAdmin, getSubjectDetail);
+router.put("/Subject/:id", verifyAdmin, updateSubject);
 
 router.delete("/Subject/:id", verifyAdmin, deleteSubject);
 router.delete("/Subjects/:id", verifyAdmin, deleteSubjects);

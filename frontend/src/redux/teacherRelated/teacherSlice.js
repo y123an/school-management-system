@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   error: null,
   response: null,
+  status: "idle",
 };
 
 const teacherSlice = createSlice({
@@ -20,6 +21,7 @@ const teacherSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.response = null;
+      state.status = "added";
     },
     getSuccess: (state, action) => {
       state.teachersList = action.payload;
@@ -42,6 +44,12 @@ const teacherSlice = createSlice({
       state.error = null;
       state.response = null;
     },
+    underTeacherControl: (state) => {
+      state.loading = false;
+      state.response = null;
+      state.error = null;
+      state.status = "idle";
+    },
   },
 });
 
@@ -51,6 +59,7 @@ export const {
   getFailed,
   getError,
   doneSuccess,
+  underTeacherControl,
   postDone,
 } = teacherSlice.actions;
 

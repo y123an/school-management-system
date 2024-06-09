@@ -43,12 +43,14 @@ const TeacherHomePage = () => {
   console.log(currentUser.classes.length);
 
   const numberOfClass = currentUser.classes.length;
-  const numberOfSessions = subjectDetails
-    ? subjectDetails.reduce(
-        (sum, subject) => sum + parseInt(subject.sessions, 10),
-        0
-      )
-    : 0;
+  const numberOfSessions = 0;
+
+  // subjectDetails
+  //   ? subjectDetails.reduce(
+  //       (sum, subject) => sum + parseInt(subject.sessions, 10),
+  //       0
+  //     )
+  //   : 0;
 
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => {

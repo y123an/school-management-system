@@ -31,16 +31,21 @@ const ShowTeachers = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteInfo, setDeleteInfo] = useState(null);
 
-  const deleteHandler = (deleteID, address) => {
-    console.log(deleteID);
-    console.log(address);
-    // setMessage("Sorry the delete function has been disabled for now.");
-
+  const confirmDelete = () => {
+    const { deleteID, address } = deleteInfo;
     dispatch(deleteUser(deleteID, address)).then(() => {
       dispatch(getAllTeachers(currentUser._id));
+      setShowPopup(true);
     });
-    setShowPopup(true);
+    setShowConfirmModal(false);
+  };
+
+  const deleteHandler = (deleteID, address) => {
+    setDeleteInfo({ deleteID, address });
+    setShowConfirmModal(true);
   };
 
   if (loading) {
@@ -57,13 +62,17 @@ const ShowTeachers = () => {
 
   const columns = [
     { id: "name", label: "Name", minWidth: 170 },
-    { id: "email", label: "email", minWidth: 100 },
-    { id: "role", label: "role", minWidth: 170 },
+    { id: "email", label: "Email", minWidth: 100 },
+    { id: "phone", label: "Phone", minWidth: 100 },
+    { id: "gender", label: "Gender", minWidth: 100 },
+    { id: "role", label: "Role", minWidth: 170 },
   ];
 
   const rows = teachersList.map((teacher) => ({
     name: teacher.name,
     email: teacher.email,
+    phone: teacher.phone,
+    gender: teacher.gender,
     role: teacher.role,
     teachSclassID: teacher.classes.teachSclass,
     id: teacher._id,
@@ -141,6 +150,18 @@ const ShowTeachers = () => {
                   className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
                 >
                   View
+                </button>
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
+                  onClick={() =>
+                    navigate("/SuperAdmin/teacher/update/" + row.id, {
+                      state: {
+                        teacher: row,
+                      },
+                    })
+                  }
+                >
+                  Update
                 </button>
               </td>
             </tr>
@@ -232,25 +253,35 @@ const ShowTeachers = () => {
                 </button>
               </div>
             </div>
-            {/* Action Buttons */}
-            {/* <div className="fixed bottom-16 right-16">
-              {actions.map((action) => (
-                <div key={action.name} className="mb-4">
-                  <button
-                    onClick={action.action}
-                    className="bg-white shadow-md rounded-full p-3"
-                  >
-                    {action.icon}
-                  </button>
-                </div>
-              ))}
-            </div> */}
             {/* Popup */}
             <Popup
               message={message}
               setShowPopup={setShowPopup}
               showPopup={showPopup}
             />
+            {/* Confirm Delete Modal */}
+            {showConfirmModal && (
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+                <div className="bg-white p-6 rounded shadow-md">
+                  <h2 className="text-lg font-semibold mb-4">Confirm Delete</h2>
+                  <p>Are you sure you want to delete this teacher?</p>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      onClick={() => setShowConfirmModal(false)}
+                      className="bg-gray-500 text-white px-4 py-2 rounded mr-2 hover:bg-gray-700"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={confirmDelete}
+                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

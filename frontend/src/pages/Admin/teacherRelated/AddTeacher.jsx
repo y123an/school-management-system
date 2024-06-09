@@ -32,9 +32,9 @@ const AddTeacher = () => {
     dispatch(getSubjectDetails(subjectID, "Subject"));
   }, [dispatch, subjectID]);
 
-  useEffect(() => {
-    dispatch(getSubjectList(currentUser._id, "AllSubjects"));
-  }, [currentUser._id, dispatch]);
+  // useEffect(() => {
+  //   dispatch(getSubjectList(currentUser._id, "AllSubjects"));
+  // }, [currentUser._id, dispatch]);
 
   useEffect(() => {
     dispatch(getAllSclasses(currentUser._id, "Sclass"));
@@ -107,6 +107,7 @@ const AddTeacher = () => {
       const selectedClass = sclassesList.find(
         (classItem) => classItem._id === event.target.value
       );
+      dispatch(getSubjectList(selectedClass._id, "ClassSubjects"));
       setClassName(selectedClass._id);
       setSclassName(selectedClass._id);
     }
@@ -153,22 +154,7 @@ const AddTeacher = () => {
                 <h2 className="text-2xl font-bold text-center text-gray-800">
                   Add Teacher
                 </h2>
-                <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Subject</label>
-                  <select
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    value={subjectName}
-                    onChange={changeSubjectHandler}
-                    required
-                  >
-                    <option value="Select subject">Select Subject</option>
-                    {subjectsList.map((classItem) => (
-                      <option key={classItem._id} value={classItem._id}>
-                        {classItem.subName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+
                 <div className="mb-4">
                   <label className="block text-gray-700 mb-2">Class</label>
                   <select
@@ -181,6 +167,22 @@ const AddTeacher = () => {
                     {sclassesList.map((classItem) => (
                       <option key={classItem._id} value={classItem._id}>
                         {classItem.gradelevel} {classItem.section}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Subject</label>
+                  <select
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    value={subjectName}
+                    onChange={changeSubjectHandler}
+                    required
+                  >
+                    <option value="Select subject">Select Subject</option>
+                    {subjectsList.map((classItem) => (
+                      <option key={classItem._id} value={classItem._id}>
+                        {classItem.subName}
                       </option>
                     ))}
                   </select>

@@ -1,26 +1,13 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteUser,
-  getUserDetails,
-  updateUser,
-} from "../../../redux/userRelated/userHandle";
+import { getUserDetails } from "../../../redux/userRelated/userHandle";
 import { useNavigate, useParams } from "react-router-dom";
 import { getSubjectList } from "../../../redux/sclassRelated/sclassHandle";
-import {
-  removeStuff,
-  updateStudentFields,
-} from "../../../redux/studentRelated/studentHandle";
-import {
-  calculateOverallAttendancePercentage,
-  calculateSubjectAttendancePercentage,
-  groupAttendanceBySubject,
-} from "../../../components/attendanceCalculator";
+import { calculateOverallAttendancePercentage } from "../../../components/attendanceCalculator";
 import CustomBarChart from "../../../components/CustomBarChart";
 import CustomPieChart from "../../../components/CustomPieChart";
 import Popup from "../../../components/Popup";
 
-import { FiArrowUp, FiArrowDown, FiTrash } from "react-icons/fi";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
@@ -71,18 +58,7 @@ const ViewStudent = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
 
-  const handleOpen = (subId) => {
-    setOpenStates((prevState) => ({
-      ...prevState,
-      [subId]: !prevState[subId],
-    }));
-  };
-
   const [value, setValue] = useState("1");
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   const [selectedSection, setSelectedSection] = useState("table");
   const handleSectionChange = (event, newSection) => {
@@ -103,41 +79,6 @@ const ViewStudent = () => {
     }
   }, [userDetails]);
 
-  const submitHandler = (event) => {
-    event.preventDefault();
-    dispatch(updateUser(fields, studentID, address))
-      .then(() => {
-        dispatch(getUserDetails(studentID, address));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const deleteHandler = () => {
-    setMessage("Sorry the delete function has been disabled for now.");
-    setShowPopup(true);
-
-    // dispatch(deleteUser(studentID, address))
-    //     .then(() => {
-    //         navigate(-1)
-    //     })
-  };
-
-  const removeHandler = (id, deladdress) => {
-    dispatch(removeStuff(id, deladdress)).then(() => {
-      dispatch(getUserDetails(studentID, address));
-    });
-  };
-
-  const removeSubAttendance = (subId) => {
-    dispatch(
-      updateStudentFields(studentID, { subId }, "RemoveStudentSubAtten")
-    ).then(() => {
-      dispatch(getUserDetails(studentID, address));
-    });
-  };
-
   const overallAttendancePercentage =
     calculateOverallAttendancePercentage(subjectAttendance);
   const overallAbsentPercentage = 100 - overallAttendancePercentage;
@@ -147,21 +88,7 @@ const ViewStudent = () => {
     { name: "Absent", value: overallAbsentPercentage },
   ];
 
-  const subjectData = Object.entries(
-    groupAttendanceBySubject(subjectAttendance)
-  ).map(([subName, { subCode, present, sessions }]) => {
-    const subjectAttendancePercentage = calculateSubjectAttendancePercentage(
-      present,
-      sessions
-    );
-    return {
-      subject: subName,
-      attendancePercentage: subjectAttendancePercentage,
-      totalClasses: sessions,
-      attendedClasses: present,
-    };
-  });
-
+  console.log(userDetails);
   const StudentAttendanceSection = () => {
     const renderTableSection = () => {
       return (
@@ -170,60 +97,23 @@ const ViewStudent = () => {
           <table className="w-full border-collapse border border-gray-300">
             <thead>
               <tr>
-                <th className="border border-gray-300 px-4 py-2">Subject</th>
-                <th className="border border-gray-300 px-4 py-2">Present</th>
-                <th className="border border-gray-300 px-4 py-2">
-                  Total Sessions
-                </th>
-                <th className="border border-gray-300 px-4 py-2">
-                  Attendance Percentage
-                </th>
-                <th className="border border-gray-300 px-4 py-2 text-center">
-                  Actions
-                </th>
+                <th className="border border-gray-300 px-4 py-2">Date</th>
+                <th className="border border-gray-300 px-4 py-2">status</th>
               </tr>
             </thead>
             <tbody>
-              {Object.entries(groupAttendanceBySubject(subjectAttendance)).map(
-                ([subName, { present, allData, subId, sessions }], index) => {
-                  const subjectAttendancePercentage =
-                    calculateSubjectAttendancePercentage(present, sessions);
-                  return (
-                    <tr key={index}>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {subName}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {present}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {sessions}
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2">
-                        {subjectAttendancePercentage}%
-                      </td>
-                      <td className="border border-gray-300 px-4 py-2 text-center">
-                        <button
-                          className="text-red-600 hover:text-red-800 ml-2 transition duration-300"
-                          onClick={() => removeSubAttendance(subId)}
-                        >
-                          <FiTrash />
-                        </button>
-                        {/* <button
-                          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded ml-2 transition duration-300"
-                          onClick={() =>
-                            navigate(
-                              `/Admin/subject/student/attendance/${studentID}/${subId}`
-                            )
-                          }
-                        >
-                          Change
-                        </button> */}
-                      </td>
-                    </tr>
-                  );
-                }
-              )}
+              {userDetails.attendance.map((attendance) => {
+                return (
+                  <tr key={attendance._id}>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {attendance.date.slice(0, 10)}
+                    </td>
+                    <td className="border border-gray-300 px-4 py-2">
+                      {attendance.status}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
           <div className="mt-4 text-lg">
@@ -252,7 +142,7 @@ const ViewStudent = () => {
         <>
           <h3 className="text-xl font-semibold mb-4">Attendance Chart:</h3>
           <CustomBarChart
-            chartData={subjectData}
+            chartData={chartData}
             dataKey="attendancePercentage"
           />
         </>
@@ -320,17 +210,28 @@ const ViewStudent = () => {
               </tr>
             </thead>
             <tbody>
-              {subjectMarks.map((result, index) => {
-                if (!result.subName || !result.marksObtained) {
-                  return null;
-                }
+              {userDetails.examResult?.map((result) => {
                 return (
-                  <tr key={index}>
+                  <tr key={result._id}>
                     <td className="border border-gray-300 px-4 py-2">
                       {result.subName.subName}
                     </td>
                     <td className="border border-gray-300 px-4 py-2">
-                      {result.marksObtained}
+                      {result?.results?.map((res) => {
+                        return (
+                          <div key={res._id} className="flex gap-2">
+                            <p>- {res.title}:</p>
+                            <p>{res.marks}</p>
+                          </div>
+                        );
+                      })}
+                      <p className="underline font-bold">
+                        Total Result:{"  "}
+                        {result?.results?.reduce(
+                          (partialSum, a) => partialSum + a.marks,
+                          0
+                        )}
+                      </p>
                     </td>
                   </tr>
                 );
@@ -405,7 +306,6 @@ const ViewStudent = () => {
     );
   };
 
-  console.log(userDetails);
   const StudentDetailsSection = () => {
     return (
       <div className="p-6 bg-white rounded-lg shadow-md">
