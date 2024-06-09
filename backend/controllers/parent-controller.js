@@ -99,7 +99,10 @@ const parentLogIn = async (req, res) => {
   }
 
   try {
-    const parent = await Parent.findOne({ email });
+    const parent = await Parent.findOne({ email }).populate({
+      path: "Children.child",
+    });
+
     if (!parent) {
       return res.status(404).json({ message: "User not found" });
     }
