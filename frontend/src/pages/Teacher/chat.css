@@ -84,13 +84,13 @@
 }
 
 .chat-title {
-  color: #7554a0;
+  color: rgb(30, 58, 138);
   font-weight: 800;
   font-size: 24px;
 }
 
 .chat-subtitle {
-  color: #7554a0;
+  color: rgb(30, 58, 138);
   font-weight: 600;
   font-size: 12px;
   padding-top: 4px;
@@ -164,7 +164,7 @@
 .message-form {
   overflow: hidden;
   border-radius: 6px;
-  border: 1px solid #3b2a50;
+  color: rgb(30, 58, 138);
   background-color: white;
 }
 

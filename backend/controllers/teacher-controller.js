@@ -66,6 +66,14 @@ const teacherRegister = async (req, res) => {
       { headers: { "Private-Key": process.env.CHAT_ENGINE_PRIVATE_KEY } }
     );
     console.log(r.data);
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log("Email sent: " + info.response);
+    });
+
     // Update the Subject and Sclass collections
     for (const cls of classes) {
       if (cls.teachSubject) {
