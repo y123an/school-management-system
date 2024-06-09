@@ -26,7 +26,6 @@
     "dotenv": "^16.4.5",
     "html2canvas": "^1.4.1",
     "icons": "^1.0.0",
-    "jspdf": "^2.5.1",
     "react": "^18.3.1",
     "react-apexcharts": "^1.4.1",
     "react-chat-engine": "^1.11.28",

@@ -190,7 +190,7 @@ const UpdateStudent = ({ situation }) => {
                     onChange={(e) => setGender(e.target.value)}
                     required
                   >
-                    <option value="Select Class">Select Class</option>
+                    <option value="Select Class">Select Gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                   </select>

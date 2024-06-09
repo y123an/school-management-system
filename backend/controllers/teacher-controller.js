@@ -46,8 +46,26 @@ const teacherRegister = async (req, res) => {
       return res.send({ message: "Email already exists" });
     }
 
-    //  let result = await teacher.save();
+    let result = await teacher.save();
+    const username = name;
+    const secret = 12345678;
+    const nameParts = name.split(" ");
 
+    const first_name = nameParts[0];
+    const last_name = nameParts.slice(1).join(" ");
+    const r = await axios.post(
+      "https://api.chatengine.io/users/",
+      {
+        username,
+        secret,
+        email,
+        first_name,
+        last_name,
+        custom_json: '{ "role": "teacher" }',
+      },
+      { headers: { "Private-Key": process.env.CHAT_ENGINE_PRIVATE_KEY } }
+    );
+    console.log(r.data);
     // Update the Subject and Sclass collections
     for (const cls of classes) {
       if (cls.teachSubject) {
@@ -78,6 +96,7 @@ const teacherLogIn = async (req, res) => {
         teacher.password
       );
       if (validated) {
+        console.log("masas");
         teacher = await teacher.populate(
           "classes.teachSubject",
           "subName sessions"
@@ -86,10 +105,25 @@ const teacherLogIn = async (req, res) => {
           "classes.teachSclass",
           "sclassName gradelevel section"
         );
+        let r = {};
+        try {
+          r = await axios.get("https://api.chatengine.io/users/me/", {
+            headers: {
+              "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
+              "User-Name": teacher.name,
+              "User-Secret": req.body.password,
+            },
+          });
 
+          //    return res.status(r.status).json(r.data);
+        } catch (e) {
+          console.log(e);
+          return res.status(e.response.status).json(e.response.data);
+        }
         const payload = {
           email: teacher.email,
           role: "Teacher",
+          chat: r.data,
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -107,6 +141,7 @@ const teacherLogIn = async (req, res) => {
       res.status(404).send({ message: "Teacher not found" });
     }
   } catch (err) {
+    console.error("Error logging in teacher:", err);
     res.status(500).json({ message: "An error occurred", error: err.message });
   }
 };

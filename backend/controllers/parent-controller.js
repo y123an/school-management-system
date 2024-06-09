@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const dotenv = require("dotenv");
-const { route } = require("../routes/route");
 
 dotenv.config();
 // Register a new parent
@@ -16,7 +15,7 @@ const registerParent = async (req, res) => {
     if (existingParent) {
       return res.status(400).json({ message: "Parent already exists" });
     }
-
+    console.log(name, email, password, phone, gender, children);
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -32,14 +31,21 @@ const registerParent = async (req, res) => {
 
     await newParent.save();
     const username = name;
-    const secret = hashedPass;
+    const secret = password;
     const nameParts = name.split(" ");
 
     const first_name = nameParts[0];
     const last_name = nameParts.slice(1).join(" ");
     const r = await axios.post(
       "https://api.chatengine.io/users/",
-      { username, secret, email, first_name, last_name, role: "parent" },
+      {
+        username,
+        secret,
+        email,
+        first_name,
+        last_name,
+        custom_json: '{ "role": "parent" }',
+      },
       { headers: { "Private-Key": process.env.CHAT_ENGINE_PRIVATE_KEY } }
     );
 

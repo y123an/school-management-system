@@ -76,7 +76,7 @@ import SuperAdminUpdateTeacher from "./pages/SuperAdmin/teacherRelated/UpdateTea
 import UpdateStudent from "./pages/Admin/studentRelated/UpdateStudent";
 import UpdateSubject from "./pages/Admin/subjectRelated/UpdateSubject";
 import UpdateTeacher from "./pages/Admin/teacherRelated/UpdateTeacher";
-import TeacherChat from "./pages/Teacher/Chat/Chat";
+import TeacherChat from "./pages/Teacher/TeacherChat";
 
 const App = () => {
   return (
@@ -361,7 +361,7 @@ const App = () => {
 
         <Route path="/Teacher/complain" element={<TeacherComplain />} />
         <Route path="/Teacher/calender" element={<TeacherCalendar />} />
-        <Route path="/Teacher/Chat" element={<TeacherChat />} />
+        <Route path="/Teacher/chat" element={<TeacherChat />} />
 
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
