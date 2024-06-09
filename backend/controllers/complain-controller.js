@@ -14,6 +14,7 @@ const complainCreate = async (req, res) => {
     user = await Teacher.findById(userId);
     userType = "teacher";
   } else if (userType === "Parent") {
+    userType = "parent";
     user = await Parent.findById(userId);
   }
 
