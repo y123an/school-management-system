@@ -31,7 +31,7 @@ const registerParent = async (req, res) => {
 
     await newParent.save();
     const username = name;
-    const secret = hashedPassword;
+    const secret = password;
     const nameParts = name.split(" ");
 
     const first_name = nameParts[0];

@@ -1,9 +1,19 @@
 import { ChatEngine } from "react-chat-engine";
+import { useState, useEffect } from "react";
 import "./chat.css";
 import TeacherSideBar from "./TeacherSideBar";
+import { jwtDecode } from "jwt-decode";
 const projectID = "fb3e7c3a-f951-4453-ade3-88d31e3dd1da";
+const token = localStorage.getItem("token"); // Assuming the token is stored in local storage
+let username = "";
+let secret = "12345678";
+
+if (token) {
+  const decodedToken = jwtDecode(token);
+  username = decodedToken.chat.username;
+}
+console.log(username);
 const TeacherChat = () => {
-  console.log("h");
   return (
     <div className="flex h-full">
       <TeacherSideBar />
@@ -11,8 +21,8 @@ const TeacherChat = () => {
         <ChatEngine
           height="100vh"
           projectID={projectID}
-          userName="mk"
-          userSecret="12345678"
+          userName={username}
+          userSecret={secret}
         />
       </div>
     </div>
