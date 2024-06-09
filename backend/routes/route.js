@@ -40,6 +40,13 @@ const {
   updateNotice,
 } = require("../controllers/notice-controller.js");
 const {
+  getTeacherStudentRatio,
+  getExamResults,
+  getParentInvolvement,
+  getClassDistribution,
+  getStudentGenderDistribution,
+} = require("../controllers/overview-controller.js");
+const {
   registerParent,
   parentLogIn,
   getParentById,
@@ -223,7 +230,15 @@ router.delete("/SubjectsClass/:id", verifyAdmin, deleteSubjectsByClass);
 //events
 router.get("/events/:id", getEvents);
 router.post("/events", addEvent);
-router.get("/events/:id", updateEvent);
+router.put("/events/:id", updateEvent);
 router.delete("/events/:id", deleteEvent);
+
+// overviews
+
+router.get("/overview/ratio", getTeacherStudentRatio);
+router.get("/overview/gender-distribution", getStudentGenderDistribution);
+router.get("/overview/exam-results", getExamResults);
+router.get("/overview/parent-involvement", getParentInvolvement);
+router.get("/overview/class-distribution", getClassDistribution);
 
 module.exports = router;

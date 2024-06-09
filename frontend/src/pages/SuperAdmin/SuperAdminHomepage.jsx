@@ -15,6 +15,11 @@ import SideBar from "./SideBar";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import SeeNotice from "../../components/SeeNotice";
 import { getAllParents } from "../../redux/parentRelated/parentHandler";
+import ClassDistributionChart from "../../components/Charts/ClassDistributionChart";
+import PerformanceOverTimeChart from "../../components/Charts/PerformanceOverTimeChart";
+import ParentInvolvementChart from "../../components/Charts/ParentInvolvementChart";
+import StudentGenderDistributionChart from "../../components/Charts/StudentGenderDistributionChart";
+import RatioChart from "../../components/Charts/RatioChart";
 
 const SuperAdminHomePage = () => {
   const dispatch = useDispatch();
@@ -120,8 +125,11 @@ const SuperAdminHomePage = () => {
                 />
               </div>
             </div>
-            <div className="mt-8">
-              <SeeNotice />
+            <div className="grid grid-cols-2 gap-10 p-10">
+              <StudentGenderDistributionChart />
+              <ClassDistributionChart />
+              <PerformanceOverTimeChart />
+              <RatioChart />
             </div>
           </div>
         </div>
