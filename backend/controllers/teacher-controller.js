@@ -124,6 +124,7 @@ const teacherLogIn = async (req, res) => {
           email: teacher.email,
           role: "Teacher",
           chat: r.data,
+          username: teacher.username,
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
