@@ -10,11 +10,12 @@ let secret = "12345678";
 
 if (token) {
   const decodedToken = jwtDecode(token);
+  console.log(decodedToken.chat);
   if (decodedToken.role === "Teacher") {
     username = decodedToken.chat.username;
   }
 }
-console.log(username);
+
 const TeacherChat = () => {
   return (
     <div className="flex h-full">

@@ -119,14 +119,14 @@ const teacherLogIn = async (req, res) => {
             headers: {
               "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
               "User-Name": teacher.name,
-              "User-Secret": req.body.password,
+              "User-Secret": 12345678,
             },
           });
 
-          //    return res.status(r.status).json(r.data);
+          console.log(r.data);
         } catch (e) {
           console.log(e);
-          return res.status(e.response.status).json(e.response.data);
+          //  return res.status(e.response.status).json(e.response.data);
         }
         const payload = {
           email: teacher.email,
