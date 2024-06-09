@@ -46,7 +46,7 @@ const teacherRegister = async (req, res) => {
       return res.send({ message: "Email already exists" });
     }
 
-    //  let result = await teacher.save();
+    let result = await teacher.save();
 
     // Update the Subject and Sclass collections
     for (const cls of classes) {
