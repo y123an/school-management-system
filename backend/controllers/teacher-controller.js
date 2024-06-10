@@ -67,13 +67,6 @@ const teacherRegister = async (req, res) => {
     );
     console.log(r.data);
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return console.log(error);
-      }
-      console.log("Email sent: " + info.response);
-    });
-
     // Update the Subject and Sclass collections
     for (const cls of classes) {
       if (cls.teachSubject) {
@@ -251,12 +244,21 @@ const deleteTeacher = async (req, res) => {
       r = await axios.get("https://api.chatengine.io/users/me/", {
         headers: {
           "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
-          "User-Name": teacher.name,
+          "User-Name": deletedTeacher.name,
           "User-Secret": 12345678,
         },
       });
 
-      console.log(r.data);
+      console.log("hey" + r.data);
+      let deletedchatuser = await axios.delete(
+        `https://api.chatengine.io/users/${r.data.id}/`,
+        {
+          headers: {
+            "PRIVATE-KEY": process.env.CHAT_ENGINE_PRIVATE_KEY,
+          },
+        }
+      );
+      console.log(deletedchatuser.data);
     } catch (e) {
       console.log(e);
       //  return res.status(e.response.status).json(e.response.data);

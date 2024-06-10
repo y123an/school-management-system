@@ -158,7 +158,29 @@ const deleteParent = async (req, res) => {
     if (!deletedParent) {
       return res.status(404).json({ message: "Parent not found" });
     }
+    try {
+      r = await axios.get("https://api.chatengine.io/users/me/", {
+        headers: {
+          "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
+          "User-Name": deletedParent.name,
+          "User-Secret": 12345678,
+        },
+      });
 
+      console.log("hey" + r.data);
+      let deletedchatuser = await axios.delete(
+        `https://api.chatengine.io/users/${r.data.id}/`,
+        {
+          headers: {
+            "PRIVATE-KEY": process.env.CHAT_ENGINE_PRIVATE_KEY,
+          },
+        }
+      );
+      console.log(deletedchatuser.data);
+    } catch (e) {
+      console.log(e);
+      //  return res.status(e.response.status).json(e.response.data);
+    }
     res.status(200).json({ message: "Parent deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
