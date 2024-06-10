@@ -57,7 +57,6 @@ const registerParent = async (req, res) => {
 
 // Update a parent
 const updateParent = async (req, res) => {
-  console.log("reqbody");
   try {
     const { id } = req.params;
     const { name, email, phone, gender, children, password } = req.body;
