@@ -7,6 +7,7 @@ const initialState = {
   error: null,
   response: null,
   status: "idle",
+  stateStatus: "idle",
 };
 
 const teacherSlice = createSlice({
@@ -28,6 +29,7 @@ const teacherSlice = createSlice({
       state.loading = false;
       state.error = null;
       state.response = null;
+      state.stateStatus = "added";
     },
 
     getFailed: (state, action) => {
@@ -49,6 +51,7 @@ const teacherSlice = createSlice({
       state.response = null;
       state.error = null;
       state.status = "idle";
+      state.stateStatus = "idle";
     },
   },
 });

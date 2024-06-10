@@ -9,12 +9,12 @@ import {
 } from "../../redux/teacherRelated/teacherHandle";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { underTeacherControl } from "../../redux/teacherRelated/teacherSlice";
 
 const TeacherProfile = () => {
-  const { currentUser, currentRole, error } = useSelector(
-    (state) => state.user
-  );
-  const { teacherDetails } = useSelector((state) => state.teacher);
+  const { currentUser, currentRole } = useSelector((state) => state.user);
+  const { teacherDetails, stateStatus, response, error, tempDetails } =
+    useSelector((state) => state.teacher);
   const dispatch = useDispatch();
 
   const teacherID = currentUser._id;
@@ -143,6 +143,31 @@ const TeacherProfile = () => {
       }
     }
   };
+
+  const [loader, setLoader] = useState(false);
+  const [message, setMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  useEffect(() => {
+    if (stateStatus === "added") {
+      dispatch(underTeacherControl());
+      toast.success("Profile changed successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } else if (stateStatus === "failed") {
+      setMessage(response);
+      setShowPopup(true);
+      setLoader(false);
+    } else if (stateStatus === "error") {
+      setMessage("Network Error");
+      setShowPopup(true);
+      setLoader(false);
+    }
+  }, [stateStatus, error, response, dispatch, tempDetails]);
 
   return (
     <div className="h-screen font-poppins bg-gray-100">

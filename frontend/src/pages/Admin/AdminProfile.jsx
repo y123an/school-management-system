@@ -9,6 +9,7 @@ import {
 } from "../../redux/adminRelated/adminHandler";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { underAdminControl } from "../../redux/adminRelated/adminSlice";
 
 const AdminProfile = () => {
   const { currentUser, currentRole } = useSelector((state) => state.user);
@@ -59,7 +60,7 @@ const AdminProfile = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:4000/change-password/${teacherID}`,
+        `http://localhost:4000/change-password/${currentUser._id}`,
         { ...passwordData, role: currentRole },
         {
           headers: {
@@ -85,7 +86,6 @@ const AdminProfile = () => {
           oldPassword: "",
           newPassword: "",
         });
-        setPasswordModalOpen(false);
       } else {
         // Display generic error message
         toast.error("Failed to change password", {
@@ -126,6 +126,36 @@ const AdminProfile = () => {
       }
     }
   };
+  const [loader, setLoader] = useState(false);
+  const [message, setMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+
+  const { statestatus, response, error, tempDetails } = useSelector(
+    (state) => state.admin
+  );
+
+  useEffect(() => {
+    if (statestatus === "added") {
+      dispatch(underAdminControl());
+      toast.success("Profile changed successfully", {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    } else if (statestatus === "failed") {
+      setMessage(response);
+      setShowPopup(true);
+      setLoader(false);
+    } else if (statestatus === "error") {
+      setMessage("Network Error");
+      setShowPopup(true);
+      setLoader(false);
+    }
+  }, [statestatus, error, response, dispatch, tempDetails]);
+
   return (
     <div className="min-h-screen font-poppins bg-gray-100">
       <div className="flex items-center justify-between h-16 px-6 bg-white shadow-md">

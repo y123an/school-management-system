@@ -67,7 +67,7 @@ export const updateTeacherFields =
       if (result.data.message) {
         dispatch(getFailed(result.data.message));
       } else {
-        dispatch(doneSuccess());
+        dispatch(getSuccess());
       }
     } catch (error) {
       dispatch(getError(error));
