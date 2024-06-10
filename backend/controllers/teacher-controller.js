@@ -123,7 +123,7 @@ const teacherLogIn = async (req, res) => {
             },
           });
 
-          console.log(r.data);
+          console.log(r.data.id);
         } catch (e) {
           console.log(e);
           //  return res.status(e.response.status).json(e.response.data);
@@ -247,7 +247,20 @@ const deleteTeacher = async (req, res) => {
       { teacher: deletedTeacher._id, teacher: { $exists: true } },
       { $unset: { teacher: 1 } }
     );
+    try {
+      r = await axios.get("https://api.chatengine.io/users/me/", {
+        headers: {
+          "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
+          "User-Name": teacher.name,
+          "User-Secret": 12345678,
+        },
+      });
 
+      console.log(r.data);
+    } catch (e) {
+      console.log(e);
+      //  return res.status(e.response.status).json(e.response.data);
+    }
     res.send(deletedTeacher);
   } catch (error) {
     res.status(500).json(error);
