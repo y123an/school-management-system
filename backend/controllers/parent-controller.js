@@ -57,6 +57,7 @@ const registerParent = async (req, res) => {
 
 // Update a parent
 const updateParent = async (req, res) => {
+  console.log("reqbody");
   try {
     const { id } = req.params;
     const { name, email, phone, gender, children, password } = req.body;
@@ -96,6 +97,8 @@ const updateParent = async (req, res) => {
 
     const updatedParent = await Parent.findByIdAndUpdate(id, parentupdate, {
       new: true,
+    }).populate({
+      path: "Children.child",
     });
 
     console.log("hey" + r.data.username);
