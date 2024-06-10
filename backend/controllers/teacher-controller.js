@@ -19,6 +19,13 @@ const teacherRegister = async (req, res) => {
       return res.send({ message: "Email already exists" });
     }
 
+    const recipient = req.body.email;
+    const subject = "Welcome to parent and teacher help desk";
+    const text = "Welcome to parent and teacher help desk";
+    const html = `<b>Welcome to parent and teacher help desk</b>
+      <p>you are assigned as a teacher on the parent and help teacher desk system your password is ${req.body.password}</p>
+      `;
+    sendEmail(recipient, subject, text, html);
     // Check if any class is already assigned to another teacher
     for (const cls of classes) {
       const existingTeacherWithClass = await Teacher.findOne({
@@ -67,13 +74,6 @@ const teacherRegister = async (req, res) => {
       { headers: { "Private-Key": process.env.CHAT_ENGINE_PRIVATE_KEY } }
     );
     console.log(r.data);
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return console.log(error);
-      }
-      console.log("Email sent: " + info.response);
-    });
 
     // Update the Subject and Sclass collections
     for (const cls of classes) {
