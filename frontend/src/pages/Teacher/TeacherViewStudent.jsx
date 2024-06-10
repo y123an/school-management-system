@@ -2,17 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails } from "../../redux/userRelated/userHandle";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  IoIosArrowDown,
-  IoIosArrowUp,
-  IoIosMenu,
-  IoMdArrowBack,
-} from "react-icons/io";
+import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import { calculateOverallAttendancePercentage } from "../../components/attendanceCalculator";
 import CustomPieChart from "../../components/CustomPieChart";
 import { PurpleButton } from "../../components/ButtonStyles";
 import TeacherSideBar from "./TeacherSideBar";
 import AccountMenu from "../../components/AccountMenu";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { CSVLink } from "react-csv";
+// import { json2csv } from "json2csv";
 
 const TeacherViewStudent = () => {
   const navigate = useNavigate();
@@ -62,6 +61,59 @@ const TeacherViewStudent = () => {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const generatePDF = (data) => {
+    const doc = new jsPDF();
+    doc.autoTable({
+      head: [Object.keys(data[0])],
+      body: data.map((row) => Object.values(row)),
+    });
+    return doc;
+  };
+
+  // const generateCSV = (data) => {
+  //   const fields = Object.keys(data[0]);
+  //   const csv = json2csv({ data, fields });
+  //   return csv;
+  // };
+
+  const handlePDFDownload = () => {
+    const pdfData = subjectMarks.map((subject) => ({
+      Subject: subject.subName.subName,
+      "Total Result": subject.results.reduce(
+        (total, res) => total + res.marks,
+        0
+      ),
+      ...subject.results.reduce((acc, res, idx) => {
+        acc[`Result ${idx + 1}`] = res.marks;
+        return acc;
+      }, {}),
+    }));
+    const pdfDoc = generatePDF(pdfData);
+    pdfDoc.save("subject_marks.pdf");
+  };
+
+  const csvData = subjectMarks.map((subject) => ({
+    Subject: subject.subName.subName,
+    "Total Result": subject.results.reduce(
+      (total, res) => total + res.marks,
+      0
+    ),
+    ...subject.results.reduce((acc, res, idx) => {
+      acc[`Result ${idx + 1}`] = res.marks;
+      return acc;
+    }, {}),
+  }));
+
+  // const handleCSVDownload = () => {
+  //   const csv = generateCSV(csvData);
+  //   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  //   const url = URL.createObjectURL(blob);
+  //   const link = document.createElement("a");
+  //   link.setAttribute("href", url);
+  //   link.setAttribute("download", "subject_marks.csv");
+  //   link.click();
+  // };
 
   return (
     <div className="h-screen font-poppins bg-gray-100">
@@ -193,44 +245,62 @@ const TeacherViewStudent = () => {
                   </div>
                 )}
 
-                <h3 className="text-2xl font-semibold mt-6 text-blue-600">
-                  Subject Marks
-                </h3>
                 {subjectMarks &&
                 Array.isArray(subjectMarks) &&
                 subjectMarks.length > 0 ? (
-                  subjectMarks.map((result, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="mt-4 bg-gray-50 p-4 rounded-lg shadow-sm"
+                  <div className="mt-6">
+                    <h3 className="text-xl font-semibold text-blue-600">
+                      Subject Marks
+                    </h3>
+                    <div className="flex gap-3 font-semibold mt-6 text-blue-600">
+                      <button
+                        onClick={handlePDFDownload}
+                        className="bg-blue-500 text-sm text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
                       >
-                        <p className="text-gray-700 mb-2">
-                          <span className="font-semibold">Subject:</span>{" "}
-                          {result.subName.subName}
-                        </p>
-                        {result.results.map((res, idx) => (
-                          <div key={idx} className="mb-2">
-                            <p className="text-gray-700">
-                              <span className="font-semibold">Title:</span>{" "}
+                        Download Pdf
+                      </button>
+                      <CSVLink
+                        data={csvData}
+                        filename="mark_list.csv"
+                        className="bg-blue-500 text-sm text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                      >
+                        Download CSV
+                      </CSVLink>
+                    </div>
+                    <table className="w-full mt-4">
+                      <thead>
+                        <tr className="bg-blue-100 text-blue-800 font-semibold">
+                          <th className="py-2 px-4 border">Subject</th>
+                          <th className="py-2 px-4 border">Total Result</th>
+                          {subjectMarks[0].results.map((res, idx) => (
+                            <th key={idx} className="py-2 px-4 border">
                               {res.title}
-                            </p>
-                            <p className="text-gray-700">
-                              <span className="font-semibold">Marks:</span>{" "}
-                              {res.marks}
-                            </p>
-                          </div>
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {subjectMarks.map((subject, index) => (
+                          <tr key={index} className="bg-white text-gray-700">
+                            <td className="py-2 px-4 border">
+                              {subject.subName.subName}
+                            </td>
+                            <td className="py-2 px-4 border">
+                              {subject.results.reduce(
+                                (total, res) => total + res.marks,
+                                0
+                              )}
+                            </td>
+                            {subject.results.map((res, idx) => (
+                              <td key={idx} className="py-2 px-4 border">
+                                {res.marks}
+                              </td>
+                            ))}
+                          </tr>
                         ))}
-                        <p className="underline font-bold text-gray-700">
-                          Total Result:{" "}
-                          {result?.results?.reduce(
-                            (partialSum, a) => partialSum + a.marks,
-                            0
-                          )}
-                        </p>
-                      </div>
-                    );
-                  })
+                      </tbody>
+                    </table>
+                  </div>
                 ) : (
                   <p className="text-gray-700 mt-4">
                     No marks records available.
