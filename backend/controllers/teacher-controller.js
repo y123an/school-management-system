@@ -68,13 +68,12 @@ const teacherRegister = async (req, res) => {
     );
     console.log(r.data);
 
-    const recipient = req.body.email;
-    const subject = "Welcome to parent and teacher help desk";
-    const text = "Welcome to parent and teacher help desk";
-    const html = `<b>Welcome to parent and teacher help desk</b>
-    <p>you are assigned as teacher on the parent and help teacher desk system your password is ${req.body.password}</p>
-    `;
-    sendEmail(recipient, subject, text, html);
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log("Email sent: " + info.response);
+    });
 
     // Update the Subject and Sclass collections
     for (const cls of classes) {
@@ -121,14 +120,14 @@ const teacherLogIn = async (req, res) => {
             headers: {
               "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
               "User-Name": teacher.name,
-              "User-Secret": "12345678",
+              "User-Secret": req.body.password,
             },
           });
 
-          //    return res.status(r.status).json(r.data);
+          console.log(r.data.id);
         } catch (e) {
           console.log(e);
-          return res.status(e.response.status).json(e.response.data);
+          //  return res.status(e.response.status).json(e.response.data);
         }
         const payload = {
           email: teacher.email,
@@ -248,7 +247,29 @@ const deleteTeacher = async (req, res) => {
       { teacher: deletedTeacher._id, teacher: { $exists: true } },
       { $unset: { teacher: 1 } }
     );
+    try {
+      r = await axios.get("https://api.chatengine.io/users/me/", {
+        headers: {
+          "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
+          "User-Name": deletedTeacher.name,
+          "User-Secret": 12345678,
+        },
+      });
 
+      console.log("hey" + r.data);
+      let deletedchatuser = await axios.delete(
+        `https://api.chatengine.io/users/${r.data.id}/`,
+        {
+          headers: {
+            "PRIVATE-KEY": process.env.CHAT_ENGINE_PRIVATE_KEY,
+          },
+        }
+      );
+      console.log(deletedchatuser.data);
+    } catch (e) {
+      console.log(e);
+      //  return res.status(e.response.status).json(e.response.data);
+    }
     res.send(deletedTeacher);
   } catch (error) {
     res.status(500).json(error);
@@ -445,6 +466,14 @@ const updateTeacher = async (req, res) => {
 
     // Find the teacher by ID
     const teacher = await Teacher.findById(id);
+    r = await axios.get("https://api.chatengine.io/users/me/", {
+      headers: {
+        "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
+        "User-Name": teacher.name,
+        "User-Secret": 12345678,
+      },
+    });
+
     if (!teacher) {
       return res.status(404).json({ error: "Teacher not found" });
     }
@@ -462,6 +491,17 @@ const updateTeacher = async (req, res) => {
     // Save the updated teacher
     const updatedTeacher = await teacher.save();
 
+    let updateChatUser = await axios.patch(
+      `https://api.chatengine.io/users/${r.data.id}/`,
+      {
+        username: updatedTeacher.name,
+      },
+      {
+        headers: {
+          "PRIVATE-KEY": process.env.CHAT_ENGINE_PRIVATE_KEY,
+        },
+      }
+    );
     // Hide the password in the response
     updatedTeacher.password = undefined;
 

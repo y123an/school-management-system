@@ -34,6 +34,7 @@ const userSlice = createSlice({
       state.currentUser = action.payload;
       state.currentRole = action.payload.role;
       localStorage.setItem("user", JSON.stringify(action.payload));
+
       state.response = null;
       state.error = null;
     },
@@ -47,6 +48,19 @@ const userSlice = createSlice({
     },
     authLogout: (state) => {
       localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      const prefix = "fb3e7c3a-f951-4453-ade3-88d31e3dd1da";
+
+      // Iterate through all the keys in local storage
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+
+        // Check if the key starts with the specified prefix
+        if (key && key.startsWith(prefix)) {
+          // Remove the key from local storage
+          localStorage.removeItem(key);
+        }
+      }
       state.currentUser = null;
       state.status = "idle";
       state.error = null;

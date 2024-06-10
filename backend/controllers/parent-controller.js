@@ -68,9 +68,16 @@ const registerParent = async (req, res) => {
 const updateParent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, phone, gender, children } = req.body;
+    const { name, email, phone, gender, children, password } = req.body;
+    const parentupdate = await Parent.findById(id); // Create the update object
 
-    // Create the update object
+    r = await axios.get("https://api.chatengine.io/users/me/", {
+      headers: {
+        "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
+        "User-Name": parentupdate.name,
+        "User-Secret": 12345678,
+      },
+    });
     const updates = {
       name,
       email,
@@ -78,11 +85,44 @@ const updateParent = async (req, res) => {
       gender,
       Children: children,
     };
+    if (name) {
+      parentupdate.name = name;
+    }
+    if (email) {
+      parentupdate.email = email;
+    }
+    if (phone) {
+      parentupdate.phone = phone;
+    }
+    if (gender) {
+      parentupdate.gender = gender;
+    }
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      parentupdate.password = hashedPassword;
+    }
 
-    // Find and update the parent document
-    const updatedParent = await Parent.findByIdAndUpdate(id, updates, {
+    const updatedParent = await Parent.findByIdAndUpdate(id, parentupdate, {
       new: true,
+    }).populate({
+      path: "Children.child",
     });
+
+    console.log("hey" + r.data.username);
+
+    let updateChatUser = await axios.patch(
+      `https://api.chatengine.io/users/${r.data.id}/`,
+      {
+        username: updatedParent.name,
+      },
+      {
+        headers: {
+          "PRIVATE-KEY": process.env.CHAT_ENGINE_PRIVATE_KEY,
+        },
+      }
+    );
+    // Find and update the parent document
 
     // If no parent was found with the given ID, return a 404 error
     if (!updatedParent) {
@@ -167,7 +207,29 @@ const deleteParent = async (req, res) => {
     if (!deletedParent) {
       return res.status(404).json({ message: "Parent not found" });
     }
+    try {
+      r = await axios.get("https://api.chatengine.io/users/me/", {
+        headers: {
+          "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
+          "User-Name": deletedParent.name,
+          "User-Secret": 12345678,
+        },
+      });
 
+      console.log("hey" + r.data);
+      let deletedchatuser = await axios.delete(
+        `https://api.chatengine.io/users/${r.data.id}/`,
+        {
+          headers: {
+            "PRIVATE-KEY": process.env.CHAT_ENGINE_PRIVATE_KEY,
+          },
+        }
+      );
+      console.log(deletedchatuser.data);
+    } catch (e) {
+      console.log(e);
+      //  return res.status(e.response.status).json(e.response.data);
+    }
     res.status(200).json({ message: "Parent deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

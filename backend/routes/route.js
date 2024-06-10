@@ -120,7 +120,7 @@ router.post("/ParentLogin", parentLogIn);
 router.get("/Parent/:id", verifyAdmin, getParentById);
 router.get("/Parents", verifyAdmin, getAllParents);
 router.delete("/Parent/:id", verifyAdmin, deleteParent);
-router.put("/Parent/:id", verifyAdmin, updateParent);
+router.put("/Parent/:id", updateParent);
 
 // Student
 
