@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import { MdChatBubble } from "react-icons/md";
 import { useSelector } from "react-redux";
-
+import { CiCalendar } from "react-icons/ci";
 const TeacherSideBar = () => {
   const { currentUser } = useSelector((state) => state.user);
   // const sclassName = currentUser.teachSclass;
@@ -74,6 +74,17 @@ const TeacherSideBar = () => {
         >
           <MdChatBubble className="w-6 h-6 mr-2" />
           <span>Chat</span>
+        </Link>
+        <Link
+          to="/Teacher/calender"
+          className={`py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
+            location.pathname.startsWith("/Teacher/calender")
+              ? "bg-blue-500 text-white"
+              : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
+          }`}
+        >
+          <CiCalendar className="mr-3 text-xl" />
+          <span>Calender</span>
         </Link>
       </div>
       <hr className="my-4 border-t border-gray-300" />
