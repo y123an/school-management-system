@@ -11,7 +11,7 @@ import {
   RiAlertLine,
   RiFileTextLine,
 } from "react-icons/ri";
-
+import { CiCalendar } from "react-icons/ci";
 const SideBar = () => {
   const location = useLocation();
 
@@ -119,12 +119,6 @@ const SideBar = () => {
           <RiNotification2Line className="mr-3 text-xl" />
           <span className="text-md font-medium">Complains</span>
         </Link>
-      </React.Fragment>
-      <hr className="my-3 border-gray-300" />
-      <React.Fragment>
-        <span className="block py-3 px-5 text-gray-500 text-md font-medium">
-          User
-        </span>
         <Link
           to="/SuperAdmin/calender"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
@@ -133,9 +127,16 @@ const SideBar = () => {
               : "text-gray-700 hover:bg-blue-100 hover:text-blue-500"
           }`}
         >
-          <RiAccountCircleLine className="mr-3 text-xl" />
+          <CiCalendar className="mr-3 text-xl" />
           <span className="text-md font-medium">Calender</span>
         </Link>
+      </React.Fragment>
+      <hr className="my-3 border-gray-300" />
+      <React.Fragment>
+        <span className="block py-3 px-5 text-gray-500 text-md font-medium">
+          User
+        </span>
+
         <Link
           to="/SuperAdmin/profile"
           className={`block py-3 px-5 my-1 flex items-center rounded-lg transition-all duration-300 ${
