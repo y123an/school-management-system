@@ -456,9 +456,17 @@ const updateTeacher = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email, password, phone, gender } = req.body;
-
+    const teacherupdate = await Teacher.findById(id);
     // Find the teacher by ID
     const teacher = await Teacher.findById(id);
+    r = await axios.get("https://api.chatengine.io/users/me/", {
+      headers: {
+        "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
+        "User-Name": teacherupdate.name,
+        "User-Secret": 12345678,
+      },
+    });
+
     if (!teacher) {
       return res.status(404).json({ error: "Teacher not found" });
     }
@@ -476,6 +484,17 @@ const updateTeacher = async (req, res) => {
     // Save the updated teacher
     const updatedTeacher = await teacher.save();
 
+    let updateChatUser = await axios.patch(
+      `https://api.chatengine.io/users/${r.data.id}/`,
+      {
+        username: updatedTeacher.name,
+      },
+      {
+        headers: {
+          "PRIVATE-KEY": process.env.CHAT_ENGINE_PRIVATE_KEY,
+        },
+      }
+    );
     // Hide the password in the response
     updatedTeacher.password = undefined;
 

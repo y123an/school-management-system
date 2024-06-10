@@ -60,8 +60,15 @@ const updateParent = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email, phone, gender, children } = req.body;
+    const parentupdate = await Parent.findById(id); // Create the update object
 
-    // Create the update object
+    r = await axios.get("https://api.chatengine.io/users/me/", {
+      headers: {
+        "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
+        "User-Name": parentupdate.name,
+        "User-Secret": 12345678,
+      },
+    });
     const updates = {
       name,
       email,
@@ -70,10 +77,24 @@ const updateParent = async (req, res) => {
       Children: children,
     };
 
-    // Find and update the parent document
     const updatedParent = await Parent.findByIdAndUpdate(id, updates, {
       new: true,
     });
+
+    console.log("hey" + r.data.username);
+
+    let updateChatUser = await axios.patch(
+      `https://api.chatengine.io/users/${r.data.id}/`,
+      {
+        username: updatedParent.name,
+      },
+      {
+        headers: {
+          "PRIVATE-KEY": process.env.CHAT_ENGINE_PRIVATE_KEY,
+        },
+      }
+    );
+    // Find and update the parent document
 
     // If no parent was found with the given ID, return a 404 error
     if (!updatedParent) {
