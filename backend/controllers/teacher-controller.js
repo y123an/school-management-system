@@ -456,13 +456,13 @@ const updateTeacher = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, email, password, phone, gender } = req.body;
-    const teacherupdate = await Teacher.findById(id);
+
     // Find the teacher by ID
     const teacher = await Teacher.findById(id);
     r = await axios.get("https://api.chatengine.io/users/me/", {
       headers: {
         "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
-        "User-Name": teacherupdate.name,
+        "User-Name": teacher.name,
         "User-Secret": 12345678,
       },
     });
