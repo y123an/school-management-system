@@ -26,8 +26,8 @@ const Calendar = () => {
   const scheduleRef = useRef(null);
   const { currentUser, currentRole } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    axios
+  const getData = async () => {
+    await axios
       .get("http://localhost:4000/events/" + currentUser._id)
       .then((response) => {
         setData(response.data);
@@ -35,6 +35,10 @@ const Calendar = () => {
       .catch((error) => {
         console.error("There was an error fetching the events!", error);
       });
+  };
+
+  useEffect(() => {
+    getData();
   }, []);
 
   const change = (args) => {
@@ -62,6 +66,7 @@ const Calendar = () => {
           console.error("There was an error creating the event!", error);
         });
     } else if (args.requestType === "eventChange") {
+      console.log(args);
       axios
         .put(`http://localhost:4000/events/${args.data._id}`, args.data)
         .then((response) => {
@@ -76,9 +81,9 @@ const Calendar = () => {
         });
     } else if (args.requestType === "eventRemove") {
       axios
-        .delete(`http://localhost:4000/events/${args.data[0]._id}}`)
+        .delete(`http://localhost:4000/events/${args.data[0]._id}`)
         .then(() => {
-          setData(data.filter((event) => event.Id !== args.data[0].Id));
+          getData();
         })
         .catch((error) => {
           console.error("There was an error deleting the event!", error);
@@ -103,7 +108,7 @@ const Calendar = () => {
           <span className="text-lg font-semibold">Super Admin Dashboard</span>
           <AccountMenu />
         </div>
-        <div className="flex flex-1">
+        <div className="flex">
           <div>
             <div
               className={`bg-white shadow-md transition-transform ${
@@ -128,9 +133,18 @@ const Calendar = () => {
                 <ViewDirective option="Week" />
                 <ViewDirective option="WorkWeek" />
                 <ViewDirective option="Month" />
+                <ViewDirective option="Agenda" />
               </ViewsDirective>
               <Inject
-                services={[Day, Week, WorkWeek, Month, Resize, DragAndDrop]}
+                services={[
+                  Day,
+                  Week,
+                  WorkWeek,
+                  Month,
+                  Agenda,
+                  Resize,
+                  DragAndDrop,
+                ]}
               />
             </ScheduleComponent>
             <PropertyPane>

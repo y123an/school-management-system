@@ -5,6 +5,7 @@ import {
   getFailed,
   getError,
   stuffDone,
+  doneSuccess,
 } from "./adminSlice";
 
 const REACT_APP_BASE_URL = "http://localhost:4000";
@@ -42,21 +43,20 @@ export const getAllAdmins = () => async (dispatch) => {
   }
 };
 
-export const updateStudentFields =
-  (id, fields, address) => async (dispatch) => {
-    dispatch(getRequest());
+export const updateAdminFields = (id, fields, address) => async (dispatch) => {
+  dispatch(getRequest());
 
-    try {
-      const result = await axiosInstance.put(`/${address}/${id}`, fields);
-      if (result.data.message) {
-        dispatch(getFailed(result.data.message));
-      } else {
-        dispatch(stuffDone());
-      }
-    } catch (error) {
-      dispatch(getError(error));
+  try {
+    const result = await axiosInstance.put(`/${address}/${id}`, fields);
+    if (result.data.message) {
+      dispatch(getFailed(result.data.message));
+    } else {
+      dispatch(stuffDone());
     }
-  };
+  } catch (error) {
+    dispatch(getError(error));
+  }
+};
 
 export const removeStuff = (id, address) => async (dispatch) => {
   dispatch(getRequest());
@@ -67,6 +67,19 @@ export const removeStuff = (id, address) => async (dispatch) => {
       dispatch(getFailed(result.data.message));
     } else {
       dispatch(stuffDone());
+    }
+  } catch (error) {
+    dispatch(getError(error));
+  }
+};
+
+export const getAdminDetails = (id) => async (dispatch) => {
+  dispatch(getRequest());
+
+  try {
+    const result = await axiosInstance.get(`/Admin/${id}`);
+    if (result.data) {
+      dispatch(doneSuccess(result.data));
     }
   } catch (error) {
     dispatch(getError(error));

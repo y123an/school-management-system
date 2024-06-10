@@ -146,7 +146,7 @@ const ShowSubjects = () => {
             >
               {open ? <IoMdArrowBack /> : <IoIosMenu />}
             </button>
-            <span className="text-lg font-semibold">Super Admin Dashboard</span>
+            <span className="text-lg font-semibold">Admin Dashboard</span>
             <AccountMenu />
           </div>
           <div className="flex flex-col flex-1 px-6 pt-6">

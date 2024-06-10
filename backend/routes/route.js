@@ -10,6 +10,7 @@ const {
   deleteAdmin,
   updateAdmin,
 } = require("../controllers/admin-controller.js");
+const { changePassword } = require("../controllers/auth-controller.js");
 
 const {
   sclassCreate,
@@ -109,10 +110,10 @@ router.post("/SuperAdminLogin", superAdminLogIn);
 // Admin
 router.post("/AdminReg", verifySuperAdmin, adminRegister);
 router.post("/AdminLogin", adminLogIn);
-router.get("/Admin/:id", verifySuperAdmin, getAdminDetail);
+router.get("/Admin/:id", verifyAdmin, getAdminDetail);
 router.get("/Admins", verifySuperAdmin, getAdmins);
 router.delete("/Admin/:id", verifySuperAdmin, deleteAdmin);
-router.put("/Admin/:id", verifySuperAdmin, updateAdmin);
+router.put("/Admin/:id", verifyAdmin, updateAdmin);
 
 // parent
 router.post("/ParentReg", verifyAdmin, registerParent);
@@ -240,5 +241,7 @@ router.get("/overview/gender-distribution", getStudentGenderDistribution);
 router.get("/overview/exam-results", getExamResults);
 router.get("/overview/parent-involvement", getParentInvolvement);
 router.get("/overview/class-distribution", getClassDistribution);
+
+router.put("/change-password/:id", verifyTeacherOrAdmin, changePassword);
 
 module.exports = router;

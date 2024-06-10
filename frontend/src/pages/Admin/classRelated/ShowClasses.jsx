@@ -182,7 +182,7 @@ const ShowClasses = () => {
         <button className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600">
           <IoIosMenu />
         </button>
-        <span className="text-lg font-semibold">Super Admin Dashboard</span>
+        <span className="text-lg font-semibold">Admin Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex h-full">

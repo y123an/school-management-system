@@ -78,7 +78,7 @@ const TeacherHomePage = () => {
           <TeacherSideBar />
         </div>
         <div className="container mx-auto mt-4 mb-4 p-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-6 rounded-lg shadow-md flex flex-col justify-between items-center">
               <img src={Students} alt="Students" className="w-16 h-16" />
               <p className="text-lg font-semibold">Classes</p>
@@ -101,7 +101,7 @@ const TeacherHomePage = () => {
                 <span>30</span> hrs
               </p>
             </div>
-          </div>
+          </div> */}
           <div className="mt-4">
             <SeeNotice />
           </div>

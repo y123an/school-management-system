@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import ReactDOM from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllComplains } from "../../../redux/complainRelated/complainHandle";
 import { AiOutlineCheckSquare } from "react-icons/ai";
@@ -6,7 +7,10 @@ import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
+import { FaPrint } from "react-icons/fa";
 import axios from "axios";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 const SeeComplains = () => {
   const dispatch = useDispatch();
@@ -14,6 +18,7 @@ const SeeComplains = () => {
     (state) => state.complain
   );
   const { currentUser } = useSelector((state) => state.user);
+  const printRef = useRef(null);
 
   useEffect(() => {
     dispatch(getAllComplains(currentUser._id, "Complain"));
@@ -26,6 +31,48 @@ const SeeComplains = () => {
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const handlePrint = async (complain) => {
+    const printContainer = document.createElement("div");
+    printContainer.style.position = "fixed";
+    printContainer.style.top = "-10000px";
+    document.body.appendChild(printContainer);
+
+    ReactDOM.render(
+      <div className="p-6">
+        <div className="bg-white shadow rounded-lg p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-semibold">{complain.name}</span>
+              <span className="text-xs text-gray-500">
+                {new Date(complain.date).toISOString().substring(0, 10)}
+              </span>
+            </div>
+          </div>
+          <div className="mt-1 text-xs text-gray-500">
+            Role: {complain.role}
+          </div>
+          <h1 className="font-bold"> {complain.title}</h1>
+          <p className="mt-2 text-gray-800 text-sm">{complain.complaint}</p>
+        </div>
+      </div>,
+      printContainer
+    );
+
+    await html2canvas(printContainer, { useCORS: true })
+      .then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const doc = new jsPDF();
+        doc.addImage(imgData, "PNG", 10, 10);
+        doc.save("complain.pdf");
+      })
+      .catch((err) => {
+        console.error("Error generating PDF: ", err);
+      })
+      .finally(() => {
+        document.body.removeChild(printContainer);
+      });
   };
 
   return (
@@ -80,33 +127,41 @@ const SeeComplains = () => {
                                   {dateString}
                                 </span>
                               </div>
-                              <button
-                                onClick={async () => {
-                                  await axios
-                                    .delete(
-                                      `http://localhost:4000/Complain/${complain._id}`,
-                                      {
-                                        headers: {
-                                          "Content-Type": "application/json",
-                                          Authorization: `Bearer ${localStorage.getItem(
-                                            "token"
-                                          )}`,
-                                        },
-                                      }
-                                    )
-                                    .then((res) => {
-                                      dispatch(
-                                        getAllComplains(
-                                          currentUser._id,
-                                          "Complain"
-                                        )
-                                      );
-                                    });
-                                }}
-                                className="text-green-600"
-                              >
-                                <MdDelete />
-                              </button>
+                              <div className="flex space-x-2">
+                                <button
+                                  onClick={() => handlePrint(complain)}
+                                  className="text-blue-600"
+                                >
+                                  <FaPrint />
+                                </button>
+                                <button
+                                  onClick={async () => {
+                                    await axios
+                                      .delete(
+                                        `http://localhost:4000/Complain/${complain._id}`,
+                                        {
+                                          headers: {
+                                            "Content-Type": "application/json",
+                                            Authorization: `Bearer ${localStorage.getItem(
+                                              "token"
+                                            )}`,
+                                          },
+                                        }
+                                      )
+                                      .then((res) => {
+                                        dispatch(
+                                          getAllComplains(
+                                            currentUser._id,
+                                            "Complain"
+                                          )
+                                        );
+                                      });
+                                  }}
+                                  className="text-green-600"
+                                >
+                                  <MdDelete />
+                                </button>
+                              </div>
                             </div>
                             <div className="mt-1 text-xs text-gray-500">
                               Role: {complain.role}
@@ -125,6 +180,7 @@ const SeeComplains = () => {
           </div>
         </div>
       </div>
+      <div ref={printRef} style={{ display: "none" }}></div>
     </>
   );
 };

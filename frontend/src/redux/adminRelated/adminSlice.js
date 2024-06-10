@@ -42,6 +42,13 @@ const adminSlice = createSlice({
       state.error = null;
       state.statestatus = "idle";
     },
+    doneSuccess: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      state.response = null;
+      state.status = "added";
+      localStorage.setItem("user", JSON.stringify(action.payload));
+    },
   },
 });
 
@@ -51,6 +58,7 @@ export const {
   getFailed,
   getError,
   underAdminControl,
+  doneSuccess,
   stuffDone,
 } = adminSlice.actions;
 

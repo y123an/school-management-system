@@ -59,8 +59,11 @@ const sendEmail = require("../middleware/nodemailer.js");
 
 const adminRegister = async (req, res) => {
   try {
+    const hashedPass = await bcrypt.hash(req.body.password, salt);
+
     const admin = new Admin({
       ...req.body,
+      password: hashedPass,
     });
 
     const existingAdminByEmail = await Admin.findOne({ email: req.body.email });
@@ -169,10 +172,6 @@ const getAdmins = async (req, res) => {
 
 const updateAdmin = async (req, res) => {
   try {
-    if (req.body.password) {
-      const salt = await bcrypt.genSalt(10);
-      req.body.password = await bcrypt.hash(req.body.password, salt);
-    }
     let result = await Admin.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },

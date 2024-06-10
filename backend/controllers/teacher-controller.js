@@ -66,6 +66,7 @@ const teacherRegister = async (req, res) => {
       },
       { headers: { "Private-Key": process.env.CHAT_ENGINE_PRIVATE_KEY } }
     );
+
     const recipient = req.body.email;
     const subject = "Welcome to parent and teacher help desk";
     const text = "Welcome to parent and teacher help desk";

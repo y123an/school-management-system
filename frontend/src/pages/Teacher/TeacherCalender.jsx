@@ -26,8 +26,8 @@ const TeacherCalendar = () => {
   const scheduleRef = useRef(null);
   const { currentUser, currentRole } = useSelector((state) => state.user);
 
-  useEffect(() => {
-    axios
+  const getData = async () => {
+    await axios
       .get("http://localhost:4000/events/" + currentUser._id)
       .then((response) => {
         setData(response.data);
@@ -35,6 +35,9 @@ const TeacherCalendar = () => {
       .catch((error) => {
         console.error("There was an error fetching the events!", error);
       });
+  };
+  useEffect(() => {
+    getData();
   }, []);
 
   const change = (args) => {
@@ -78,7 +81,7 @@ const TeacherCalendar = () => {
       axios
         .delete(`http://localhost:4000/events/${args.data[0].Id}`)
         .then(() => {
-          setData(data.filter((event) => event.Id !== args.data[0].Id));
+          getData();
         })
         .catch((error) => {
           console.error("There was an error deleting the event!", error);
