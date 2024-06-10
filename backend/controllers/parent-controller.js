@@ -59,7 +59,7 @@ const registerParent = async (req, res) => {
 const updateParent = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, email, phone, gender, children } = req.body;
+    const { name, email, phone, gender, children, password } = req.body;
     const parentupdate = await Parent.findById(id); // Create the update object
 
     r = await axios.get("https://api.chatengine.io/users/me/", {
@@ -76,8 +76,25 @@ const updateParent = async (req, res) => {
       gender,
       Children: children,
     };
+    if (name) {
+      parentupdate.name = name;
+    }
+    if (email) {
+      parentupdate.email = email;
+    }
+    if (phone) {
+      parentupdate.phone = phone;
+    }
+    if (gender) {
+      parentupdate.gender = gender;
+    }
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      parentupdate.password = hashedPassword;
+    }
 
-    const updatedParent = await Parent.findByIdAndUpdate(id, updates, {
+    const updatedParent = await Parent.findByIdAndUpdate(id, parentupdate, {
       new: true,
     });
 
