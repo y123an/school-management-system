@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
 const axios = require("axios");
 const dotenv = require("dotenv");
+const sendEmail = require("../middleware/nodemailer");
 
 dotenv.config();
 // Register a new parent
@@ -48,6 +49,14 @@ const registerParent = async (req, res) => {
       },
       { headers: { "Private-Key": process.env.CHAT_ENGINE_PRIVATE_KEY } }
     );
+
+    const recipient = req.body.email;
+    const subject = "Welcome to parent and teacher help desk";
+    const text = "Welcome to parent and teacher help desk";
+    const html = `<b>Welcome to parent and teacher help desk</b>
+      <p>you are assigned as a parent on the parent and help teacher desk system your password is ${req.body.password}</p>
+      `;
+    sendEmail(recipient, subject, text, html);
 
     res.status(201).json(newParent);
   } catch (error) {

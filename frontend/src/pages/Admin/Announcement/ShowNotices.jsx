@@ -10,18 +10,19 @@ import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import { FaSpinner } from "react-icons/fa";
+import { CSVLink } from "react-csv";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const ShowNotices = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { noticesList, loading, error, response } = useSelector(
-    (state) => state.notice
-  );
+  const { noticesList, loading, error } = useSelector((state) => state.notice);
   const { currentUser, currentRole } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getAllNotices(currentUser._id, "Notice", currentRole));
-  }, [currentUser._id, dispatch]);
+  }, [currentUser._id, dispatch, currentRole]);
 
   if (error) {
     console.log(error);
@@ -30,7 +31,7 @@ const ShowNotices = () => {
   const [deleteId, setDeleteId] = useState(null);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
-  const deleteHandler = (deleteID, address) => {
+  const deleteHandler = (deleteID) => {
     setDeleteId(deleteID);
     setShowConfirmationModal(true);
   };
@@ -56,33 +57,31 @@ const ShowNotices = () => {
   ];
 
   const noticeRows =
-    noticesList &&
-    noticesList.length > 0 &&
-    noticesList.map((notice) => {
-      const date = new Date(notice.date);
-      const dateString =
-        date.toString() !== "Invalid Date"
-          ? date.toISOString().substring(0, 10)
-          : "Invalid Date";
-      return {
-        title: notice.title,
-        details: notice.details,
-        recipient: notice.recipient,
-        date: dateString,
-        id: notice._id,
-      };
-    });
+    noticesList && noticesList.length > 0
+      ? noticesList.map((notice) => {
+          const date = new Date(notice.date);
+          const dateString =
+            date.toString() !== "Invalid Date"
+              ? date.toISOString().substring(0, 10)
+              : "Invalid Date";
+          return {
+            title: notice.title,
+            details: notice.details,
+            recipient: notice.recipient,
+            date: dateString,
+            id: notice._id,
+          };
+        })
+      : [];
 
-  const NoticeButtonHaver = ({ row }) => {
-    return (
-      <button
-        onClick={() => deleteHandler(row.id, "Notice")}
-        className="text-red-500 hover:text-red-700"
-      >
-        <FiTrash2 />
-      </button>
-    );
-  };
+  const NoticeButtonHaver = ({ row }) => (
+    <button
+      onClick={() => deleteHandler(row.id)}
+      className="text-red-500 hover:text-red-700"
+    >
+      <FiTrash2 />
+    </button>
+  );
 
   const actions = [
     {
@@ -93,7 +92,7 @@ const ShowNotices = () => {
     {
       icon: <FiTrash2 className="text-red-500" />,
       name: "Delete All Notices",
-      action: () => deleteHandler(currentUser._id, "Notices"),
+      action: () => deleteHandler(currentUser._id),
     },
   ];
 
@@ -102,10 +101,33 @@ const ShowNotices = () => {
     setOpen(!open);
   };
 
+  const downloadPdf = () => {
+    const doc = new jsPDF();
+    const tableColumn = noticeColumns.map((col) => col.label);
+    const tableRows = noticeRows.map((row) => [
+      row.title,
+      row.details,
+      row.recipient,
+      row.date,
+    ]);
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [0, 57, 107] },
+      alternateRowStyles: { fillColor: [240, 240, 240] },
+    });
+
+    doc.text("Notice List", 14, 15);
+    doc.save("notice_list.pdf");
+  };
+
   return (
     <>
       <div className="h-screen font-poppins">
-        <div className="flex items-center  justify-between h-16 px-6 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
           <button
             onClick={toggleDrawer}
             className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
@@ -113,50 +135,63 @@ const ShowNotices = () => {
             {open ? <IoMdArrowBack /> : <IoIosMenu />}
           </button>
           <span className="text-lg font-semibold">Super Admin Dashboard</span>
-
           <AccountMenu />
         </div>
         <div className="flex h-screen">
           <div className="bg-white border-b border-gray-200 w-64">
             <SideBar />
           </div>
-          <>
+          <div className="flex-1 overflow-y-auto p-4">
             {loading ? (
               <div className="flex justify-center items-center h-full">
                 <FaSpinner className="animate-spin text-blue-500" size={32} />
               </div>
             ) : (
               <>
-                {response ? (
-                  <div className="flex items-end flex-col w-full  mt-4">
-                    <button
-                      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-                      onClick={() => navigate("/Admin/addnotice")}
-                    >
-                      Add Notice
-                    </button>
+                <div className="flex justify-end mb-4 gap-2">
+                  <button
+                    className="bg-green-500 text-white px-4 py-2 rounded shadow-md hover:bg-green-600 transition duration-300"
+                    onClick={() => navigate("/Admin/addnotice")}
+                  >
+                    Add Notice
+                  </button>
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                    onClick={downloadPdf}
+                  >
+                    Download PDF
+                  </button>
+                  <CSVLink
+                    data={noticeRows}
+                    headers={noticeColumns.map((col) => ({
+                      label: col.label,
+                      key: col.id,
+                    }))}
+                    filename="notice_list.csv"
+                    className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                  >
+                    Download CSV
+                  </CSVLink>
+                </div>
+
+                <div className="w-full overflow-hidden">
+                  {Array.isArray(noticesList) && noticesList.length > 0 && (
+                    <TableTemplate
+                      buttonHaver={NoticeButtonHaver}
+                      columns={noticeColumns}
+                      rows={noticeRows}
+                    />
+                  )}
+                  <div className="fixed bottom-4 right-4">
+                    <SpeedDialTemplate actions={actions} />
                   </div>
-                ) : (
-                  <div className="w-full overflow-hidden p-4">
-                    {Array.isArray(noticesList) && noticesList.length > 0 && (
-                      <TableTemplate
-                        buttonHaver={NoticeButtonHaver}
-                        columns={noticeColumns}
-                        rows={noticeRows}
-                      />
-                    )}
-                    <div className="fixed bottom-4 right-4">
-                      <SpeedDialTemplate actions={actions} />
-                    </div>
-                  </div>
-                )}
+                </div>
               </>
             )}
-          </>
+          </div>
         </div>
       </div>
 
-      {/* Confirmation Modal */}
       {showConfirmationModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
           <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -166,14 +201,12 @@ const ShowNotices = () => {
             >
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
-
             <span
               className="hidden sm:inline-block sm:align-middle sm:h-screen"
               aria-hidden="true"
             >
               &#8203;
             </span>
-
             <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">

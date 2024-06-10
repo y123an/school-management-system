@@ -63,10 +63,10 @@ const SuperAdminHomePage = () => {
         <span className="text-lg font-semibold">Super Admin Dashboard</span>
         <AccountMenu />
       </div>
-      <div className="flex h-full">
-        <div>
+      <div className="flex">
+        <div className="">
           <div
-            className={`bg-white shadow-md transition-transform ${
+            className={`bg-white shadow-md transition-transform sticky top-0 ${
               open ? "w-64" : "w-0"
             } overflow-hidden`}
           >

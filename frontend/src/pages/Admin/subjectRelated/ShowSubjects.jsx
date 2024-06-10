@@ -4,12 +4,20 @@ import { useNavigate } from "react-router-dom";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
-import { FaPlus, FaTrash, FaSpinner } from "react-icons/fa";
+import {
+  FaPlus,
+  FaTrash,
+  FaSpinner,
+  FaFilePdf,
+  FaFileCsv,
+} from "react-icons/fa";
 import TableTemplate from "../../../components/TableTemplate";
 import SpeedDialTemplate from "../../../components/SpeedDialTemplate";
 import Popup from "../../../components/Popup";
 import { getSubjectList } from "../../../redux/sclassRelated/sclassHandle";
 import { deleteUser } from "../../../redux/userRelated/userHandle";
+import { CSVLink } from "react-csv";
+import jsPDF from "jspdf";
 
 const ShowSubjects = () => {
   const navigate = useNavigate();
@@ -100,10 +108,28 @@ const ShowSubjects = () => {
       action: () => deleteHandler(currentUser._id, "Subjects"),
     },
   ];
+  const headers = ["Subject Name", "Sessions", "Subject Code", "Class", "id"];
+  const csvData = [headers, ...subjectRows.map((row) => Object.values(row))];
 
   const [open, setOpen] = useState(false);
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Subject Data", 10, 10);
+    let yPos = 20;
+    doc.autoTable({
+      head: [["Subject Name", "Sessions", "Class"]],
+      body: subjectsList.map((subject) => [
+        subject.subName,
+        subject.sessions,
+        `${subject.sclassName.gradelevel}${subject.sclassName.section}`,
+      ]),
+      startY: yPos,
+    });
+    doc.save("subjects_data.pdf");
   };
 
   return (
@@ -130,27 +156,37 @@ const ShowSubjects = () => {
               </div>
             ) : (
               <>
-                {response ? (
-                  <div className="flex justify-end mt-4">
-                    <button
-                      onClick={() => navigate("/Admin/subjects/chooseclass")}
-                      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-                    >
-                      Add Subjects
-                    </button>
-                  </div>
-                ) : (
-                  <div className="w-full overflow-hidden">
-                    {Array.isArray(subjectsList) && subjectsList.length > 0 && (
-                      <TableTemplate
-                        buttonHaver={SubjectsButtonHaver}
-                        columns={subjectColumns}
-                        rows={subjectRows}
-                      />
-                    )}
-                    <SpeedDialTemplate actions={actions} />
-                  </div>
-                )}
+                <div className="flex justify-end mb-4 gap-2">
+                  <button
+                    onClick={() => navigate("/Admin/subjects/chooseclass")}
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+                  >
+                    Add Subjects
+                  </button>
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                    onClick={downloadPDF}
+                  >
+                    Download PDF
+                  </button>
+                  <CSVLink
+                    data={csvData}
+                    filename="class_list.csv"
+                    className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                  >
+                    Download CSV
+                  </CSVLink>
+                </div>
+                <div className="w-full overflow-hidden">
+                  {Array.isArray(subjectsList) && subjectsList.length > 0 && (
+                    <TableTemplate
+                      buttonHaver={SubjectsButtonHaver}
+                      columns={subjectColumns}
+                      rows={subjectRows}
+                    />
+                  )}
+                  <SpeedDialTemplate actions={actions} />
+                </div>
               </>
             )}
             <Popup
@@ -163,7 +199,7 @@ const ShowSubjects = () => {
       </div>
       {showConfirmModal && (
         <div className="fixed inset-0 font-poppins flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg">
+          <div className="bg-white p-6 rounded shadow-lg ">
             <h2 className="text-lg font-semibold mb-4">Confirm Deletion</h2>
             <p>Are you sure you want to delete this subject?</p>
             <div className="flex justify-end mt-4">

@@ -88,20 +88,18 @@ const ShowClasses = () => {
 
   const generatePDF = () => {
     // Create a new PDF Document
-    const pdf = new jsPDF();
+    const doc = new jsPDF();
 
     // Add content to the PDF
-    pdf.text("Class Data", 10, 10);
-    sclassesList.forEach((sclass, index) => {
-      pdf.text(
-        `${index + 1}. ${sclass.gradelevel + sclass.section}`,
-        10,
-        20 + index * 10
-      );
+    doc.text("Class Data", 10, 10);
+    doc.autoTable({
+      head: [["Class Name"]],
+      body: sclassesList.map((sclass) => [sclass.gradelevel + sclass.section]),
+      startY: 20,
     });
 
     // Save the PDF as a blob
-    const blob = pdf.output("blob");
+    const blob = doc.output("blob");
 
     // Create a download link and trigger the download
     const url = window.URL.createObjectURL(blob);
@@ -198,32 +196,29 @@ const ShowClasses = () => {
             </div>
           ) : (
             <div className="grid ">
-              <div className="flex justify-end mt-4">
+              <div className="flex justify-end mb-4 gap-2">
                 <button
                   onClick={() => navigate("/SuperAdmin/addclass")}
                   className="bg-green-500 text-white py-1 px-4 rounded"
                 >
                   Add Class
                 </button>
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                  onClick={generatePDF}
+                >
+                  Download PDF
+                </button>
+                <CSVLink
+                  data={csvData}
+                  filename="class_list.csv"
+                  className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                >
+                  Download CSV
+                </CSVLink>
               </div>
               <>
                 <div className="">
-                  <div className="flex mt-4">
-                    {/* Add download buttons with icons */}
-                    <CSVLink
-                      data={csvData}
-                      filename={"class_data.csv"}
-                      className="btn text-green-500 hover:text-gray-500 cursor-pointer"
-                    >
-                      <FaFileCsv className="icon" size={30} />
-                    </CSVLink>
-                    <button
-                      onClick={generatePDF}
-                      className="btn text-green-500 hover:text-gray-500 cursor-pointer"
-                    >
-                      <FaFilePdf className="icon" size={30} />
-                    </button>
-                  </div>
                   {Array.isArray(sclassesList) && sclassesList.length > 0 && (
                     <DataTable
                       columns={columns}

@@ -324,7 +324,7 @@ const App = () => {
           path="/Admin/teachers/choosesubject/:id"
           element={<ChooseSubject situation="Norm" />}
         />
-        <Route path="/Admin/eacher/update/:id" element={<UpdateTeacher />} />
+        <Route path="/Admin/teacher/update/:id" element={<UpdateTeacher />} />
 
         {/* calender */}
         <Route path="/Admin/calender" element={<Calendar />} />

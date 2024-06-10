@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getAllStudents } from "../../../redux/studentRelated/studentHandle";
@@ -9,8 +9,11 @@ import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import { AiOutlineUserAdd, AiOutlineDelete } from "react-icons/ai";
-import { MdDelete, MdOutlineViewList } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { FaSpinner } from "react-icons/fa";
+import { CSVLink } from "react-csv";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 const ShowStudents = () => {
   const navigate = useNavigate();
@@ -53,18 +56,18 @@ const ShowStudents = () => {
   ];
 
   const studentRows =
-    studentsList &&
-    studentsList.length > 0 &&
-    studentsList.map((student) => {
-      return {
-        firstName: student.firstName,
-        lastName: student.lastName,
-        gender: student.gender,
-        studentID: student.studentID,
-        className: student.className,
-        id: student._id,
-      };
-    });
+    studentsList && studentsList.length > 0
+      ? studentsList.map((student) => {
+          return {
+            firstName: student.firstName,
+            lastName: student.lastName,
+            gender: student.gender,
+            studentID: student.studentID,
+            className: student.className,
+            id: student._id,
+          };
+        })
+      : [];
 
   const StudentButtonHaver = ({ row }) => {
     return (
@@ -115,6 +118,27 @@ const ShowStudents = () => {
     setOpen(!open);
   };
 
+  const downloadPdf = () => {
+    const doc = new jsPDF();
+    const tableColumn = studentColumns.map((col) => col.label);
+    const tableRows = studentRows.map((row) => [
+      row.firstName,
+      row.lastName,
+      row.gender,
+      row.studentID,
+      row.className,
+    ]);
+
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+    });
+
+    doc.text("Student List", 14, 15);
+    doc.save("student_list.pdf");
+  };
+
   return (
     <div className="h-screen font-poppins bg-gray-100">
       <div className="flex items-center justify-between h-16 px-6 bg-white shadow-md">
@@ -144,13 +168,30 @@ const ShowStudents = () => {
             </div>
           ) : (
             <>
-              <div className="flex justify-end mb-4">
+              <div className="flex justify-end mb-4 gap-2">
                 <button
                   className="bg-green-500 text-white px-4 py-2 rounded shadow-md hover:bg-green-600 transition duration-300"
                   onClick={() => navigate("/SuperAdmin/addstudents")}
                 >
                   Add Students
                 </button>
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                  onClick={downloadPdf}
+                >
+                  Download PDF
+                </button>
+                <CSVLink
+                  data={studentRows}
+                  headers={studentColumns.map((col) => ({
+                    label: col.label,
+                    key: col.id,
+                  }))}
+                  filename="student_list.csv"
+                  className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                >
+                  Download CSV
+                </CSVLink>
               </div>
 
               <div className="w-full overflow-hidden">

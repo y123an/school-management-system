@@ -14,6 +14,12 @@ import AccountMenu from "../../components/AccountMenu";
 import SideBar from "./SideBar";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import SeeNotice from "../../components/SeeNotice";
+import { getAllParents } from "../../redux/parentRelated/parentHandler";
+import ClassDistributionChart from "../../components/Charts/ClassDistributionChart";
+import PerformanceOverTimeChart from "../../components/Charts/PerformanceOverTimeChart";
+import ParentInvolvementChart from "../../components/Charts/ParentInvolvementChart";
+import StudentGenderDistributionChart from "../../components/Charts/StudentGenderDistributionChart";
+import RatioChart from "../../components/Charts/RatioChart";
 
 const AdminHomePage = () => {
   const dispatch = useDispatch();
@@ -21,7 +27,7 @@ const AdminHomePage = () => {
   const { sclassesList } = useSelector((state) => state.sclass);
   const { teachersList } = useSelector((state) => state.teacher);
   const { subjectsList } = useSelector((state) => state.sclass);
-
+  const { parentsList } = useSelector((state) => state.parent);
   const { currentUser } = useSelector((state) => state.user);
 
   const adminID = currentUser._id;
@@ -31,12 +37,14 @@ const AdminHomePage = () => {
     dispatch(getAllSclasses(adminID, "Sclass"));
     dispatch(getAllTeachers(adminID));
     dispatch(getSubjectList(adminID, "AllSubjects"));
+    dispatch(getAllParents(adminID));
   }, [adminID, dispatch]);
 
   const numberOfStudents = studentsList && studentsList.length;
   const numberOfClasses = sclassesList && sclassesList.length;
   const numberOfTeachers = teachersList && teachersList.length;
   const numberOfSubjects = subjectsList && subjectsList.length;
+  const numberOfParents = parentsList && parentsList.length;
 
   const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
@@ -52,13 +60,13 @@ const AdminHomePage = () => {
         >
           {open ? <IoMdArrowBack /> : <IoIosMenu />}
         </button>
-        <span className="text-lg font-semibold">Admin Dashboard</span>
+        <span className="text-lg font-semibold">Super Admin Dashboard</span>
         <AccountMenu />
       </div>
-      <div className="flex h-full">
-        <div>
+      <div className="flex">
+        <div className="">
           <div
-            className={`bg-white shadow-md transition-transform ${
+            className={`bg-white shadow-md transition-transform sticky top-0 ${
               open ? "w-64" : "w-0"
             } overflow-hidden`}
           >
@@ -107,18 +115,21 @@ const AdminHomePage = () => {
               <div className="p-6 flex flex-col justify-between items-center bg-gradient-to-r from-teal-400 to-cyan-500 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
                 <img src={Fees} alt="Fees" className="w-16 h-16" />
                 <p className="text-xl font-semibold mt-4 text-white">
-                  Total Subjects
+                  Total Parents
                 </p>
                 <CountUp
                   start={0}
-                  end={numberOfSubjects}
+                  end={numberOfParents}
                   duration={2.5}
                   className="text-white text-4xl mt-2"
                 />
               </div>
             </div>
-            <div className="mt-8">
-              <SeeNotice />
+            <div className="grid grid-cols-2 gap-10 p-10">
+              <StudentGenderDistributionChart />
+              <ClassDistributionChart />
+              <PerformanceOverTimeChart />
+              <RatioChart />
             </div>
           </div>
         </div>

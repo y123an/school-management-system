@@ -18,7 +18,7 @@ const SideBar = () => {
   const isActive = (path) => location.pathname.startsWith(path);
 
   return (
-    <div className="h-screen w-64 font-poppins fixed top-0 bg-white shadow-lg rounded-lg p-4">
+    <div className="h-screen w-64 font-poppins bg-white shadow-lg rounded-lg p-4 sticky top-12">
       <React.Fragment>
         <Link
           to="/SuperAdmin/dashboard"

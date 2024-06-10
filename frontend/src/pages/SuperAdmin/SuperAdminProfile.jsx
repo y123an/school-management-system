@@ -24,7 +24,7 @@ const SuperAdminProfile = () => {
         <span className="text-lg font-semibold">Super Admin Dashboard</span>
         <AccountMenu />
       </div>
-      <div className="flex flex-col lg:flex-row h-full">
+      <div className="flex flex-col lg:flex-row">
         <div className="bg-white border-b border-gray-200 w-64 lg:border-r lg:border-b-0">
           <SideBar />
         </div>

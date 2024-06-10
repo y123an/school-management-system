@@ -8,10 +8,13 @@ import Popup from "../../../components/Popup";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
 import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
-import { FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaFileCsv, FaFilePdf } from "react-icons/fa";
+import { CSVLink } from "react-csv";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 const ShowTeachers = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -179,6 +182,36 @@ const ShowTeachers = () => {
     },
   ];
 
+  const headers = [
+    "Name",
+    "Email",
+    "Phone",
+    "Gender",
+    "Role",
+    "TeachSclassID",
+    "ID",
+  ];
+  const csvData = [headers, ...rows.map((row) => Object.values(row))];
+
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+    doc.text("Teachers Data", 10, 10);
+    doc.autoTable({
+      head: [headers],
+      body: rows.map((row) => [
+        row.name,
+        row.email,
+        row.phone,
+        row.gender,
+        row.role,
+        row.teachSclassID,
+        row.id,
+      ]),
+      startY: 20,
+    });
+    doc.save("teachers_data.pdf");
+  };
+
   return (
     <>
       <div className="h-screen font-poppins ">
@@ -194,19 +227,38 @@ const ShowTeachers = () => {
           <AccountMenu />
         </div>
         <div className="flex h-screen">
-          <div className="bg-white border-b border-gray-200 w-64">
-            <SideBar />
+          <div className="">
+            <div
+              className={`bg-white shadow-md transition-transform ${
+                open ? "w-64" : "w-0"
+              } overflow-hidden`}
+            >
+              <SideBar />
+            </div>
           </div>
           <div className="w-full overflow-hidden p-4">
-            <div className="flex justify-end mt-4">
+            <div className="flex justify-end mb-4 gap-2">
               <button
                 onClick={() => navigate("/Admin/teachers/addteacher")}
                 className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
               >
                 Add Teacher
               </button>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                onClick={downloadPDF}
+              >
+                Download PDF
+              </button>
+              <CSVLink
+                data={csvData}
+                filename="teacher_list.csv"
+                className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+              >
+                Download CSV
+              </CSVLink>
             </div>
-            <div className="overflow-x-auto">
+            <div className="">
               {/* Render Table */}
               <ActionsTable />
             </div>

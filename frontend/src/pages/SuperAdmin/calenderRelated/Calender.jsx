@@ -104,7 +104,7 @@ const Calendar = () => {
           <span className="text-lg font-semibold">Super Admin Dashboard</span>
           <AccountMenu />
         </div>
-        <div className="flex flex-1">
+        <div className="flex">
           <div>
             <div
               className={`bg-white shadow-md transition-transform ${

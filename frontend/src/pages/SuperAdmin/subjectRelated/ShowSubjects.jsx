@@ -120,13 +120,14 @@ const ShowSubjects = () => {
     const doc = new jsPDF();
     doc.text("Subject Data", 10, 10);
     let yPos = 20;
-    subjectsList.forEach((subject) => {
-      doc.text(
-        `${subject.subName} - ${subject.sessions} - ${subject.sclassName.gradelevel}${subject.sclassName.section}`,
-        10,
-        yPos
-      );
-      yPos += 10;
+    doc.autoTable({
+      head: [["Subject Name", "Sessions", "Class"]],
+      body: subjectsList.map((subject) => [
+        subject.subName,
+        subject.sessions,
+        `${subject.sclassName.gradelevel}${subject.sclassName.section}`,
+      ]),
+      startY: yPos,
     });
     doc.save("subjects_data.pdf");
   };
@@ -155,48 +156,37 @@ const ShowSubjects = () => {
               </div>
             ) : (
               <>
-                {response ? (
-                  <div className="flex justify-end mt-4">
-                    <button
-                      onClick={() =>
-                        navigate("/SuperAdmin/subjects/chooseclass")
-                      }
-                      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-                    >
-                      Add Subjects
-                    </button>
-                  </div>
-                ) : (
-                  <div className="w-full overflow-hidden">
-                    {subjectsList && subjectsList.length > 0 && (
-                      <div className="flex justify-between items-center mb-4">
-                        <div className="flex">
-                          <CSVLink
-                            data={csvData}
-                            filename={"class_data.csv"}
-                            className="btn text-green-500 hover:text-gray-500 cursor-pointer"
-                          >
-                            <FaFileCsv className="icon" size={30} />
-                          </CSVLink>
-                          <button
-                            className="btn text-green-500 hover:text-gray-500 cursor-pointer"
-                            onClick={downloadPDF}
-                          >
-                            <FaFilePdf className="icon" size={30} />
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                    {Array.isArray(subjectsList) && subjectsList.length > 0 && (
-                      <TableTemplate
-                        buttonHaver={SubjectsButtonHaver}
-                        columns={subjectColumns}
-                        rows={subjectRows}
-                      />
-                    )}
-                    <SpeedDialTemplate actions={actions} />
-                  </div>
-                )}
+                <div className="flex justify-end mb-4 gap-2">
+                  <button
+                    onClick={() => navigate("/SuperAdmin/subjects/chooseclass")}
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+                  >
+                    Add Subjects
+                  </button>
+                  <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                    onClick={downloadPDF}
+                  >
+                    Download PDF
+                  </button>
+                  <CSVLink
+                    data={csvData}
+                    filename="class_list.csv"
+                    className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                  >
+                    Download CSV
+                  </CSVLink>
+                </div>
+                <div className="w-full overflow-hidden">
+                  {Array.isArray(subjectsList) && subjectsList.length > 0 && (
+                    <TableTemplate
+                      buttonHaver={SubjectsButtonHaver}
+                      columns={subjectColumns}
+                      rows={subjectRows}
+                    />
+                  )}
+                  <SpeedDialTemplate actions={actions} />
+                </div>
               </>
             )}
             <Popup

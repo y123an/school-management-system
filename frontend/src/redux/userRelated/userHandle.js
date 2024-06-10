@@ -58,7 +58,7 @@ export const registerUser = (fields, role) => async (dispatch) => {
       headers: { "Content-Type": "application/json" },
     });
     if (result.data._id) {
-      dispatch(authSuccess(result.data));
+      dispatch(stuffAdded(result.data));
     } else if (result.data.school) {
       dispatch(stuffAdded());
     } else {

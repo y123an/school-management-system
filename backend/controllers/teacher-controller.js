@@ -5,6 +5,7 @@ const Sclass = require("../models/sclassSchema.js");
 const jwt = require("jsonwebtoken");
 const axios = require("axios");
 const dotenv = require("dotenv");
+const sendEmail = require("../middleware/nodemailer.js");
 
 dotenv.config();
 const teacherRegister = async (req, res) => {
@@ -67,12 +68,13 @@ const teacherRegister = async (req, res) => {
     );
     console.log(r.data);
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        return console.log(error);
-      }
-      console.log("Email sent: " + info.response);
-    });
+    const recipient = req.body.email;
+    const subject = "Welcome to parent and teacher help desk";
+    const text = "Welcome to parent and teacher help desk";
+    const html = `<b>Welcome to parent and teacher help desk</b>
+    <p>you are assigned as teacher on the parent and help teacher desk system your password is ${req.body.password}</p>
+    `;
+    sendEmail(recipient, subject, text, html);
 
     // Update the Subject and Sclass collections
     for (const cls of classes) {
@@ -119,7 +121,7 @@ const teacherLogIn = async (req, res) => {
             headers: {
               "Project-ID": process.env.CHAT_ENGINE_PROJECT_ID,
               "User-Name": teacher.name,
-              "User-Secret": req.body.password,
+              "User-Secret": "12345678",
             },
           });
 
@@ -132,7 +134,6 @@ const teacherLogIn = async (req, res) => {
           email: teacher.email,
           role: "Teacher",
           chat: r.data,
-          username: teacher.username,
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {

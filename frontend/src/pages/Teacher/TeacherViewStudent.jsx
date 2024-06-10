@@ -91,20 +91,24 @@ const TeacherViewStudent = () => {
           ) : (
             <>
               <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-2xl font-bold mb-4">
+                <h2 className="text-3xl font-bold mb-4 text-purple-600">
                   {userDetails.firstName} {userDetails.lastName}
                 </h2>
-                <p className="text-gray-700">
-                  <span className="font-semibold">StudentID:</span>{" "}
-                  {userDetails.studentID}
-                </p>
-                <p className="text-gray-700">
-                  <span className="font-semibold">Class:</span>{" "}
-                  {sclassName.gradelevel} {sclassName.section}
-                </p>
+                <div className="mb-6">
+                  <p className="text-gray-700 mb-2">
+                    <span className="font-semibold">Student ID:</span>{" "}
+                    {userDetails.studentID}
+                  </p>
+                  <p className="text-gray-700 mb-2">
+                    <span className="font-semibold">Class:</span>{" "}
+                    {sclassName.gradelevel} {sclassName.section}
+                  </p>
+                </div>
                 {currentRole === "HomeRoomTeacher" && (
                   <div>
-                    <h3 className="text-xl font-semibold mt-6">Attendance</h3>
+                    <h3 className="text-2xl font-semibold mt-6 text-green-600">
+                      Attendance
+                    </h3>
                     {subjectAttendance &&
                     Array.isArray(subjectAttendance) &&
                     subjectAttendance.length > 0 ? (
@@ -134,15 +138,11 @@ const TeacherViewStudent = () => {
                             <h4 className="font-semibold">
                               Attendance Details
                             </h4>
-                            <table className="min-w-full bg-white">
+                            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                               <thead>
-                                <tr>
-                                  <th className="py-2 px-4 bg-gray-200">
-                                    Date
-                                  </th>
-                                  <th className="py-2 px-4 bg-gray-200">
-                                    Status
-                                  </th>
+                                <tr className="bg-gray-200 text-gray-700">
+                                  <th className="py-2 px-4 border">Date</th>
+                                  <th className="py-2 px-4 border">Status</th>
                                 </tr>
                               </thead>
                               <tbody>
@@ -186,26 +186,31 @@ const TeacherViewStudent = () => {
                           `/Teacher/class/student/attendance/${studentID}`
                         )
                       }
-                      className="bg-gradient-to-r from-green-500 to-green-700 text-white p-2 rounded-sm"
+                      className="bg-gradient-to-r from-green-500 to-green-700 text-white p-2 rounded-sm mt-4"
                     >
                       Add Attendance
                     </PurpleButton>
                   </div>
                 )}
 
-                <h3 className="text-xl font-semibold mt-6">Subject Marks</h3>
+                <h3 className="text-2xl font-semibold mt-6 text-blue-600">
+                  Subject Marks
+                </h3>
                 {subjectMarks &&
                 Array.isArray(subjectMarks) &&
                 subjectMarks.length > 0 ? (
                   subjectMarks.map((result, index) => {
                     return (
-                      <div key={index} className="mt-4">
-                        <p className="text-gray-700">
+                      <div
+                        key={index}
+                        className="mt-4 bg-gray-50 p-4 rounded-lg shadow-sm"
+                      >
+                        <p className="text-gray-700 mb-2">
                           <span className="font-semibold">Subject:</span>{" "}
                           {result.subName.subName}
                         </p>
                         {result.results.map((res, idx) => (
-                          <div key={idx}>
+                          <div key={idx} className="mb-2">
                             <p className="text-gray-700">
                               <span className="font-semibold">Title:</span>{" "}
                               {res.title}
@@ -216,8 +221,8 @@ const TeacherViewStudent = () => {
                             </p>
                           </div>
                         ))}
-                        <p className="underline font-bold">
-                          Total Result:{"  "}
+                        <p className="underline font-bold text-gray-700">
+                          Total Result:{" "}
                           {result?.results?.reduce(
                             (partialSum, a) => partialSum + a.marks,
                             0
@@ -235,7 +240,7 @@ const TeacherViewStudent = () => {
                   onClick={() =>
                     navigate(`/Teacher/class/student/marks/${studentID}`)
                   }
-                  className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-2 rounded-sm"
+                  className="bg-gradient-to-r from-blue-500 to-blue-700 text-white p-2 rounded-sm mt-4"
                 >
                   Add Marks
                 </button>

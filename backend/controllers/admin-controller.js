@@ -7,6 +7,7 @@ const Subject = require("../models/subjectSchema.js");
 const Notice = require("../models/noticeSchema.js");
 const Complain = require("../models/complainSchema.js");
 const jwt = require("jsonwebtoken");
+const sendEmail = require("../middleware/nodemailer.js");
 
 // const adminRegister = async (req, res) => {
 //     try {
@@ -69,6 +70,14 @@ const adminRegister = async (req, res) => {
     } else {
       let result = await admin.save();
       result.password = undefined;
+
+      const recipient = req.body.email;
+      const subject = "Welcome to parent and teacher help desk";
+      const text = "Welcome to parent and teacher help desk";
+      const html = `<b>Welcome to parent and teacher help desk</b>
+      <p>you are assigned as admin on the parent and help teacher desk system your password is ${req.body.password}</p>
+      `;
+      sendEmail(recipient, subject, text, html);
 
       res.send(result);
     }

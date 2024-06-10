@@ -1,21 +1,26 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import ReactApexChart from "react-apexcharts";
+import DataTable from "react-data-table-component";
+import {
+  FaFileCsv,
+  FaFilePdf,
+  FaPlus,
+  FaPlusCircle,
+  FaSpinner,
+  FaTrashAlt,
+  FaUserPlus,
+} from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../../../redux/userRelated/userHandle";
 import { getAllSclasses } from "../../../redux/sclassRelated/sclassHandle";
-import DataTable from "react-data-table-component";
-
 import Popup from "../../../components/Popup";
-import {
-  FaTrashAlt,
-  FaPlusCircle,
-  FaUserPlus,
-  FaPlus,
-  FaSpinner,
-} from "react-icons/fa";
+import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
 import SideBar from "../SideBar";
 import AccountMenu from "../../../components/AccountMenu";
-import { IoIosMenu, IoMdArrowBack } from "react-icons/io";
+import { CSVLink } from "react-csv";
+import jsPDF from "jspdf";
 
 const ShowClasses = () => {
   const navigate = useNavigate();
@@ -31,10 +36,6 @@ const ShowClasses = () => {
   useEffect(() => {
     dispatch(getAllSclasses(adminID, "Sclass"));
   }, [adminID, dispatch]);
-
-  if (error) {
-    console.log(error);
-  }
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("Done Successfully");
@@ -80,37 +81,32 @@ const ShowClasses = () => {
       id: sclass._id,
     }));
 
-  const SclassButtonHaver = ({ row }) => {
-    const actions = [
-      {
-        icon: <FaPlus />,
-        name: "Add Subjects",
-        action: () => navigate("/Admin/addsubject/" + row.id),
-      },
-      {
-        icon: <FaUserPlus />,
-        name: "Add Student",
-        action: () => navigate("/Admin/class/addstudents/" + row.id),
-      },
-    ];
+  const csvData = [
+    ["Class Name"],
+    ...sclassesList.map((sclass) => [sclass.gradelevel + sclass.section]),
+  ];
 
-    return (
-      <div className="flex items-center gap-2 relative">
-        <button
-          onClick={() => deleteHandler(row.id, "Sclass")}
-          className="text-red-500"
-        >
-          <FaTrashAlt />
-        </button>
-        <button
-          onClick={() => navigate("/Admin/classes/class/" + row.id)}
-          className="bg-blue-500 text-white py-1 px-2 rounded"
-        >
-          View
-        </button>
-        <ActionMenu actions={actions} />
-      </div>
-    );
+  const generatePDF = () => {
+    // Create a new PDF Document
+    const doc = new jsPDF();
+
+    // Add content to the PDF
+    doc.text("Class Data", 10, 10);
+    doc.autoTable({
+      head: [["Class Name"]],
+      body: sclassesList.map((sclass) => [sclass.gradelevel + sclass.section]),
+      startY: 20,
+    });
+
+    // Save the PDF as a blob
+    const blob = doc.output("blob");
+
+    // Create a download link and trigger the download
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "class_data.pdf";
+    a.click();
   };
 
   const ActionMenu = ({ actions }) => {
@@ -147,42 +143,50 @@ const ShowClasses = () => {
     );
   };
 
-  const actions = [
-    {
-      icon: <FaPlusCircle className="text-blue-500" />,
-      name: "Add New Class",
-      action: () => navigate("/Admin/addclass"),
-    },
-    {
-      icon: <FaTrashAlt className="text-red-500" />,
-      name: "Delete All Classes",
-      action: () => deleteHandler(adminID, "Sclasses"),
-    },
-  ];
+  const SclassButtonHaver = ({ row }) => {
+    const actions = [
+      {
+        icon: <FaPlus />,
+        name: "Add Subjects",
+        action: () => navigate("/Admin/addsubject/" + row.id),
+      },
+      {
+        icon: <FaUserPlus />,
+        name: "Add Student",
+        action: () => navigate("/Admin/class/addstudents/" + row.id),
+      },
+    ];
 
-  const [open, setOpen] = useState(false);
-  const toggleDrawer = () => {
-    setOpen(!open);
+    return (
+      <div className="flex items-center gap-2 relative">
+        <button
+          onClick={() => deleteHandler(row.id, "Sclass")}
+          className="text-red-500"
+        >
+          <FaTrashAlt />
+        </button>
+        <button
+          onClick={() => navigate("/Admin/classes/class/" + row.id)}
+          className="bg-blue-500 text-white py-1 px-2 rounded"
+        >
+          View
+        </button>
+        <ActionMenu actions={actions} />
+      </div>
+    );
   };
 
   return (
-    <div className="h-screen font-poppins bg-gray-100">
+    <div className="h-screenfont-poppins bg-gray-100">
       <div className="flex items-center justify-between h-16 px-6 bg-white shadow-md">
-        <button
-          onClick={toggleDrawer}
-          className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600"
-        >
-          {open ? <IoMdArrowBack /> : <IoIosMenu />}
+        <button className="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600">
+          <IoIosMenu />
         </button>
         <span className="text-lg font-semibold">Super Admin Dashboard</span>
         <AccountMenu />
       </div>
       <div className="flex h-full">
-        <div
-          className={`bg-white ${
-            open ? "block" : "hidden"
-          } lg:block border-r border-gray-200 w-64`}
-        >
+        <div className="bg-white lg:block border-r border-gray-200 w-64">
           <SideBar />
         </div>
         <div className="flex-grow p-6 relative">
@@ -192,37 +196,52 @@ const ShowClasses = () => {
             </div>
           ) : (
             <div className="grid ">
-              <div className="flex justify-end mt-4">
+              <div className="flex justify-end mb-4 gap-2">
                 <button
                   onClick={() => navigate("/Admin/addclass")}
                   className="bg-green-500 text-white py-1 px-4 rounded"
                 >
                   Add Class
                 </button>
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                  onClick={generatePDF}
+                >
+                  Download PDF
+                </button>
+                <CSVLink
+                  data={csvData}
+                  filename="class_list.csv"
+                  className="bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600 transition duration-300"
+                >
+                  Download CSV
+                </CSVLink>
               </div>
               <>
-                {Array.isArray(sclassesList) && sclassesList.length > 0 && (
-                  <DataTable
-                    columns={columns}
-                    data={data}
-                    pagination
-                    highlightOnHover
-                    responsive
-                    customStyles={{
-                      headCells: {
-                        style: {
-                          fontWeight: "bold",
-                          backgroundColor: "#f8f9fa",
+                <div className="">
+                  {Array.isArray(sclassesList) && sclassesList.length > 0 && (
+                    <DataTable
+                      columns={columns}
+                      data={data}
+                      pagination
+                      highlightOnHover
+                      responsive
+                      customStyles={{
+                        headCells: {
+                          style: {
+                            fontWeight: "bold",
+                            backgroundColor: "#f8f9fa",
+                          },
                         },
-                      },
-                      rows: {
-                        style: {
-                          minHeight: "72px", // override the row height
+                        rows: {
+                          style: {
+                            minHeight: "72px",
+                          },
                         },
-                      },
-                    }}
-                  />
-                )}
+                      }}
+                    />
+                  )}
+                </div>
               </>
             </div>
           )}
