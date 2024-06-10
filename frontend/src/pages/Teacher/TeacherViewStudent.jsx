@@ -35,7 +35,7 @@ const TeacherViewStudent = () => {
 
   const [sclassName, setSclassName] = useState("");
   const [studentSchool, setStudentSchool] = useState("");
-  const [subjectMarks, setSubjectMarks] = useState("");
+  const [subjectMarks, setSubjectMarks] = useState([]);
   const [subjectAttendance, setSubjectAttendance] = useState([]);
   const [openStates, setOpenStates] = useState({});
 
@@ -93,17 +93,20 @@ const TeacherViewStudent = () => {
     pdfDoc.save("subject_marks.pdf");
   };
 
-  const csvData = subjectMarks.map((subject) => ({
-    Subject: subject.subName.subName,
-    "Total Result": subject.results.reduce(
-      (total, res) => total + res.marks,
-      0
-    ),
-    ...subject.results.reduce((acc, res, idx) => {
-      acc[`Result ${idx + 1}`] = res.marks;
-      return acc;
-    }, {}),
-  }));
+  const csvData =
+    subjectMarks && subjectMarks.length > 0
+      ? subjectMarks?.map((subject) => ({
+          Subject: subject.subName.subName,
+          "Total Result": subject.results.reduce(
+            (total, res) => total + res.marks,
+            0
+          ),
+          ...subject.results.reduce((acc, res, idx) => {
+            acc[`Result ${idx + 1}`] = res.marks;
+            return acc;
+          }, {}),
+        }))
+      : [];
 
   // const handleCSVDownload = () => {
   //   const csv = generateCSV(csvData);
