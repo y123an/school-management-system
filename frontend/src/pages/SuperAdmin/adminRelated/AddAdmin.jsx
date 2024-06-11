@@ -33,7 +33,7 @@ const AddAdmin = ({ situation }) => {
   };
 
   useEffect(() => {
-    if (status === "success") {
+    if (status === "added") {
       dispatch(underControl());
       navigate(-1);
     } else if (status === "failed") {

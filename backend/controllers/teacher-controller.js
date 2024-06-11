@@ -89,7 +89,7 @@ const teacherRegister = async (req, res) => {
     }
 
     result.password = undefined;
-    res.send(result);
+    res.send(result[0]);
   } catch (err) {
     console.error("Error registering teacher:", err);
     res.status(500).json({ error: "Internal server error" });

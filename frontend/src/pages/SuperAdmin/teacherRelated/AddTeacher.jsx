@@ -78,7 +78,7 @@ const AddTeacher = () => {
     setLoader(true);
     dispatch(registerUser(fields, role));
   };
-
+  console.log(status);
   useEffect(() => {
     if (status === "success") {
       dispatch(underControl());

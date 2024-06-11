@@ -59,7 +59,8 @@ const sendEmail = require("../middleware/nodemailer.js");
 
 const adminRegister = async (req, res) => {
   try {
-    const hashedPass = await bcrypt.hash(req.body.password, salt);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPass = await bcrypt.hash(req.body.password, 10);
 
     const admin = new Admin({
       ...req.body,
@@ -85,39 +86,41 @@ const adminRegister = async (req, res) => {
       res.send(result);
     }
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };
 
 const adminLogIn = async (req, res) => {
   if (req.body.email && req.body.password) {
-    let admin = await Admin.findOne({ email: req.body.email });
-    if (admin) {
-      if (req.body.password === admin.password) {
-        // Create a payload for the JWT
-        const payload = {
-          email: admin.email,
-          role: "Admin",
-        };
+    try {
+      let admin = await Admin.findOne({ email: req.body.email });
+      if (admin) {
+        const isMatch = await bcrypt.compare(req.body.password, admin.password);
+        if (isMatch) {
+          const payload = {
+            email: admin.email,
+            role: "Admin",
+          };
 
-        // Sign the JWT token
-        const token = jwt.sign(payload, process.env.JWT_SECRET, {
-          expiresIn: "1h",
-        });
+          const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+          });
 
-        // Do not send the password back
-        admin.password = undefined;
+          admin.password = undefined;
 
-        // Send the token along with the admin details
-        res.send({ user: admin, token });
+          res.send({ user: admin, token });
+        } else {
+          res.status(401).send({ message: "Invalid password" });
+        }
       } else {
-        res.send({ message: "Invalid password" });
+        res.status(404).send({ message: "User not found" });
       }
-    } else {
-      res.send({ message: "User not found" });
+    } catch (error) {
+      res.status(500).send({ message: "Server error", error });
     }
   } else {
-    res.send({ message: "Email and password are required" });
+    res.status(400).send({ message: "Email and password are required" });
   }
 };
 

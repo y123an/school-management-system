@@ -78,7 +78,7 @@ const AddTeacher = () => {
     setLoader(true);
     dispatch(registerUser(fields, role));
   };
-
+  console.log(status);
   useEffect(() => {
     if (status === "success") {
       dispatch(underControl());
@@ -217,7 +217,7 @@ const AddTeacher = () => {
                   <input
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     type="number"
-                    placeholder="Enter phone's name..."
+                    placeholder="Enter phone name..."
                     value={phone}
                     onChange={(event) => setPhone(event.target.value)}
                     autoComplete="name"

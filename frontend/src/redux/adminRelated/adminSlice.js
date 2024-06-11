@@ -31,6 +31,7 @@ const adminSlice = createSlice({
       state.response = action.payload;
       state.loading = false;
       state.error = null;
+      state.adminsList = [];
     },
     getError: (state, action) => {
       state.loading = false;
